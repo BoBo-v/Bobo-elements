@@ -33,7 +33,7 @@ createApp(App).use(VElement).mount('#app')
 
 **单个导入**
 
-Bobo Element 提供了基于 ES Module 的开箱即用的 Tree Shaking 功能。
+Bobo-Elements 提供了基于 ES Module 的开箱即用的 Tree Shaking 功能。
 
 
 ```vue
