@@ -12,7 +12,7 @@ npm i @bobocn/element --save
 // 引入所有组件
 import VElement from '@bobocn/element'
 // 引入样式
-import '@vikingmute/v-element/dist/style.css'
+import '@bobocn/element/dist/index.css'
 
 import App from './App.vue'
 // 全局使用

@@ -9,6 +9,9 @@
 npm i @bobocn/element --save
 ```
 
+### 演示网站
+https://static-mp-ce1f918a-35f0-4886-9b3a-99f72513a4a4.next.bspapp.com/
+
 ### 开始使用
 
 **全局使用**
@@ -18,7 +21,7 @@ npm i @bobocn/element --save
 // 引入所有组件
 import VElement from '@bobocn/element'
 // 引入样式
-import '@vikingmute/v-element/dist/style.css'
+import '@bobocn/element/dist/index.css'
 
 import App from './App.vue'
 // 全局使用
