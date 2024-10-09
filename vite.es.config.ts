@@ -29,8 +29,8 @@ export default defineConfig({
     outDir: 'dist/es',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'VElement',
-      fileName: 'v-element',
+      name: 'BoboElement',
+      fileName: 'Bobo-element',
       formats: ['es']
     },
     rollupOptions: {

@@ -1,31 +1,31 @@
 {
-  "name": "@vikingmute/element",
-  "version": "1.0.2",
+  "name": "@bobocn/element",
+  "version": "1.0.1",
   "description": "Vue3 components library",
   "type": "module",
-  "author": "Viking Zhang",
+  "author": "Bobo",
   "license": "MIT",
   "keywords": [
     "Component",
     "UI",
     "Vue3"
   ],
-  "homepage": "http://element.vikingship.xyz/",
+  "homepage": "https://static-mp-ce1f918a-35f0-4886-9b3a-99f72513a4a4.next.bspapp.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vikingmute/v-element/"
+    "url": "https://github.com/BoBo-v/Bobo-elements.git"
   },
   "files": [
     "dist"
   ],
   "sideEffects": ["dist/index.css"],
-  "main": "./dist/umd/v-element.umd.cjs",
-  "module": "./dist/es/v-element.js",
+  "main": "./dist/umd/Bobo-element.umd.cjs",
+  "module": "./dist/es/Bobo-element.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/es/v-element.js",
-      "require": "./dist/umd/v-element.umd.cjs",
+      "import": "./dist/es/Bobo-element.js",
+      "require": "./dist/umd/Bobo-element.umd.cjs",
       "types": "./dist/types/index.d.ts"
     },
     "./dist/": {

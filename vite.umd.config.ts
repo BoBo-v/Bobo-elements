@@ -25,8 +25,8 @@ export default defineConfig({
     outDir: 'dist/umd',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'VElement',
-      fileName: 'v-element',
+      name: 'BoboElement',
+      fileName: 'Bobo-element',
       formats: ['umd']
     },
     rollupOptions: {

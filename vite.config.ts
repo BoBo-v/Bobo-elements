@@ -29,8 +29,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'VElement',
-      fileName: 'v-element'
+      name: 'BoboElement',
+      fileName: 'Bobo-element'
     },
     rollupOptions: {
       external: ['vue', '@fortawesome/fontawesome-svg-core', '@fortawesome/free-solid-svg-icons', '@fortawesome/vue-fontawesome'],
