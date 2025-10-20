@@ -49,7 +49,9 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "prepublishOnly": "npm run build",
-    "test": "vitest"
+    "test": "vitest",
+    "test:vue": "vitest --config vite.config.vue.test.ts",
+    "test:react": "vitest --config vite.config.react.test.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",

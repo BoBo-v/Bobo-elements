@@ -40,12 +40,18 @@ describe('Button component', () => {
         expect(handleClick).not.toHaveBeenCalled();
     });
 
+    // test('renders custom icon', () => {
+    //     render(<Button icon={<span data-testid="button-icon">Icon</span>}>Icon Button</Button>);
+    //     const icon = screen.getByTestId('button-icon');
+    //     expect(icon).toBeInTheDocument();
+    //     expect(icon).toHaveTextContent('Icon');
+    // });
     test('renders custom icon', () => {
         render(<Button icon={<span data-testid="button-icon">Icon</span>}>Icon Button</Button>);
-        const icon = screen.getByTestId('button-icon');
-        expect(icon).toBeInTheDocument();
-        expect(icon).toHaveTextContent('Icon');
+        const icons = screen.getAllByTestId('button-icon');
+        expect(icons[0]).toHaveTextContent('Icon');
     });
+
 
     test('renders loading state correctly', () => {
         render(

@@ -1,6 +1,11 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons'
+
+beforeAll(() => {
+    library.add(faXmark, faSpinner)
+})
 
 type IconProps = {
     name: 'xmark' | 'spinner';
