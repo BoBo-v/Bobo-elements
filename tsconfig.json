@@ -6,7 +6,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["unplugin-vue-macros/macros-global" /* ... */]
+    "jsx": "react-jsx", // 或 "react-jsxdev" 开发环境
+    "types": ["unplugin-vue-macros/macros-global","react", "react-dom" /* ... */]
   },
   "vueCompilerOptions": {
     "plugins": [
