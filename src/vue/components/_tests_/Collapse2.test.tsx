@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import Collapse from '../Collapse/Collapse'
+import Collapse from '../Collapse/Collapse.vue'
 import CollapseItem from '../Collapse/CollapseItem'
 describe('Collapse.vue', () => {
   test('basic collapse', async () => {
