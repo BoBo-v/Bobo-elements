@@ -48,3 +48,50 @@ description: Input 组件的文档
 
 
 <preview path="../demo/Input/Clear.vue" title="清空文本框" description="Input 清空文本框"></preview>
+<<<<<<< HEAD
+=======
+
+## API
+
+### 属性 (Attributes)
+
+| 属性名 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 输入框类型 | `'text' \| 'textarea' \| 'password'` | text |
+| modelValue / v-model | 绑定值 | `string` | — |
+| size | 输入框尺寸 | `'large' \| 'small'` | — |
+| disabled | 是否禁用 | `boolean` | false |
+| clearable | 是否可清空 | `boolean` | false |
+| show-password | 是否显示切换密码图标 | `boolean` | false |
+| placeholder | 占位文本 | `string` | — |
+| readonly | 是否只读 | `boolean` | false |
+| autocomplete | 原生 autocomplete 属性 | `string` | off |
+| autofocus | 原生 autofocus 属性 | `boolean` | false |
+| form | 原生 form 属性 | `string` | — |
+
+### 事件 (Events)
+
+| 事件名 | 说明 | 回调参数 |
+| --- | --- | --- |
+| update:modelValue | 绑定值更新时触发 | `(value: string) => void` |
+| input | 输入时触发 | `(value: string) => void` |
+| change | 值改变且失焦时触发 | `(value: string) => void` |
+| focus | 获取焦点时触发 | `(event: FocusEvent) => void` |
+| blur | 失去焦点时触发 | `(event: FocusEvent) => void` |
+| clear | 点击清空按钮时触发 | `() => void` |
+
+### 插槽 (Slots)
+
+| 插槽名 | 说明 |
+| --- | --- |
+| prepend | 输入框前置内容 |
+| prefix | 输入框头部图标 |
+| suffix | 输入框尾部图标 |
+| append | 输入框后置内容 |
+
+### 方法 (Exposes)
+
+| 方法名 | 说明 | 类型 |
+| --- | --- | --- |
+| ref | 原生 input / textarea 元素引用 | `Ref<HTMLInputElement \| HTMLTextAreaElement>` |
+>>>>>>> master

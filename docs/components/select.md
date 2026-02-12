@@ -2,11 +2,20 @@
 title: Select | Bobo-Element
 description: Select 组件的文档
 ---
+<<<<<<< HEAD
 ## 选择器
 
 当选项过多时，使用下拉菜单展示并选择内容。
 
 #### 基础用法
+=======
+
+# Select 选择器
+
+当选项过多时，使用下拉菜单展示并选择内容。
+
+## 基础用法
+>>>>>>> master
 
 适用广泛的基础单选 v-model 的值为当前被选中的 option 的 value 属性值。
 
@@ -40,4 +49,34 @@ description: Select 组件的文档
 
 服务器搜索数据，输入关键字进行查找。为了启用远程搜索，需要将 `filterable` 和 `remote` 设置为true，同时传入一个`remote-method`。 remote-method 为一个返回 Promise 的Function，类型为 `(value: string) => Promise<SelectOption[]>` 。
 
+<<<<<<< HEAD
 <preview path="../demo/Select/Remote.vue" title="筛选选项" description="Select 筛选选项"></preview>
+=======
+<preview path="../demo/Select/Remote.vue" title="远程搜索" description="Select 远程搜索"></preview>
+
+## API
+
+### 属性 (Attributes)
+
+| 属性名 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| modelValue / v-model | 绑定值 | `string` | — |
+| options | 选项数据 | `SelectOption[]` | [] |
+| placeholder | 占位文本 | `string` | 请选择 |
+| disabled | 是否禁用 | `boolean` | false |
+| clearable | 是否可以清空选项 | `boolean` | false |
+| renderLabel | 自定义选项渲染函数 | `(option: SelectOption) => VNode` | — |
+| filterable | 是否可搜索 | `boolean` | false |
+| filterMethod | 自定义搜索方法 | `(value: string) => SelectOption[]` | — |
+| remote | 是否为远程搜索 | `boolean` | false |
+| remoteMethod | 远程搜索方法 | `(value: string) => Promise<SelectOption[]>` | — |
+
+### 事件 (Events)
+
+| 事件名 | 说明 | 回调参数 |
+| --- | --- | --- |
+| update:modelValue | 选中值变化时触发 | `(value: string) => void` |
+| change | 选中值变化时触发 | `(value: string) => void` |
+| visible-change | 下拉菜单显示/隐藏时触发 | `(visible: boolean) => void` |
+| clear | 点击清空按钮时触发 | `() => void` |
+>>>>>>> master
