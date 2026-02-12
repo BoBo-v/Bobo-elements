@@ -48,8 +48,7 @@ description: Input 组件的文档
 
 
 <preview path="../demo/Input/Clear.vue" title="清空文本框" description="Input 清空文本框"></preview>
-<<<<<<< HEAD
-=======
+
 
 ## API
 
@@ -94,4 +93,4 @@ description: Input 组件的文档
 | 方法名 | 说明 | 类型 |
 | --- | --- | --- |
 | ref | 原生 input / textarea 元素引用 | `Ref<HTMLInputElement \| HTMLTextAreaElement>` |
->>>>>>> master
+

@@ -1,12 +1,8 @@
 :root {
-<<<<<<< HEAD
-=======
   --vp-c-brand-1: #3451b2;
   --vp-c-brand-2: #3a5ccc;
   --vp-c-brand-3: #5672cd;
   --vp-c-brand-soft: rgba(100, 108, 255, 0.14);
-
->>>>>>> master
   --vp-c-brand: var(--vk-color-primary);
   --vp-c-brand-light: var(--vk-color-primary-light-3);
   --vp-c-brand-lighter: var(--vk-color-primary-light-5);
@@ -17,14 +13,7 @@
   --component-preview-soft: var(--vp-code-block-bg-light);
 }
 
-<<<<<<< HEAD
-body {
-  color: var(--vp-c-text-1);
-}
-h1, h2, h3, h4, h5, h6, p {
-  color: var(--vp-c-text-1);
-}
-=======
+
 .dark {
   --vp-c-brand-1: #a8b1ff;
   --vp-c-brand-2: #5c73e7;
@@ -150,4 +139,3 @@ h1, h2, h3, h4, h5, h6, p {
   padding-top: 8px;
   border-top: 1px solid var(--vp-c-divider);
 }
->>>>>>> master

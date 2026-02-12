@@ -1,9 +1,7 @@
 ---
-<<<<<<< HEAD
+
 title: Button | Bobo-Element
-=======
-title: Alert | Bobo-Element
->>>>>>> master
+
 description: Alert 提示
 ---
 
@@ -11,10 +9,6 @@ description: Alert 提示
 用于页面中展示重要的提示信息。
 
 ## 基础用法
-<<<<<<< HEAD
-Alert 组件提供四种类型，由 type 属性指定，为 success| warning | danger | info , 默认值为 info。
-<preview path="../demo/Alert/Basic.vue" title="基础用法" description="Button 组件的基础用法"></preview>
-=======
 Alert 组件提供四种类型，由 type 属性指定，为 success | warning | danger | info，默认值为 info。
 <preview path="../demo/Alert/Basic.vue" title="基础用法" description="Alert 组件的基础用法"></preview>
 
@@ -46,4 +40,3 @@ Alert 组件提供四种类型，由 type 属性指定，为 success | warning |
 | 方法名 | 说明 | 类型 |
 | --- | --- | --- |
 | hide | 隐藏 Alert | `() => void` |
->>>>>>> master

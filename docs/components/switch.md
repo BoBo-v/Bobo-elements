@@ -35,8 +35,7 @@ description: Switch 组件的文档
 使用 **active-text** 属性与 **inactive-text** 属性来设置开关的文字描述。
 
 <preview path="../demo/Switch/Text.vue" title="支持文字描述" description="Switch 文字描述"></preview>
-<<<<<<< HEAD
-=======
+
 
 ## API
 
@@ -60,4 +59,4 @@ description: Switch 组件的文档
 | --- | --- | --- |
 | update:modelValue | 绑定值更新时触发 | `(value: boolean \| string \| number) => void` |
 | change | 状态发生变化时触发 | `(value: boolean \| string \| number) => void` |
->>>>>>> master
+

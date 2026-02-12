@@ -1,25 +1,15 @@
-<<<<<<< HEAD
-# Bobo-Element 开始使用
-基于Vue 和 typescript，组件项目
 
-## 安装
-=======
 # Bobo-Elements 开始使用
 
 Bobo-Elements 是一套基于 Vue3 和 TypeScript 的企业级 UI 组件库，提供了 Button、Form、Input、Select、Switch、Collapse、Tooltip、Dropdown、Message、Notification、Alert 等常用组件，帮助开发者快速构建高质量的 Web 应用。
 
 ## 安装
 
->>>>>>> master
 ```bash
 npm i @bobocn/element --save
 ```
 
-<<<<<<< HEAD
-## 开始使用
-全局使用
-```js
-=======
+
 或使用 yarn：
 
 ```bash
@@ -30,7 +20,6 @@ yarn add @bobocn/element
 
 ```js
 import { createApp } from 'vue'
->>>>>>> master
 // 引入所有组件
 import VElement from '@bobocn/element'
 // 引入样式
@@ -40,30 +29,13 @@ import App from './App.vue'
 // 全局使用
 createApp(App).use(VElement).mount('#app')
 ```
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 ```vue
 <template>
   <vk-button>我是 VkButton</vk-button>
 </template>
 ```
-<<<<<<< HEAD
-单个导入
-V Element 提供了基于 ES Module 的开箱即用的 Tree Shaking 功能。
-```vue
-<template>
-  <Button>我是 VkButton</Button>
-</template>
-<script>
-  import { Button } from ' @bobocn/element'
-  export default {
-    components: { Button },
-  }
-</script>
-```
-=======
+
 
 ## 按需引入
 
@@ -144,4 +116,3 @@ Bobo-Elements 基于 Vue3 开发，支持所有现代浏览器：
 ::: tip
 Vue3 不再支持 IE11，因此 Bobo-Elements 也不支持 IE11 及更早版本。
 :::
->>>>>>> master

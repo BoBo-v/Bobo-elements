@@ -1,16 +1,10 @@
 ---
 title: Collapse | Bobo-Element
-<<<<<<< HEAD
-description: Collapse 折叠面版
----
 
-# Collapse 折叠面版
-=======
 description: Collapse 折叠面板
 ---
 
 # Collapse 折叠面板
->>>>>>> master
 通过折叠面板收纳内容区域
 
 ## 基础用法
@@ -21,9 +15,6 @@ description: Collapse 折叠面板
 每次只能展开一个面板
 
 通过 accordion 属性来设置是否以手风琴模式显示。
-<<<<<<< HEAD
-<preview path="../demo/Collapse/accordion.vue" title="基础用法" description="Collapse 组件的基础用法"></preview>
-=======
 <preview path="../demo/Collapse/accordion.vue" title="手风琴效果" description="Collapse 手风琴效果"></preview>
 
 ## API
@@ -64,4 +55,3 @@ description: Collapse 折叠面板
 | --- | --- |
 | default | 面板内容 |
 | title | 自定义标题内容 |
->>>>>>> master

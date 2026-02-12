@@ -5,11 +5,8 @@ description: Form 组件的文档
 
 # Form 表单
 
-<<<<<<< HEAD
-表单包含 `输入框`, `单选框`, `下拉选择`, `多选框` 等用户输入的组件。 
-=======
+
 表单包含 `输入框`, `单选框`, `下拉选择`, `多选框` 等用户输入的组件。
->>>>>>> master
 使用表单，您可以收集、验证和提交数据。
 
 ## 典型表单
@@ -26,9 +23,7 @@ Form 组件允许你验证用户的输入是否符合规范，来帮助你找到
 Form 组件提供了表单验证的功能，只需为 rules 属性传入约定的验证规则，并将 form-Item 的 prop 属性设置为需要验证的特殊键值即可。
 更多高级用法可参考 async-validator。
 
-<<<<<<< HEAD
-<preview path="../demo/Form/Rules.vue" title="典型表单" description="Form 典型表单"></preview>
-=======
+
 <preview path="../demo/Form/Rules.vue" title="表单校验" description="Form 表单校验"></preview>
 
 ## API
@@ -77,4 +72,3 @@ Form 组件提供了表单验证的功能，只需为 rules 属性传入约定�
 | validate | 对该表单项进行校验 | `() => Promise<boolean>` |
 | resetField | 重置该表单项并移除校验结果 | `() => void` |
 | clearValidate | 清除该表单项的校验结果 | `() => void` |
->>>>>>> master
