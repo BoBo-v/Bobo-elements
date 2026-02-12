@@ -10,7 +10,7 @@ npm i @bobocn/element --save
 ```
 
 ### 演示网站
-https://static-mp-ce1f918a-35f0-4886-9b3a-99f72513a4a4.next.bspapp.com/
+www.bobocn.bond/
 
 ### 开始使用
 
