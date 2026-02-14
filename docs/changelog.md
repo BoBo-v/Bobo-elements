@@ -1,5 +1,23 @@
 # 更新日志
 
+## v1.1.0
+
+_2025-12-20_
+
+### 新增
+
+- 新增 React 组件支持（Button、Collapse、Alert、Icon、Tooltip、Dropdown 等）
+- 支持子路径导出：`@bobocn/element/vue` 和 `@bobocn/element/react`
+- 样式统一通过 `@bobocn/element/style.css` 引入
+
+### 变更
+
+- 重构打包方案：Vue 和 React 独立打包，互不干扰
+- 框架依赖（vue、react）改为可选 peerDependencies，按需安装
+- 移除全局注册（`app.use()`）方式，改为按需引入
+
+---
+
 ## v1.0.2
 
 _2025-10-15_

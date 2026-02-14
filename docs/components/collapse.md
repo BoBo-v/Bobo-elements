@@ -17,6 +17,42 @@ description: Collapse 折叠面板
 通过 accordion 属性来设置是否以手风琴模式显示。
 <preview path="../demo/Collapse/accordion.vue" title="手风琴效果" description="Collapse 手风琴效果"></preview>
 
+## React 用法
+
+```tsx
+import { useState } from 'react'
+import { Collapse, CollapseItem } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  const [activeNames, setActiveNames] = useState(['1'])
+
+  return (
+    <Collapse
+      modelValue={activeNames}
+      onChange={(val) => setActiveNames(val)}
+    >
+      <CollapseItem name="1" title="面板一">
+        内容一
+      </CollapseItem>
+      <CollapseItem name="2" title="面板二">
+        内容二
+      </CollapseItem>
+      <CollapseItem name="3" title="面板三" disabled>
+        内容三（禁用）
+      </CollapseItem>
+    </Collapse>
+  )
+}
+
+// 手风琴模式
+<Collapse modelValue={activeNames} accordion onChange={setActiveNames}>
+  <CollapseItem name="1" title="面板一">内容一</CollapseItem>
+  <CollapseItem name="2" title="面板二">内容二</CollapseItem>
+</Collapse>
+```
+
 ## API
 
 ### Collapse 属性 (Attributes)

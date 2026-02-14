@@ -22,27 +22,28 @@
   "sideEffects": [
     "dist/index.css"
   ],
-  "main": "./dist/umd/Bobo-element.umd.cjs",
-  "module": "./dist/es/Bobo-element.js",
-  "types": "./dist/types/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/es/Bobo-element.js",
-      "require": "./dist/umd/Bobo-element.umd.cjs",
-      "types": "./dist/types/index.d.ts"
+    "./vue": {
+      "types": "./dist/vue/types/src/vue/index.d.ts",
+      "import": "./dist/vue/index.js",
+      "require": "./dist/vue/index.umd.cjs"
     },
-    "./dist/": {
-      "import": "./dist/",
-      "require": "./dist/"
-    }
+    "./react": {
+      "types": "./dist/react/types/react/index.d.ts",
+      "import": "./dist/react/index.js",
+      "require": "./dist/react/index.umd.cjs"
+    },
+    "./style.css": "./dist/index.css"
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run build-only && npm run move-style",
-    "build-only": "run-p build-es build-umd",
-    "build-es": "vite build --config vite.es.config.ts",
-    "build-umd": "vite build --config vite.umd.config.ts",
-    "move-style": "move-file dist/es/index.css dist/index.css",
+    "build": "npm run build-only && npm run build-css",
+    "build-only": "run-p build-vue-es build-vue-umd build-react-es build-react-umd",
+    "build-vue-es": "vite build --config vite.es.config.ts",
+    "build-vue-umd": "vite build --config vite.umd.config.ts",
+    "build-react-es": "vite build --config vite.react.es.config.ts",
+    "build-react-umd": "vite build --config vite.react.umd.config.ts",
+    "build-css": "move-file dist/vue/index.css dist/index.css",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "docs:dev": "vitepress dev docs",
@@ -61,15 +62,17 @@
     "@popperjs/core": "^2.11.6",
     "async-validator": "^4.2.5",
     "axios": "^1.3.4",
-    "lodash-es": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "vue": "^3.3.4"
+    "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
+    "vue": "^3.3.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "vue": "^3.3.4"
+    "react-dom": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "vue": { "optional": true },
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

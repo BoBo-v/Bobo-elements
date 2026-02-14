@@ -23,6 +23,38 @@ description: Dropdown 下拉菜单
 将 manual 属性设置为 true 即可， 然后可以使用实例上面的 show 和 hide 方法打开关闭下拉菜单。
 <preview path="../demo/Dropdown/manual.vue" title="手动打开关闭" description="Dropdown 手动打开关闭"></preview>
 
+## React 用法
+
+```tsx
+import { Dropdown } from '@bobocn/element/react'
+import type { MenuOption } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+const menuOptions: MenuOption[] = [
+  { key: 1, label: '选项一' },
+  { key: 2, label: '选项二' },
+  { key: 3, label: '选项三', disabled: true },
+  { key: 4, label: '选项四', divided: true },
+]
+
+function App() {
+  return (
+    <Dropdown
+      menuOptions={menuOptions}
+      trigger="hover"
+      onSelect={(item) => console.log('选中:', item)}
+    >
+      <button>下拉菜单</button>
+    </Dropdown>
+  )
+}
+
+// 点击触发
+<Dropdown menuOptions={menuOptions} trigger="click">
+  <button>点击展开</button>
+</Dropdown>
+```
+
 ## API
 
 ### 属性 (Attributes)

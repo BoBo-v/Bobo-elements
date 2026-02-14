@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import { createContext, useContext } from 'react'
 import type { CollapseProps, CollapseContext } from '../../../core/components/collapse/types'
 import { useCollapse } from '../../../core/components/collapse/useCollapse'
 
@@ -10,12 +10,12 @@ export const useCollapseContext = () => {
     return ctx
 }
 
-export const Collapse: React.FC<React.PropsWithChildren<CollapseProps>> = ({
-                                                                               modelValue = [],
-                                                                               accordion,
-                                                                               onChange,
-                                                                               children
-                                                                           }) => {
+export function Collapse({
+    modelValue = [],
+    accordion,
+    onChange,
+    children,
+}: CollapseProps) {
     const { activeNames, handleItemClick } = useCollapse({ modelValue, accordion, onChange })
 
     return (

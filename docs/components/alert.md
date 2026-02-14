@@ -12,6 +12,38 @@ description: Alert 提示
 Alert 组件提供四种类型，由 type 属性指定，为 success | warning | danger | info，默认值为 info。
 <preview path="../demo/Alert/Basic.vue" title="基础用法" description="Alert 组件的基础用法"></preview>
 
+## React 用法
+
+```tsx
+import { Alert } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  return (
+    <div>
+      <Alert type="success">成功提示</Alert>
+      <Alert type="warning">警告提示</Alert>
+      <Alert type="danger">错误提示</Alert>
+      <Alert type="info">信息提示</Alert>
+    </div>
+  )
+}
+
+// 可关闭
+<Alert type="success" closable onClose={() => console.log('closed')}>
+  可关闭的提示
+</Alert>
+
+// 通过 ref 手动隐藏
+import { useRef } from 'react'
+import type { AlertRef } from '@bobocn/element/react'
+
+const alertRef = useRef<AlertRef>(null)
+<Alert ref={alertRef} type="info">提示内容</Alert>
+alertRef.current?.hide()
+```
+
 ## API
 
 ### 属性 (Attributes)

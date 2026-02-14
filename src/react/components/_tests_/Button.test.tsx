@@ -1,14 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Button from '../Button';
-import React from 'react';
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons'
-
-beforeAll(() => {
-    library.add(faXmark, faSpinner)
-})
 
 describe('Button component', () => {
     test('renders with correct text and type class', () => {
@@ -40,18 +33,11 @@ describe('Button component', () => {
         expect(handleClick).not.toHaveBeenCalled();
     });
 
-    // test('renders custom icon', () => {
-    //     render(<Button icon={<span data-testid="button-icon">Icon</span>}>Icon Button</Button>);
-    //     const icon = screen.getByTestId('button-icon');
-    //     expect(icon).toBeInTheDocument();
-    //     expect(icon).toHaveTextContent('Icon');
-    // });
     test('renders custom icon', () => {
         render(<Button icon={<span data-testid="button-icon">Icon</span>}>Icon Button</Button>);
         const icons = screen.getAllByTestId('button-icon');
         expect(icons[0]).toHaveTextContent('Icon');
     });
-
 
     test('renders loading state correctly', () => {
         render(
@@ -63,7 +49,6 @@ describe('Button component', () => {
         expect(btn).toHaveClass('is-loading');
         expect(btn).toBeDisabled();
         expect(screen.getByTestId('button-loading-icon')).toBeInTheDocument();
-        // loading 状态下自定义 icon 不应显示
         expect(screen.queryByTestId('button-icon')).toBeNull();
         expect(screen.getByTestId('button-text')).toHaveTextContent('Loading');
     });

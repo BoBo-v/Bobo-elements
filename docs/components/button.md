@@ -30,6 +30,35 @@ description: Button 组件的文档
 通过设置 size 属性为 small | large 来调整图标的大小。
 <preview path="../demo/Button/Sizes.vue" title="不同大小" description="Button 不同大小"></preview>
 
+## React 用法
+
+```tsx
+import { Button } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  return (
+    <div>
+      <Button type="primary">主要按钮</Button>
+      <Button type="success">成功按钮</Button>
+      <Button type="warning">警告按钮</Button>
+      <Button type="danger">危险按钮</Button>
+      <Button type="info">信息按钮</Button>
+    </div>
+  )
+}
+
+// 禁用状态
+<Button type="primary" disabled>禁用按钮</Button>
+
+// 图标按钮
+<Button type="primary" icon="search">搜索</Button>
+
+// 加载状态
+<Button type="primary" loading>加载中</Button>
+```
+
 ## API
 
 ### 属性 (Attributes)

@@ -1,15 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import Alert, { AlertRef } from '../Alert';
+import Alert from '../Alert';
+import type { AlertRef } from '../Alert';
 import React from 'react';
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons'
-
-beforeAll(() => {
-    library.add(faXmark, faSpinner)
-})
-
 
 describe('Alert component', () => {
     test('renders content and children', () => {
@@ -54,7 +48,7 @@ describe('Alert component', () => {
                 Test
             </Alert>
         );
-        ref.current?.hide();
+        ref.current!.hide!();
         expect(handleClose).toHaveBeenCalledTimes(1);
         await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
     });

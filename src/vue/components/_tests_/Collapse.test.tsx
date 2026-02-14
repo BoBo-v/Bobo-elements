@@ -1,5 +1,6 @@
 import { describe, test, expect, vi, beforeAll } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { h } from 'vue'
 import type { VueWrapper, DOMWrapper } from '@vue/test-utils'
 import Collapse from '../Collapse/Collapse.vue'
 import CollapseItem from '../Collapse/CollapseItem.vue'
@@ -11,23 +12,22 @@ let firstContent: DOMWrapper<Element>, secondContent: DOMWrapper<Element>, disab
 
 describe('Collapse.vue', () => {
   beforeAll(() => {
-    wrapper = mount(() => 
-      <Collapse modelValue={['a']} onChange={onChange}>
-        <CollapseItem name="a" title="title a">
-          content a
-        </CollapseItem>
-        <CollapseItem name="b" title="title b">
-          content b
-        </CollapseItem>
-        <CollapseItem name="c" title="title c" disabled>
-          content c
-        </CollapseItem>
-      </Collapse>
-    , {
-      global: {
-        stubs: ['Icon']
+    wrapper = mount(Collapse, {
+      props: {
+        modelValue: ['a'],
+        onChange,
       },
-      attachTo: document.body
+      slots: {
+        default: () => [
+          h(CollapseItem, { name: 'a', title: 'title a' }, { default: () => 'content a' }),
+          h(CollapseItem, { name: 'b', title: 'title b' }, { default: () => 'content b' }),
+          h(CollapseItem, { name: 'c', title: 'title c', disabled: true }, { default: () => 'content c' }),
+        ],
+      },
+      global: {
+        stubs: ['Icon'],
+      },
+      attachTo: document.body,
     })
     headers = wrapper.findAll('.vk-collapse-item__header')
     contents = wrapper.findAll('.vk-collapse-item__wrapper')
@@ -39,19 +39,14 @@ describe('Collapse.vue', () => {
     disabledContent = contents[2]
   })
   test('测试基础结构以及对应文本', () => {
-    // 长度
     expect(headers.length).toBe(3)
     expect(contents.length).toBe(3)
-    //文本
     expect(firstHeader.text()).toBe('title a')
-    // 内容
     expect(firstContent.isVisible()).toBeTruthy()
     expect(secondContent.isVisible()).toBeFalsy()
-    expect(firstContent.text()).toBe('content a')   
-
+    expect(firstContent.text()).toBe('content a')
   })
   test('点击标题展开/关闭内容', async () => {
-    // 行为
     await firstHeader.trigger('click')
     expect(firstContent.isVisible()).toBeFalsy()
     await secondHeader.trigger('click')

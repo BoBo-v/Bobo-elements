@@ -45,6 +45,54 @@ description: Select 组件的文档
 
 <preview path="../demo/Select/Remote.vue" title="远程搜索" description="Select 远程搜索"></preview>
 
+## React 用法
+
+```tsx
+import { useState } from 'react'
+import { Select } from '@bobocn/element/react'
+import type { SelectOption } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+const options: SelectOption[] = [
+  { label: '选项一', value: '1' },
+  { label: '选项二', value: '2' },
+  { label: '选项三', value: '3', disabled: true },
+]
+
+// 基础用法
+function App() {
+  const [value, setValue] = useState('')
+
+  return (
+    <Select
+      modelValue={value}
+      options={options}
+      placeholder="请选择"
+      onChange={setValue}
+    />
+  )
+}
+
+// 可清空
+<Select modelValue={value} options={options} clearable onChange={setValue} />
+
+// 可搜索
+<Select modelValue={value} options={options} filterable onChange={setValue} />
+
+// 远程搜索
+<Select
+  modelValue={value}
+  options={[]}
+  filterable
+  remote
+  remoteMethod={async (query) => {
+    const res = await fetch(`/api/search?q=${query}`)
+    return res.json()
+  }}
+  onChange={setValue}
+/>
+```
+
 ## API
 
 ### 属性 (Attributes)

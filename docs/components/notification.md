@@ -35,6 +35,39 @@ description: Notification 组件的文档
 
 
 
+## React 用法
+
+```tsx
+import { createNotification, closeAllNotifications } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  return (
+    <div>
+      <button onClick={() => createNotification({ title: '通知', message: '这是一条通知' })}>
+        基础通知
+      </button>
+      <button onClick={() => createNotification({ title: '成功', message: '操作成功', type: 'success' })}>
+        成功
+      </button>
+      <button onClick={() => createNotification({ title: '警告', message: '请注意', type: 'warning' })}>
+        警告
+      </button>
+    </div>
+  )
+}
+
+// 自定义图标
+createNotification({ title: '通知', message: '自定义图标', icon: 'bell' })
+
+// 不自动关闭
+createNotification({ title: '通知', message: '手动关闭', duration: 0 })
+
+// 关闭所有
+closeAllNotifications()
+```
+
 ## API
 
 ### Notification 配置项

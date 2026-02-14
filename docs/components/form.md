@@ -26,6 +26,61 @@ Form 组件提供了表单验证的功能，只需为 rules 属性传入约定�
 
 <preview path="../demo/Form/Rules.vue" title="表单校验" description="Form 表单校验"></preview>
 
+## React 用法
+
+```tsx
+import { useRef, useState } from 'react'
+import { Form, FormItem, Input } from '@bobocn/element/react'
+import type { FormInstance, FormRules } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+function App() {
+  const formRef = useRef<FormInstance>(null)
+  const [model] = useState({ username: '', password: '' })
+
+  const rules: FormRules = {
+    username: [
+      { required: true, message: '请输入用户名', trigger: 'blur' },
+    ],
+    password: [
+      { required: true, message: '请输入密码', trigger: 'blur' },
+      { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+    ],
+  }
+
+  const handleSubmit = async () => {
+    try {
+      await formRef.current?.validate()
+      console.log('验证通过', model)
+    } catch (errors) {
+      console.log('验证失败', errors)
+    }
+  }
+
+  return (
+    <Form ref={formRef} model={model} rules={rules}>
+      <FormItem label="用户名" prop="username">
+        <Input
+          modelValue={model.username}
+          onUpdate:modelValue={(v) => { model.username = v }}
+          placeholder="请输入用户名"
+        />
+      </FormItem>
+      <FormItem label="密码" prop="password">
+        <Input
+          type="password"
+          modelValue={model.password}
+          onUpdate:modelValue={(v) => { model.password = v }}
+          placeholder="请输入密码"
+        />
+      </FormItem>
+      <button type="button" onClick={handleSubmit}>提交</button>
+      <button type="button" onClick={() => formRef.current?.resetFields()}>重置</button>
+    </Form>
+  )
+}
+```
+
 ## API
 
 ### Form 属性 (Attributes)

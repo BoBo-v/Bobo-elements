@@ -1,23 +1,50 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import {
+  faXmark,
+  faSpinner,
+  faCircleXmark,
+  faEye,
+  faEyeSlash,
+  faAngleDown,
+  faCircleCheck,
+  faCircleInfo,
+  faCircleExclamation,
+} from '@fortawesome/free-solid-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { MouseEvent } from 'react';
 
-beforeAll(() => {
-    library.add(faXmark, faSpinner)
-})
+const iconMap: Record<string, IconDefinition> = {
+  xmark: faXmark,
+  spinner: faSpinner,
+  'circle-xmark': faCircleXmark,
+  eye: faEye,
+  'eye-slash': faEyeSlash,
+  'angle-down': faAngleDown,
+  'circle-check': faCircleCheck,
+  'circle-info': faCircleInfo,
+  'circle-exclamation': faCircleExclamation,
+};
 
 type IconProps = {
-    name: 'xmark' | 'spinner';
-    spin?: boolean;
-    'data-testid'?: string;
+  name: string;
+  spin?: boolean;
+  className?: string;
+  onClick?: (e: MouseEvent) => void;
+  onMouseDown?: (e: MouseEvent) => void;
+  'data-testid'?: string;
 };
 
-const iconMap = {
-    xmark: faXmark,
-    spinner: faSpinner,
-};
-
-export default function Icon({ name, spin, 'data-testid': testId }: IconProps) {
-    return <FontAwesomeIcon icon={iconMap[name]} spin={spin} data-testid={testId} />;
+export default function Icon({ name, spin, className, onClick, onMouseDown, 'data-testid': testId }: IconProps) {
+  const icon = iconMap[name];
+  if (!icon) return null;
+  return (
+    <FontAwesomeIcon
+      icon={icon}
+      spin={spin}
+      className={className}
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      data-testid={testId}
+    />
+  );
 }

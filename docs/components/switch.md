@@ -37,6 +37,39 @@ description: Switch 组件的文档
 <preview path="../demo/Switch/Text.vue" title="支持文字描述" description="Switch 文字描述"></preview>
 
 
+## React 用法
+
+```tsx
+import { useState } from 'react'
+import { Switch } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  const [checked, setChecked] = useState(false)
+
+  return <Switch modelValue={checked} onChange={setChecked} />
+}
+
+// 禁用状态
+<Switch modelValue={false} disabled />
+
+// 不同尺寸
+<Switch modelValue={checked} size="large" onChange={setChecked} />
+<Switch modelValue={checked} size="small" onChange={setChecked} />
+
+// 文字描述
+<Switch modelValue={checked} activeText="开启" inactiveText="关闭" onChange={setChecked} />
+
+// 自定义 value 类型
+<Switch
+  modelValue={checked}
+  activeValue="yes"
+  inactiveValue="no"
+  onChange={setChecked}
+/>
+```
+
 ## API
 
 ### 属性 (Attributes)

@@ -1,4 +1,5 @@
-import React, { forwardRef, useImperativeHandle, useState, ReactElement } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
+import type { ReactElement } from 'react';
 import type { AlertProps, AlertRef } from '../../core/components/alert.react.types';
 import Icon from './Icon';
 
@@ -6,7 +7,7 @@ const Alert = forwardRef<AlertRef, AlertProps>(
     (
         { type = 'info', closable = false, children, onClose }: AlertProps,
         ref
-    ): ReactElement | null => {  // ✅ 关键：ReactElement | null
+    ): ReactElement | null => {
         const [visible, setVisible] = useState(true);
 
         const hide = () => {
@@ -39,3 +40,4 @@ const Alert = forwardRef<AlertRef, AlertProps>(
 );
 
 export default Alert;
+export type { AlertRef };

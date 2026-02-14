@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["src/index.ts", "src/components/**/*", "src/core/components/**/*","src/hooks/**/*"],
+  "include": ["src/index.ts", "src/components/**/*", "src/core/components/**/*", "src/hooks/**/*", "src/vue/**/*", "src/react/**/*"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

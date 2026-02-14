@@ -50,6 +50,47 @@ description: Input 组件的文档
 <preview path="../demo/Input/Clear.vue" title="清空文本框" description="Input 清空文本框"></preview>
 
 
+## React 用法
+
+```tsx
+import { useState } from 'react'
+import { Input } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  const [value, setValue] = useState('')
+
+  return (
+    <Input
+      modelValue={value}
+      onUpdate:modelValue={setValue}
+      placeholder="请输入内容"
+    />
+  )
+}
+
+// 禁用状态
+<Input modelValue="" disabled placeholder="禁用" />
+
+// 可清空
+<Input modelValue={value} onUpdate:modelValue={setValue} clearable />
+
+// 密码框
+<Input modelValue={value} onUpdate:modelValue={setValue} showPassword />
+
+// Textarea
+<Input type="textarea" modelValue={value} onUpdate:modelValue={setValue} />
+
+// 复合型输入框（前后缀通过 prepend / append 传入 ReactNode）
+<Input
+  modelValue={value}
+  onUpdate:modelValue={setValue}
+  prepend={<span>http://</span>}
+  append={<span>.com</span>}
+/>
+```
+
 ## API
 
 ### 属性 (Attributes)

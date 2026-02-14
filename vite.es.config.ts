@@ -2,23 +2,15 @@ import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import react from '@vitejs/plugin-react'
-import VueMacros from 'unplugin-vue-macros'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
     plugins: [
-        VueMacros.vite({
-            plugins: {
-                vue: vue(),
-                vueJsx: vueJsx(),
-            },
-        }),
-        react(), // 新增
+        vue(),
         dts({
             tsconfigPath: './tsconfig.build.json',
-            outDir: 'dist/types'
+            outDir: 'dist/vue/types',
+            include: ['src/vue/**/*', 'src/core/**/*', 'src/hooks/**/*', 'src/components/**/*']
         })
     ],
     resolve: {
@@ -27,30 +19,28 @@ export default defineConfig({
         }
     },
     build: {
-        outDir: 'dist/es',
+        outDir: 'dist/vue',
+        emptyOutDir: false,
         lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
-            name: 'BoboElement',
-            fileName: 'Bobo-element',
+            entry: resolve(__dirname, 'src/vue/index.ts'),
+            name: 'BoboElementVue',
+            fileName: 'index',
             formats: ['es']
         },
         rollupOptions: {
             external: [
                 'vue',
-                'react',
-                'react-dom',
                 '@fortawesome/fontawesome-svg-core',
                 '@fortawesome/free-solid-svg-icons',
                 '@fortawesome/vue-fontawesome',
                 'async-validator',
                 '@popperjs/core',
+                'lodash-es',
                 'axios'
             ],
             output: {
                 globals: {
-                    vue: 'Vue',
-                    react: 'React',
-                    'react-dom': 'ReactDOM'
+                    vue: 'Vue'
                 },
                 assetFileNames: (chunkInfo) => {
                     if (chunkInfo.name === 'style.css') return 'index.css'

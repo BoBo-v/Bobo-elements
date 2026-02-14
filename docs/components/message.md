@@ -33,6 +33,42 @@ Message 在配置上与 Notification 非常类似，所以部分 options 在此�
 可以调用 message 模块提供了一个 closeAll() 手动关闭所有实例
 <preview path="../demo/Message/closeAll.vue" title="关闭所有实例" description="Message 关闭所有实例"></preview>
 
+## React 用法
+
+```tsx
+import { createMessage, closeAllMessages } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  return (
+    <div>
+      <button onClick={() => createMessage({ message: '这是一条消息', type: 'info' })}>
+        信息
+      </button>
+      <button onClick={() => createMessage({ message: '成功!', type: 'success' })}>
+        成功
+      </button>
+      <button onClick={() => createMessage({ message: '警告!', type: 'warning' })}>
+        警告
+      </button>
+      <button onClick={() => createMessage({ message: '错误!', type: 'danger' })}>
+        错误
+      </button>
+    </div>
+  )
+}
+
+// 可关闭 + 自定义时长
+createMessage({ message: '5秒后关闭', duration: 5000, showClose: true })
+
+// 不自动关闭
+createMessage({ message: '手动关闭', duration: 0, showClose: true })
+
+// 关闭所有
+closeAllMessages()
+```
+
 ## API
 
 ### Message 配置项

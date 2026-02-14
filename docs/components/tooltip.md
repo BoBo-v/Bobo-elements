@@ -31,6 +31,42 @@ description: Tooltip 文字提示
 将 manual 属性设置为 true 即可， 然后可以使用实例上面的 show 和 hide 方法打开关闭下拉菜单。
 <preview path="../demo/Tooltip/manual.vue" title="手动触发" description="Tooltip 手动触发"></preview>
 
+## React 用法
+
+```tsx
+import { useRef } from 'react'
+import { Tooltip } from '@bobocn/element/react'
+import type { TooltipInstance } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+// 基础用法
+function App() {
+  return (
+    <Tooltip content="提示文字" placement="top">
+      <button>悬停查看提示</button>
+    </Tooltip>
+  )
+}
+
+// 点击触发
+<Tooltip content="点击触发" trigger="click">
+  <button>点击</button>
+</Tooltip>
+
+// 自定义内容（contentSlot）
+<Tooltip contentSlot={<div><p>多行内容</p><p>第二行</p></div>}>
+  <button>悬停查看</button>
+</Tooltip>
+
+// 手动控制
+const tooltipRef = useRef<TooltipInstance>(null)
+<Tooltip content="手动控制" manual ref={tooltipRef}>
+  <button>手动触发</button>
+</Tooltip>
+tooltipRef.current?.show()
+tooltipRef.current?.hide()
+```
+
 ## API
 
 ### 属性 (Attributes)

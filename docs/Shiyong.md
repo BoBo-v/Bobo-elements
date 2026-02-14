@@ -1,7 +1,7 @@
 
 # Bobo-Elements 开始使用
 
-Bobo-Elements 是一套基于 Vue3 和 TypeScript 的企业级 UI 组件库，提供了 Button、Form、Input、Select、Switch、Collapse、Tooltip、Dropdown、Message、Notification、Alert 等常用组件，帮助开发者快速构建高质量的 Web 应用。
+Bobo-Elements 是一套基于 TypeScript 的 UI 组件库，同时支持 **Vue3** 和 **React** 双框架。通过子路径导出，Vue 和 React 代码互不干扰，按需选择你所使用的框架即可。
 
 ## 安装
 
@@ -16,30 +16,9 @@ npm i @bobocn/element --save
 yarn add @bobocn/element
 ```
 
-## 全局使用
-
-```js
-import { createApp } from 'vue'
-// 引入所有组件
-import VElement from '@bobocn/element'
-// 引入样式
-import '@bobocn/element/dist/index.css'
-
-import App from './App.vue'
-// 全局使用
-createApp(App).use(VElement).mount('#app')
-```
-
-```vue
-<template>
-  <vk-button>我是 VkButton</vk-button>
-</template>
-```
-
-
 ## 按需引入
 
-Bobo-Elements 提供了基于 ES Module 的开箱即用的 Tree Shaking 功能。
+### Vue 用户
 
 使用 `<script setup>` 写法（推荐）：
 
@@ -51,8 +30,8 @@ Bobo-Elements 提供了基于 ES Module 的开箱即用的 Tree Shaking 功能�
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button, Input } from '@bobocn/element'
-import '@bobocn/element/dist/index.css'
+import { Button, Input } from '@bobocn/element/vue'
+import '@bobocn/element/style.css'
 
 const value = ref('')
 </script>
@@ -66,8 +45,8 @@ const value = ref('')
 </template>
 
 <script>
-import { Button } from '@bobocn/element'
-import '@bobocn/element/dist/index.css'
+import { Button } from '@bobocn/element/vue'
+import '@bobocn/element/style.css'
 
 export default {
   components: { Button },
@@ -75,9 +54,27 @@ export default {
 </script>
 ```
 
+### React 用户
+
+```tsx
+import { Button, Input } from '@bobocn/element/react'
+import '@bobocn/element/style.css'
+
+function App() {
+  return (
+    <div>
+      <Button type="primary">按钮</Button>
+      <Input placeholder="请输入" />
+    </div>
+  )
+}
+```
+
 ## CDN 使用
 
-你可以通过 CDN 的方式直接在 HTML 文件中使用 Bobo-Elements：
+你可以通过 CDN 的方式直接在 HTML 文件中使用 Bobo-Elements。
+
+### Vue 版本
 
 ```html
 <head>
@@ -91,19 +88,36 @@ export default {
 
   <!-- 引入 Vue3 -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <!-- 引入 Bobo-Elements -->
-  <script src="https://unpkg.com/@bobocn/element"></script>
+  <!-- 引入 Bobo-Elements Vue 版 -->
+  <script src="https://unpkg.com/@bobocn/element/dist/vue/index.umd.cjs"></script>
   <script>
     const app = Vue.createApp({})
-    app.use(VElement)
     app.mount('#app')
   </script>
 </body>
 ```
 
+### React 版本
+
+```html
+<head>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/@bobocn/element/dist/index.css" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- 引入 React -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- 引入 Bobo-Elements React 版 -->
+  <script src="https://unpkg.com/@bobocn/element/dist/react/index.umd.cjs"></script>
+</body>
+```
+
 ## 浏览器兼容性
 
-Bobo-Elements 基于 Vue3 开发，支持所有现代浏览器：
+Bobo-Elements 支持所有现代浏览器：
 
 | 浏览器 | 支持版本 |
 | --- | --- |

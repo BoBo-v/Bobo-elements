@@ -15,6 +15,7 @@ export interface ButtonProps {
     autofocus?: boolean;
     icon?: ReactNode;
     loading?: boolean;
+    children?: ReactNode;
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 

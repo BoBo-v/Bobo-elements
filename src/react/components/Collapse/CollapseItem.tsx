@@ -1,15 +1,14 @@
-import React from 'react'
 import { useCollapseContext } from './Collapse'
 import type { CollapseItemProps } from '../../../core/components/collapse/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-export const CollapseItem: React.FC<CollapseItemProps> = ({
-                                                              name,
-                                                              title,
-                                                              disabled,
-                                                              children
-                                                          }) => {
+export function CollapseItem({
+    name,
+    title,
+    disabled,
+    children,
+}: CollapseItemProps) {
     const { activeNames, handleItemClick } = useCollapseContext()
     const isActive = activeNames.includes(name)
 
