@@ -23,6 +23,9 @@ export default defineConfig({
             }
         }
     },
+    head: [
+        ['link', { rel: 'icon', href: '/favicon.ico' }]
+    ],
     markdown: {
         config(md) {
             md.use(containerPreview)
@@ -31,6 +34,7 @@ export default defineConfig({
     },
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
+        logo: '/logo.png',
         nav: [
             { text: '开始使用', link: '/Shiyong' },
             { text: '组件', link: '/components/button' },
