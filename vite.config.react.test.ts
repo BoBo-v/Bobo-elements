@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
@@ -6,7 +6,7 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'jsdom',
-        include: ['src/react/**/*.test.{ts,tsx}'], // ✅ 只执行 React 目录下的测试
-        exclude: ['src/vue/**'],                   // 🚫 排除 Vue 测试
+        include: ['src/react/**/*.test.{ts,tsx}'],
+        exclude: ['src/vue/**'],
     },
 })

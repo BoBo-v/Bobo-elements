@@ -1,5 +1,50 @@
 # 更新日志
 
+## v1.2.0
+
+_2026-04-23_
+
+### 工具链升级
+
+- **TypeScript** 4.7 → 5.7，支持 `satisfies`、`const` 类型参数、装饰器等新特性
+- **Vite** 4.x → 6.x，基于 Rollup 4 的构建引擎，显著提升构建速度
+- **Vitest** 0.29 → 3.x，测试框架全面升级，支持更丰富的测试 API
+- **@vitejs/plugin-vue** 4.x → 5.x
+- **@vitejs/plugin-vue-jsx** 3.x → 4.x
+- **@vitejs/plugin-react** 3.x → 4.x
+- **vite-plugin-dts** 3.x → 4.x
+- **vue-tsc** 1.x → 2.x
+
+### Vue 组件补齐
+
+Vue 侧新增以下组件，与 React 侧完全对等：
+
+- **Input 输入框** — 支持 clearable、showPassword、textarea 模式、prepend/append/prefix/suffix 插槽
+- **Switch 开关** — 支持 activeText/inactiveText、size 变体、自定义 activeValue/inactiveValue
+- **Form 表单** — 基于 provide/inject 的表单上下文管理，暴露 validate / resetFields / clearValidate
+- **FormItem 表单项** — 集成 async-validator 校验引擎，支持 required 标记、error/success 状态
+- **Select 选择器** — 键盘导航（ArrowUp/Down/Enter/Escape）、filterable 筛选、remote 远程搜索、clearable
+- **Message 消息提示** — 组件 + `createMessage()` 命令式 API，支持多实例堆叠定位、自动关闭
+- **Notification 通知** — 组件 + `createNotification()` 命令式 API，支持 title、icon、类型图标映射
+- **Tooltip 文字提示** — 补全之前的空壳实现，支持 Popper.js 定位、hover/click 触发、延迟控制
+
+### 修复
+
+- 修复 Dropdown 组件引用不存在的 core 文件导致构建失败的问题
+- 修复 VitePress 文档配置中引用已移除插件的问题
+
+### 清理
+
+- 移除 `unplugin-vue-macros` —— `defineOptions` 已内置于 Vue 3.3+，无需额外插件
+- 移除 `@vue-macros/volar` —— 同上
+- 移除 `vite-plugin-eslint` —— 已停止维护，不兼容 Vite 6
+- 移除 `@vue/tsconfig` —— 旧版使用已废弃的 TS 选项，改为独立 tsconfig 配置
+- 移除 `jest-environment-jsdom` —— Vitest 自带 jsdom 支持
+- tsconfig 迁移：`preserveValueImports` + `importsNotUsedAsValues` → `verbatimModuleSyntax`
+- tsconfig 迁移：`moduleResolution: "Node"` → `"bundler"`
+
+---
+
 ## v1.1.0
 
 _2025-12-20_

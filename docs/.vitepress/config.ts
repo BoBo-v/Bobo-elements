@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { fileURLToPath, URL } from 'node:url'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import VueMacros from 'unplugin-vue-macros'
 import { containerPreview, componentPreview } from '@vitepress-demo-preview/plugin'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -9,13 +8,7 @@ export default defineConfig({
     description: "基于vue3+Typescript,开发者的组件库",
     vite: {
         plugins: [
-            VueMacros.vite({
-                setupComponent: false,
-                setupSFC: false,
-                plugins: {
-                    vueJsx: vueJsx(),
-                },
-            }),
+            vueJsx(),
         ],
         resolve: {
             alias: {
