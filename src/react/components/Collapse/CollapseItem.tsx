@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import { useCollapseContext } from './Collapse'
 import type { CollapseItemProps } from '../../../core/components/collapse/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-export function CollapseItem({
+export const CollapseItem = memo(function CollapseItem({
     name,
     title,
     disabled,
@@ -36,4 +37,4 @@ export function CollapseItem({
             )}
         </div>
     )
-}
+})

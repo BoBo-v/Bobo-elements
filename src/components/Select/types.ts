@@ -14,8 +14,8 @@ export interface SelectProps {
   // 选项
   options?: SelectOption[];
   // 一些基本表单属性
-  placeholder: string;
-  disabled: boolean;
+  placeholder?: string;
+  disabled?: boolean;
   clearable?: boolean;
   renderLabel?: RenderLabelFunc;
   filterable?: boolean;

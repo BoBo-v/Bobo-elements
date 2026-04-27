@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import type { ButtonProps } from '../../core/components/button.react.types';
 import Icon from './Icon';
 
-export default function Button({
+const Button = memo(function Button({
     children,
     onClick,
     disabled,
@@ -21,4 +22,6 @@ export default function Button({
             <span data-testid="button-text">{children}</span>
         </button>
     );
-}
+});
+
+export default Button;

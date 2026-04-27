@@ -1,10 +1,10 @@
-import { useRef, Fragment } from 'react';
+import { useRef, Fragment, memo } from 'react';
 import type { DropdownProps, DropdownInstance, MenuOption } from '../../../core/components/dropdown.react.types';
 import type { TooltipInstance } from '../../../core/components/Tooltip/tooltip.types';
 import Tooltip from '../Tooltip/Tooltip';
 import '../../../components/Dropdown/style.css';
 
-const Dropdown = ({
+const Dropdown = memo(function Dropdown({
     menuOptions,
     hideAfterClick = true,
     trigger,
@@ -15,7 +15,7 @@ const Dropdown = ({
     onVisibleChange,
     onSelect,
     children,
-}: DropdownProps) => {
+}: DropdownProps) {
     const tooltipRef = useRef<TooltipInstance>(null);
 
     const visibleChange = (visible: boolean) => {
@@ -69,6 +69,6 @@ const Dropdown = ({
             </Tooltip>
         </div>
     );
-};
+});
 
 export default Dropdown;

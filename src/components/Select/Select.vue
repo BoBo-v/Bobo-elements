@@ -82,7 +82,9 @@ defineOptions({
   name: 'VkSelect'
 })
 const props = withDefaults(defineProps<SelectProps>(), {
-  options: () => []
+  options: () => [],
+  disabled: false,
+  placeholder: ''
 })
 const timeout = computed(() => props.remote ? 300 : 0)
 const emits = defineEmits<SelectEmits>()

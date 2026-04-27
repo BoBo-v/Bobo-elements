@@ -30,6 +30,7 @@ defineOptions({
 })
 
 withDefaults(defineProps<AlertProps>(), {
+  type: 'info',
   effect: 'light',
   closable: true
 })

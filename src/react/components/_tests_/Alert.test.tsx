@@ -44,7 +44,7 @@ describe('Alert component', () => {
         const handleClose = vi.fn();
         const ref = React.createRef<AlertRef>();
         render(
-            <Alert type="error" closable onClose={handleClose} ref={ref}>
+            <Alert type="danger" closable onClose={handleClose} ref={ref}>
                 Test
             </Alert>
         );

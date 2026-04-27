@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 
-export type AlertType = 'success' | 'info' | 'warning' | 'error';
+export type AlertType = 'success' | 'info' | 'warning' | 'danger';
 
 export interface AlertProps {
     type?: AlertType;
+    effect?: 'light' | 'dark';
     closable?: boolean;
     children?: ReactNode;
     onClose?: () => void;

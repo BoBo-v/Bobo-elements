@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faXmark,
@@ -34,7 +35,7 @@ type IconProps = {
   'data-testid'?: string;
 };
 
-export default function Icon({ name, spin, className, onClick, onMouseDown, 'data-testid': testId }: IconProps) {
+const Icon = memo(function Icon({ name, spin, className, onClick, onMouseDown, 'data-testid': testId }: IconProps) {
   const icon = iconMap[name];
   if (!icon) return null;
   return (
@@ -47,4 +48,6 @@ export default function Icon({ name, spin, className, onClick, onMouseDown, 'dat
       data-testid={testId}
     />
   );
-}
+});
+
+export default Icon;

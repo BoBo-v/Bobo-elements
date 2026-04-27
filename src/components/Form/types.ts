@@ -1,7 +1,7 @@
 import type { InjectionKey } from 'vue'
 import type { RuleItem, ValidateError, ValidateFieldsError } from 'async-validator'
 export interface FormItemProps {
-  label: string;
+  label?: string;
   prop?: string;
 }
 export interface FormItemRule extends RuleItem {
@@ -10,7 +10,7 @@ export interface FormItemRule extends RuleItem {
 export type FormRules = Record<string, FormItemRule[]>
 export interface FormProps {
   model: Record<string, any>;
-  rules: FormRules;
+  rules?: FormRules;
 }
 
 export interface FormContext extends FormProps {

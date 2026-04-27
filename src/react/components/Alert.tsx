@@ -5,7 +5,7 @@ import Icon from './Icon';
 
 const Alert = forwardRef<AlertRef, AlertProps>(
     (
-        { type = 'info', closable = false, children, onClose }: AlertProps,
+        { type = 'info', effect = 'light', closable = false, children, onClose }: AlertProps,
         ref
     ): ReactElement | null => {
         const [visible, setVisible] = useState(true);
@@ -20,7 +20,7 @@ const Alert = forwardRef<AlertRef, AlertProps>(
         if (!visible) return null;
 
         return (
-            <div className={`vk-alert vk-alert--${type}`} role="alert" data-testid="alert">
+            <div className={`vk-alert vk-alert__${type} vk-alert__${effect}`} role="alert" data-testid="alert">
                 <div className="vk-alert__content" data-testid="alert-content">
                     {children}
                 </div>

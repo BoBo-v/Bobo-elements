@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import type { SwitchProps } from '../../core/components/switch.react.types';
 import '../../components/Switch/style.css';
 
-export default function Switch({
+const Switch = memo(function Switch({
   modelValue,
   disabled = false,
   activeText,
@@ -69,4 +69,6 @@ export default function Switch({
       </div>
     </div>
   );
-}
+});
+
+export default Switch;
