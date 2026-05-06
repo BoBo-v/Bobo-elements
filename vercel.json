@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/ai",
-      "destination": "https://rag-chatbot-pvzlzygjj-bobo-vs-projects.vercel.app/"
+      "destination": "https://rag-chatbot-vue.vercel.app/"
     },
     {
       "source": "/ai/:path*",
-      "destination": "https://rag-chatbot-pvzlzygjj-bobo-vs-projects.vercel.app/:path*"
+      "destination": "https://rag-chatbot-vue.vercel.app/:path*"
     }
   ]
 }
