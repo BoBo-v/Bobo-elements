@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/ai",
+      "destination": "https://rag-chatbot-pvzlzygjj-bobo-vs-projects.vercel.app/"
+    },
+    {
+      "source": "/ai/:path*",
+      "destination": "https://rag-chatbot-pvzlzygjj-bobo-vs-projects.vercel.app/:path*"
+    }
+  ]
+}
