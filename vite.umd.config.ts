@@ -21,6 +21,7 @@ export default defineConfig({
     build: {
         outDir: 'dist/vue',
         emptyOutDir: false,
+        copyPublicDir: false,
         lib: {
             entry: resolve(__dirname, 'src/vue/index.ts'),
             name: 'BoboElementVue',

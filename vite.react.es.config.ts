@@ -21,6 +21,7 @@ export default defineConfig({
     build: {
         outDir: 'dist/react',
         emptyOutDir: false,
+        copyPublicDir: false,
         lib: {
             entry: resolve(__dirname, 'src/react/index.ts'),
             name: 'BoboElementReact',
