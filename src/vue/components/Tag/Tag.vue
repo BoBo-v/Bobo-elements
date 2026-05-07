@@ -28,7 +28,7 @@
 import { ref } from 'vue'
 import type { TagProps, TagEmits } from '../../../core/components/tag.types'
 import Icon from '../Icon.vue'
-import '@/components/Tag/style.css'
+import '../../../components/Tag/style.css'
 
 defineOptions({ name: 'VkTag' })
 

@@ -42,7 +42,7 @@ import { watch } from 'vue'
 import type { ModalProps, ModalEmits } from '../../../core/components/modal.types'
 import Icon from '../Icon.vue'
 import Button from '../Button.vue'
-import '@/components/Modal/style.css'
+import '../../../components/Modal/style.css'
 
 defineOptions({ name: 'VkModal' })
 

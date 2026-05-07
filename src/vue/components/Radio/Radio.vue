@@ -27,7 +27,7 @@
 import { computed, inject } from 'vue'
 import type { RadioProps, RadioEmits } from '../../../core/components/radio/types'
 import { radioGroupContextKey } from '../../../core/components/radio/types'
-import '@/components/Radio/style.css'
+import '../../../components/Radio/style.css'
 
 defineOptions({ name: 'VkRadio' })
 

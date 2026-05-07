@@ -29,10 +29,10 @@ const handleChange = (value: CheckboxValueType, checked: boolean) => {
 }
 
 provide(checkboxGroupContextKey, {
-  modelValue: props.modelValue,
-  disabled: props.disabled,
-  min: props.min,
-  max: props.max,
+  get modelValue() { return props.modelValue },
+  get disabled() { return props.disabled },
+  get min() { return props.min },
+  get max() { return props.max },
   handleChange
 })
 </script>

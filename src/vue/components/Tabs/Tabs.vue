@@ -27,7 +27,7 @@
 import { ref, provide, watch, onMounted } from 'vue'
 import type { TabsProps, TabsEmits, TabPaneProps } from '../../../core/components/tabs/types'
 import { tabsContextKey } from '../../../core/components/tabs/types'
-import '@/components/Tabs/style.css'
+import '../../../components/Tabs/style.css'
 
 defineOptions({ name: 'VkTabs' })
 

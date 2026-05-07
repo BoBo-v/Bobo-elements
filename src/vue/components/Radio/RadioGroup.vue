@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, watch, ref } from 'vue'
+import { provide, computed } from 'vue'
 import type { RadioGroupProps, RadioGroupEmits, RadioValueType } from '../../../core/components/radio/types'
 import { radioGroupContextKey } from '../../../core/components/radio/types'
 
@@ -20,10 +20,10 @@ const handleChange = (value: RadioValueType) => {
 }
 
 provide(radioGroupContextKey, {
-  modelValue: props.modelValue,
-  name: props.name,
-  disabled: props.disabled,
-  size: props.size,
+  get modelValue() { return props.modelValue },
+  get name() { return props.name },
+  get disabled() { return props.disabled },
+  get size() { return props.size },
   handleChange
 })
 </script>
