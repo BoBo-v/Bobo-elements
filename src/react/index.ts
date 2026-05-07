@@ -11,6 +11,11 @@ export { Form, FormItem } from './components/Form';
 export { Select } from './components/Select';
 export { createMessage, closeAllMessages } from './components/Message';
 export { createNotification, closeAllNotifications } from './components/Notification';
+export { Modal } from './components/Modal';
+export { Tabs, TabPane } from './components/Tabs';
+export { Tag } from './components/Tag';
+export { Radio, RadioGroup } from './components/Radio';
+export { Checkbox, CheckboxGroup } from './components/Checkbox';
 
 // Type re-exports
 export type { AlertRef } from './components/Alert';
@@ -51,3 +56,16 @@ export type {
   CollapseContext,
   NameType,
 } from '../core/components/collapse/types';
+export type { ModalProps } from '../core/components/modal.react.types';
+export type { TabsProps, TabPaneProps, TabsType } from '../core/components/tabs/types';
+export type { TagProps, TagType, TagSize, TagEffect } from '../core/components/tag.react.types';
+export type {
+  RadioProps,
+  RadioGroupProps,
+  RadioValueType,
+} from '../core/components/radio/types';
+export type {
+  CheckboxProps,
+  CheckboxGroupProps,
+  CheckboxValueType,
+} from '../core/components/checkbox/types';

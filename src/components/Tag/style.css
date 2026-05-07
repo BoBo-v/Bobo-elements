@@ -1,0 +1,85 @@
+.vk-tag {
+  --vk-tag-font-size: 12px;
+  --vk-tag-border-radius: 4px;
+  --vk-tag-padding: 0 9px;
+  --vk-tag-height: 24px;
+  --vk-tag-bg-color: var(--vk-color-primary-light-9, #ecf5ff);
+  --vk-tag-text-color: var(--vk-color-primary, #409eff);
+  --vk-tag-border-color: var(--vk-color-primary-light-8, #d9ecff);
+}
+
+.vk-tag {
+  display: inline-flex;
+  align-items: center;
+  height: var(--vk-tag-height);
+  padding: var(--vk-tag-padding);
+  font-size: var(--vk-tag-font-size);
+  color: var(--vk-tag-text-color);
+  background-color: var(--vk-tag-bg-color);
+  border: 1px solid var(--vk-tag-border-color);
+  border-radius: var(--vk-tag-border-radius);
+  box-sizing: border-box;
+  white-space: nowrap;
+  line-height: 1;
+  cursor: default;
+  &.is-round {
+    border-radius: var(--vk-tag-height);
+  }
+}
+
+.vk-tag__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  transition: background-color 0.2s, color 0.2s;
+  color: var(--vk-tag-text-color);
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  &:hover {
+    background-color: var(--vk-tag-text-color);
+    color: #fff;
+  }
+}
+
+.vk-tag__content {
+  line-height: 1;
+}
+
+/* Sizes */
+.vk-tag--large {
+  --vk-tag-height: 32px;
+  --vk-tag-padding: 0 12px;
+  --vk-tag-font-size: 14px;
+}
+.vk-tag--small {
+  --vk-tag-height: 20px;
+  --vk-tag-padding: 0 6px;
+  --vk-tag-font-size: 12px;
+}
+
+/* Effects */
+@each $val in primary, success, warning, danger, info {
+  .vk-tag--$(val).vk-tag--light {
+    --vk-tag-bg-color: var(--vk-color-$(val)-light-9);
+    --vk-tag-text-color: var(--vk-color-$(val));
+    --vk-tag-border-color: var(--vk-color-$(val)-light-8);
+  }
+  .vk-tag--$(val).vk-tag--dark {
+    --vk-tag-bg-color: var(--vk-color-$(val));
+    --vk-tag-text-color: var(--vk-color-white, #fff);
+    --vk-tag-border-color: var(--vk-color-$(val));
+  }
+  .vk-tag--$(val).vk-tag--plain {
+    --vk-tag-bg-color: var(--vk-color-white, #fff);
+    --vk-tag-text-color: var(--vk-color-$(val));
+    --vk-tag-border-color: var(--vk-color-$(val)-light-5);
+  }
+}

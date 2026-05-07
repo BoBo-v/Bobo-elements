@@ -1,0 +1,98 @@
+.vk-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+}
+
+.vk-modal {
+  --vk-modal-width: 520px;
+  --vk-modal-padding: 20px;
+  --vk-modal-font-size: 14px;
+  --vk-modal-border-radius: var(--vk-border-radius-base, 4px);
+  --vk-modal-header-font-size: 16px;
+  --vk-modal-bg-color: var(--vk-color-white, #fff);
+  --vk-modal-header-text-color: var(--vk-text-color-primary, #303133);
+  --vk-modal-body-text-color: var(--vk-text-color-regular, #606266);
+  --vk-modal-close-color: var(--vk-text-color-placeholder, #a8abb2);
+  --vk-modal-close-hover-color: var(--vk-color-primary, #409eff);
+}
+
+.vk-modal {
+  position: relative;
+  margin: 0 auto;
+  background: var(--vk-modal-bg-color);
+  border-radius: var(--vk-modal-border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  width: var(--vk-modal-width);
+}
+
+.vk-modal__header {
+  padding: var(--vk-modal-padding);
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .vk-modal__title {
+    font-size: var(--vk-modal-header-font-size);
+    font-weight: 500;
+    color: var(--vk-modal-header-text-color);
+    line-height: 1;
+  }
+}
+
+.vk-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--vk-modal-close-color);
+  border: none;
+  background: transparent;
+  padding: 0;
+  outline: none;
+  transition: color 0.2s;
+  &:hover {
+    color: var(--vk-modal-close-hover-color);
+  }
+}
+
+.vk-modal__body {
+  padding: 10px var(--vk-modal-padding) var(--vk-modal-padding);
+  font-size: var(--vk-modal-font-size);
+  color: var(--vk-modal-body-text-color);
+  word-break: break-all;
+}
+
+.vk-modal__footer {
+  padding: 0 var(--vk-modal-padding) var(--vk-modal-padding);
+  text-align: right;
+  box-sizing: border-box;
+  .vk-button + .vk-button {
+    margin-left: 10px;
+  }
+}
+
+.vk-modal-fade-enter-active {
+  animation: vk-modal-fade-in 0.3s;
+}
+.vk-modal-fade-leave-active {
+  animation: vk-modal-fade-in 0.3s reverse;
+}
+
+@keyframes vk-modal-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
