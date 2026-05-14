@@ -875,7 +875,9 @@ const componentGroups = [
 .stat-item {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  min-width: 64px;
+  text-align: center;
   position: relative;
 }
 
