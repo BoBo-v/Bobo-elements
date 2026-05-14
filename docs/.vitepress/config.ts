@@ -36,51 +36,64 @@ export default defineConfig({
             { text: '关于', link: '/components/about' },
         ],
 
-        sidebar: [
-            {
-                text: '开发指南',
-                items: [
-                    { text: '开始使用', link: '/Shiyong' },
-                    { text: '更新日志', link: '/changelog' },
-                ]
-            },
-            {
-                text: '基础组件',
-                items: [
-                    { text: 'Button 按钮', link: '/components/button' },
-                    { text: 'Alert 提示', link: '/components/alert' },
-                    { text: 'Tag 标签', link: '/components/tag' },
-                ]
-            },
-            {
-                text: '表单组件',
-                items: [
-                    { text: 'Form 表单', link: '/components/form' },
-                    { text: 'Input 输入框', link: '/components/input' },
-                    { text: 'Select 选择器', link: '/components/select' },
-                    { text: 'Switch 开关', link: '/components/switch' },
-                    { text: 'Radio 单选框', link: '/components/radio' },
-                    { text: 'Checkbox 多选框', link: '/components/checkbox' },
-                ]
-            },
-            {
-                text: '数据展示',
-                items: [
-                    { text: 'Collapse 折叠面板', link: '/components/collapse' },
-                    { text: 'Tabs 标签页', link: '/components/tabs' },
-                    { text: 'Tooltip 文字提示', link: '/components/tooltip' },
-                    { text: 'Dropdown 下拉菜单', link: '/components/dropdown' },
-                ]
-            },
-            {
-                text: '反馈组件',
-                items: [
-                    { text: 'Modal 对话框', link: '/components/modal' },
-                    { text: 'Message 消息', link: '/components/message' },
-                    { text: 'Notification 通知', link: '/components/notification' },
-                ]
-            },
-        ],
+        sidebar: {
+            '/components/': [
+                {
+                    text: '基础组件',
+                    items: [
+                        { text: 'Button 按钮', link: '/components/button' },
+                        { text: 'Alert 提示', link: '/components/alert' },
+                        { text: 'Tag 标签', link: '/components/tag' },
+                    ]
+                },
+                {
+                    text: '表单组件',
+                    items: [
+                        { text: 'Form 表单', link: '/components/form' },
+                        { text: 'Input 输入框', link: '/components/input' },
+                        { text: 'Select 选择器', link: '/components/select' },
+                        { text: 'Switch 开关', link: '/components/switch' },
+                        { text: 'Radio 单选框', link: '/components/radio' },
+                        { text: 'Checkbox 多选框', link: '/components/checkbox' },
+                    ]
+                },
+                {
+                    text: '数据展示',
+                    items: [
+                        { text: 'Collapse 折叠面板', link: '/components/collapse' },
+                        { text: 'Tabs 标签页', link: '/components/tabs' },
+                        { text: 'Tooltip 文字提示', link: '/components/tooltip' },
+                        { text: 'Dropdown 下拉菜单', link: '/components/dropdown' },
+                    ]
+                },
+                {
+                    text: '反馈组件',
+                    items: [
+                        { text: 'Modal 对话框', link: '/components/modal' },
+                        { text: 'Message 消息', link: '/components/message' },
+                        { text: 'Notification 通知', link: '/components/notification' },
+                    ]
+                },
+            ],
+            '/Shiyong': [
+                {
+                    text: '开发指南',
+                    items: [
+                        { text: '开始使用', link: '/Shiyong' },
+                        { text: '更新日志', link: '/changelog' },
+                    ]
+                },
+            ],
+            '/changelog': [
+                {
+                    text: '开发指南',
+                    items: [
+                        { text: '开始使用', link: '/Shiyong' },
+                        { text: '更新日志', link: '/changelog' },
+                    ]
+                },
+            ],
+        },
 
         socialLinks: [
             { icon: 'github', link: 'https://github.com/BoBo-v/Bobo-elements.git' }

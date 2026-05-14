@@ -100,33 +100,9 @@ h1, h2, h3, h4, h5, h6, p {
   margin-bottom: 8px;
 }
 
-/* ==================== 首页 Features 区域 ==================== */
-.VPFeatures .VPFeature {
-  border-radius: 12px;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.VPFeatures .VPFeature:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-.VPFeatures .VPFeature .title {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.VPFeatures .VPFeature .details {
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-}
-
-/* ==================== 首页 Hero 区域 ==================== */
-.VPHero .name {
-  background: linear-gradient(135deg, var(--vp-c-brand-1), var(--vp-c-brand-3));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* ==================== 自定义首页 ==================== */
+.VPPage {
+  padding-bottom: 0 !important;
 }
 
 /* ==================== 侧边栏分组标题 ==================== */
