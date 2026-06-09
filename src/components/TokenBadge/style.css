@@ -1,0 +1,41 @@
+.vk-token-badge {
+  --vk-token-badge-bg: var(--vk-fill-color-light);
+  --vk-token-badge-text: var(--vk-text-color-secondary);
+  --vk-token-badge-border-radius: 12px;
+}
+
+.vk-token-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: var(--vk-token-badge-border-radius);
+  background-color: var(--vk-token-badge-bg);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--vk-token-badge-text);
+}
+
+.vk-token-badge--normal {
+  --vk-token-badge-bg: var(--vk-color-primary-light-9);
+  --vk-token-badge-text: var(--vk-color-primary);
+}
+
+.vk-token-badge--warning {
+  --vk-token-badge-bg: var(--vk-color-warning-light-9);
+  --vk-token-badge-text: var(--vk-color-warning);
+}
+
+.vk-token-badge--danger {
+  --vk-token-badge-bg: var(--vk-color-danger-light-9);
+  --vk-token-badge-text: var(--vk-color-danger);
+}
+
+.vk-token-badge__prefix {
+  font-weight: 500;
+}
+
+.vk-token-badge__value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
