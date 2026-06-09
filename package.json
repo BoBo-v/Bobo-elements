@@ -58,24 +58,30 @@
     "test:react": "vitest --config vite.config.react.test.ts"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.3.0",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^3.1.0",
-    "@fortawesome/vue-fontawesome": "^3.0.3",
-    "@popperjs/core": "^2.11.6",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.3.1",
+    "@fortawesome/vue-fontawesome": "^3.2.0",
+    "@popperjs/core": "^2.11.8",
     "async-validator": "^4.2.5",
-    "axios": "^1.3.4",
+    "axios": "^1.17.0",
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
-    "vue": "^3.3.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vue": "^3.3.4"
   },
   "peerDependenciesMeta": {
-    "vue": { "optional": true },
-    "react": { "optional": true },
-    "react-dom": { "optional": true }
+    "vue": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
@@ -84,20 +90,21 @@
     "@types/jest": "^30.0.0",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^20.0.0",
-    "@types/react": "^18.0.37",
-    "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^4.3.0",
-    "@vitejs/plugin-vue": "^5.2.0",
-    "@vitejs/plugin-vue-jsx": "^4.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vitejs/plugin-vue-jsx": "^5.1.5",
     "@vitepress-demo-preview/component": "^2.3.0",
     "@vitepress-demo-preview/plugin": "^1.1.9",
     "@vue/eslint-config-typescript": "^11.0.0",
-    "@vue/test-utils": "^2.4.6",
+    "@vue/language-core": "^3.1.8",
+    "@vue/test-utils": "^2.4.11",
     "eslint": "^8.22.0",
     "eslint-plugin-vue": "^9.3.0",
-    "jsdom": "^21.1.2",
+    "jsdom": "^29.1.1",
     "move-file-cli": "^3.0.0",
-    "npm-run-all": "^4.1.5",
+    "npm-run-all2": "^8.0.4",
     "postcss-color-mix": "^1.1.0",
     "postcss-each": "^1.1.0",
     "postcss-each-variables": "^0.3.0",
@@ -105,7 +112,7 @@
     "postcss-nested": "^6.0.1",
     "typescript": "~5.7.2",
     "vite": "^6.0.0",
-    "vite-plugin-dts": "^4.5.0",
+    "vite-plugin-dts": "^5.0.2",
     "vitepress": "^1.6.0",
     "vitest": "^3.1.0",
     "vue-tsc": "^2.2.0"
