@@ -1,0 +1,26 @@
+.vk-streaming-text {
+  --vk-streaming-cursor-color: var(--vk-text-color-primary);
+}
+
+.vk-streaming-text {
+  display: inline;
+  position: relative;
+}
+
+.vk-streaming-text__cursor {
+  display: inline-block;
+  color: var(--vk-streaming-cursor-color);
+  animation: vk-cursor-blink 1s step-end infinite;
+  margin-left: 1px;
+  font-weight: 300;
+}
+
+.vk-streaming-text__cursor--hidden {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes vk-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
