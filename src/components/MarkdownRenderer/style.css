@@ -1,0 +1,102 @@
+.vk-markdown-renderer {
+  --vk-md-heading-color: var(--vk-text-color-primary);
+  --vk-md-text-color: var(--vk-text-color-regular);
+  --vk-md-code-bg: var(--vk-fill-color-light);
+  --vk-md-code-text: var(--vk-color-danger);
+  --vk-md-blockquote-border: var(--vk-color-primary);
+  --vk-md-blockquote-bg: var(--vk-fill-color-lighter);
+  --vk-md-link-color: var(--vk-color-primary);
+  --vk-md-hr-color: var(--vk-border-color-light);
+}
+
+.vk-markdown-renderer {
+  color: var(--vk-md-text-color);
+  font-size: var(--vk-font-size-base);
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+.vk-md-h1, .vk-md-h2, .vk-md-h3, .vk-md-h4, .vk-md-h5, .vk-md-h6 {
+  color: var(--vk-md-heading-color);
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  line-height: 1.4;
+}
+
+.vk-md-h1 { font-size: 1.6em; }
+.vk-md-h2 { font-size: 1.4em; }
+.vk-md-h3 { font-size: 1.2em; }
+.vk-md-h4 { font-size: 1.1em; }
+.vk-md-h5 { font-size: 1em; }
+.vk-md-h6 { font-size: 0.9em; }
+
+.vk-md-p {
+  margin: 0.5em 0;
+}
+
+.vk-md-bold { font-weight: 600; }
+.vk-md-italic { font-style: italic; }
+.vk-md-del { text-decoration: line-through; }
+
+.vk-md-inline-code {
+  background-color: var(--vk-md-code-bg);
+  color: var(--vk-md-code-text);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 0.9em;
+}
+
+.vk-md-pre {
+  background-color: var(--vk-md-code-bg);
+  border-radius: var(--vk-border-radius-base);
+  padding: 12px 16px;
+  overflow-x: auto;
+  margin: 0.8em 0;
+}
+
+.vk-md-pre .vk-md-code {
+  color: var(--vk-md-text-color);
+  font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 0;
+  background: transparent;
+}
+
+.vk-md-blockquote {
+  border-left: 4px solid var(--vk-md-blockquote-border);
+  background-color: var(--vk-md-blockquote-bg);
+  padding: 8px 16px;
+  margin: 0.8em 0;
+  border-radius: 0 var(--vk-border-radius-base) var(--vk-border-radius-base) 0;
+}
+
+.vk-md-ul {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.vk-md-li {
+  margin: 0.25em 0;
+}
+
+.vk-md-link {
+  color: var(--vk-md-link-color);
+  text-decoration: none;
+}
+
+.vk-md-link:hover {
+  text-decoration: underline;
+}
+
+.vk-md-img {
+  max-width: 100%;
+  border-radius: var(--vk-border-radius-base);
+}
+
+.vk-md-hr {
+  border: none;
+  border-top: 1px solid var(--vk-md-hr-color);
+  margin: 1em 0;
+}
