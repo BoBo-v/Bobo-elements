@@ -1,0 +1,27 @@
+import type { ReactNode, KeyboardEvent } from 'react'
+
+export interface PromptInputProps {
+  value?: string
+  placeholder?: string
+  disabled?: boolean
+  maxLength?: number
+  rows?: number
+  autoResize?: boolean
+  maxRows?: number
+  showCount?: boolean
+  streaming?: boolean
+  streamingText?: string
+  hintText?: string
+  sendAriaLabel?: string
+  children?: ReactNode
+  onChange?: (value: string) => void
+  onSubmit?: (value: string) => void
+  onKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>) => void
+}
+
+export interface PromptInputRef {
+  focus: () => void
+  blur: () => void
+  clear: () => void
+  textareaRef: HTMLTextAreaElement | null
+}

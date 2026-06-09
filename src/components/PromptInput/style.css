@@ -1,0 +1,115 @@
+.vk-prompt-input {
+  --vk-prompt-input-border-color: var(--vk-border-color);
+  --vk-prompt-input-focus-border-color: var(--vk-color-primary);
+  --vk-prompt-input-bg-color: var(--vk-fill-color-blank);
+  --vk-prompt-input-border-radius: var(--vk-border-radius-base);
+  --vk-prompt-input-padding: 12px;
+  --vk-prompt-input-send-color: var(--vk-color-primary);
+  --vk-prompt-input-send-disabled-color: var(--vk-text-color-placeholder);
+  --vk-prompt-input-count-color: var(--vk-text-color-secondary);
+}
+
+.vk-prompt-input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--vk-prompt-input-border-color);
+  border-radius: var(--vk-prompt-input-border-radius);
+  background-color: var(--vk-prompt-input-bg-color);
+  transition: border-color var(--vk-transition-duration-fast);
+}
+
+.vk-prompt-input:focus-within {
+  border-color: var(--vk-prompt-input-focus-border-color);
+}
+
+.vk-prompt-input.is-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.vk-prompt-input.is-streaming .vk-prompt-input__textarea {
+  cursor: not-allowed;
+}
+
+.vk-prompt-input__textarea {
+  width: 100%;
+  min-height: 24px;
+  padding: var(--vk-prompt-input-padding);
+  padding-bottom: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--vk-font-size-base);
+  line-height: 1.5;
+  color: var(--vk-text-color-primary);
+  box-sizing: border-box;
+}
+
+.vk-prompt-input__textarea::placeholder {
+  color: var(--vk-text-color-placeholder);
+}
+
+.vk-prompt-input__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px var(--vk-prompt-input-padding);
+}
+
+.vk-prompt-input__count {
+  font-size: 12px;
+  color: var(--vk-prompt-input-count-color);
+}
+
+.vk-prompt-input__count.is-exceeded {
+  color: var(--vk-color-danger);
+}
+
+.vk-prompt-input__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vk-prompt-input__hint {
+  font-size: 11px;
+  color: var(--vk-text-color-placeholder);
+}
+
+.vk-prompt-input__send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--vk-prompt-input-send-color);
+  color: var(--vk-color-white);
+  cursor: pointer;
+  transition: opacity var(--vk-transition-duration-fast);
+  font-size: 14px;
+}
+
+.vk-prompt-input__send-btn:disabled {
+  background-color: var(--vk-prompt-input-send-disabled-color);
+  cursor: not-allowed;
+}
+
+.vk-prompt-input__send-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.vk-prompt-input__streaming-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--vk-color-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  background-color: var(--vk-color-primary-light-9);
+}
