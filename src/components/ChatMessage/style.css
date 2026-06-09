@@ -1,0 +1,140 @@
+.vk-chat-message {
+  --vk-chat-msg-max-width: 80%;
+  --vk-chat-msg-gap: 12px;
+  --vk-chat-msg-avatar-size: 36px;
+  --vk-chat-msg-padding: 12px 16px;
+  --vk-chat-msg-border-radius: var(--vk-border-radius-base);
+  --vk-chat-msg-user-bg: var(--vk-color-primary);
+  --vk-chat-msg-user-text: var(--vk-color-white);
+  --vk-chat-msg-ai-bg: var(--vk-fill-color-light);
+  --vk-chat-msg-ai-text: var(--vk-text-color-primary);
+  --vk-chat-msg-system-bg: var(--vk-fill-color-lighter);
+  --vk-chat-msg-system-text: var(--vk-text-color-secondary);
+  --vk-chat-msg-timestamp-color: var(--vk-text-color-secondary);
+  --vk-chat-msg-avatar-bg: var(--vk-fill-color);
+  --vk-chat-msg-error-color: var(--vk-color-danger);
+}
+
+.vk-chat-message {
+  display: flex;
+  gap: var(--vk-chat-msg-gap);
+  align-items: flex-start;
+  padding: 8px 0;
+  max-width: 100%;
+}
+
+.vk-chat-message--user {
+  flex-direction: row-reverse;
+}
+
+.vk-chat-message--system {
+  justify-content: center;
+}
+
+.vk-chat-message__avatar {
+  flex-shrink: 0;
+  width: var(--vk-chat-msg-avatar-size);
+  height: var(--vk-chat-msg-avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--vk-chat-msg-avatar-bg);
+}
+
+.vk-chat-message__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vk-chat-message__avatar-icon {
+  font-size: 18px;
+  color: var(--vk-text-color-secondary);
+}
+
+.vk-chat-message__avatar--small {
+  --vk-chat-msg-avatar-size: 28px;
+}
+
+.vk-chat-message__avatar--large {
+  --vk-chat-msg-avatar-size: 44px;
+}
+
+.vk-chat-message__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vk-chat-message__bubble {
+  position: relative;
+  max-width: var(--vk-chat-msg-max-width);
+  padding: var(--vk-chat-msg-padding);
+  border-radius: var(--vk-chat-msg-border-radius);
+  font-size: var(--vk-font-size-base);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.vk-chat-message--user .vk-chat-message__bubble {
+  background-color: var(--vk-chat-msg-user-bg);
+  color: var(--vk-chat-msg-user-text);
+  border-top-right-radius: 2px;
+}
+
+.vk-chat-message--assistant .vk-chat-message__bubble {
+  background-color: var(--vk-chat-msg-ai-bg);
+  color: var(--vk-chat-msg-ai-text);
+  border-top-left-radius: 2px;
+}
+
+.vk-chat-message--system .vk-chat-message__bubble {
+  background-color: var(--vk-chat-msg-system-bg);
+  color: var(--vk-chat-msg-system-text);
+  font-size: 13px;
+  text-align: center;
+  padding: 6px 16px;
+  border-radius: 16px;
+}
+
+.vk-chat-message__timestamp {
+  font-size: 11px;
+  color: var(--vk-chat-msg-timestamp-color);
+  margin-top: 4px;
+  user-select: none;
+}
+
+.vk-chat-message--user .vk-chat-message__timestamp {
+  text-align: right;
+}
+
+.vk-chat-message__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.vk-chat-message__status--error {
+  color: var(--vk-chat-msg-error-color);
+}
+
+.vk-chat-message__retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  color: var(--vk-color-primary);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.vk-chat-message__retry:hover {
+  background-color: var(--vk-color-primary-light-9);
+}
