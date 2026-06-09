@@ -1,0 +1,101 @@
+.vk-code-block {
+  --vk-code-block-bg: #1e1e2e;
+  --vk-code-block-text: #cdd6f4;
+  --vk-code-block-header-bg: #313244;
+  --vk-code-block-header-text: #bac2de;
+  --vk-code-block-border-radius: var(--vk-border-radius-base);
+  --vk-code-block-line-number-color: #585b70;
+  --vk-code-block-copy-color: #a6adc8;
+  --vk-code-block-copy-hover-color: #cdd6f4;
+  --vk-code-keyword: #cba6f7;
+  --vk-code-string: #a6e3a1;
+  --vk-code-comment: #6c7086;
+  --vk-code-function: #89b4fa;
+  --vk-code-number: #fab387;
+  --vk-code-operator: #89dceb;
+}
+
+.vk-code-block {
+  position: relative;
+  border-radius: var(--vk-code-block-border-radius);
+  overflow: hidden;
+  background-color: var(--vk-code-block-bg);
+  font-family: 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.vk-code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: var(--vk-code-block-header-bg);
+  color: var(--vk-code-block-header-text);
+  font-size: 12px;
+}
+
+.vk-code-block__language {
+  text-transform: lowercase;
+  font-weight: 500;
+}
+
+.vk-code-block__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: none;
+  background: transparent;
+  color: var(--vk-code-block-copy-color);
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: inherit;
+  transition: all var(--vk-transition-duration-fast);
+}
+
+.vk-code-block__copy-btn:hover {
+  color: var(--vk-code-block-copy-hover-color);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.vk-code-block__body {
+  overflow: auto;
+  padding: 16px;
+}
+
+.vk-code-block__lines {
+  display: flex;
+}
+
+.vk-code-block__line-numbers {
+  flex-shrink: 0;
+  padding-right: 16px;
+  text-align: right;
+  color: var(--vk-code-block-line-number-color);
+  user-select: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  margin-right: 16px;
+}
+
+.vk-code-block__line-number {
+  display: block;
+}
+
+.vk-code-block__code {
+  flex: 1;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--vk-code-block-text);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.vk-code-keyword { color: var(--vk-code-keyword); }
+.vk-code-string { color: var(--vk-code-string); }
+.vk-code-comment { color: var(--vk-code-comment); font-style: italic; }
+.vk-code-function { color: var(--vk-code-function); }
+.vk-code-number { color: var(--vk-code-number); }
+.vk-code-operator { color: var(--vk-code-operator); }
