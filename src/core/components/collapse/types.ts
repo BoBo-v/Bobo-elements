@@ -12,7 +12,7 @@ export interface CollapseProps {
 
 export interface CollapseItemProps {
     name: NameType
-    title?: string
+    title?: ReactNode
     disabled?: boolean
     children?: ReactNode
 }

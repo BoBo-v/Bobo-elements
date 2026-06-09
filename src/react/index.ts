@@ -16,6 +16,15 @@ export { Tabs, TabPane } from './components/Tabs';
 export { Tag } from './components/Tag';
 export { Radio, RadioGroup } from './components/Radio';
 export { Checkbox, CheckboxGroup } from './components/Checkbox';
+export { ThinkingIndicator } from './components/ThinkingIndicator';
+export { StreamingText } from './components/StreamingText';
+export { CodeBlock } from './components/CodeBlock';
+export { TokenBadge } from './components/TokenBadge';
+export { MarkdownRenderer } from './components/MarkdownRenderer';
+export { PromptInput } from './components/PromptInput';
+export { ReasoningBlock } from './components/ReasoningBlock';
+export { ChatMessage } from './components/ChatMessage';
+export { ConversationList } from './components/ConversationList';
 
 // Type re-exports
 export type { AlertRef } from './components/Alert';
@@ -69,3 +78,12 @@ export type {
   CheckboxGroupProps,
   CheckboxValueType,
 } from '../core/components/checkbox/types';
+export type { ThinkingIndicatorProps, ThinkingIndicatorVariant } from '../core/components/thinking-indicator.types';
+export type { StreamingTextProps } from '../core/components/streaming-text.types';
+export type { CodeBlockProps } from '../core/components/code-block.types';
+export type { TokenBadgeProps, TokenBadgeStatus } from '../core/components/token-badge.types';
+export type { MarkdownRendererProps } from '../core/components/markdown-renderer.types';
+export type { PromptInputProps, PromptInputRef } from '../core/components/prompt-input.react.types';
+export type { ReasoningBlockProps } from '../core/components/reasoning-block.types';
+export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus } from '../core/components/chat-message.react.types';
+export type { ConversationListProps } from '../core/components/conversation-list.react.types';
