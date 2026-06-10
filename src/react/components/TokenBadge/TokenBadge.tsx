@@ -12,10 +12,19 @@ export const TokenBadge = memo(function TokenBadge({
   used = 0,
   total,
   status = 'normal',
+  size = 'default',
+  variant = 'light',
   prefix = 'Tokens',
 }: TokenBadgeProps) {
+  const classes = [
+    'vk-token-badge',
+    `vk-token-badge--${status}`,
+    size !== 'default' ? `vk-token-badge--${size}` : '',
+    variant === 'filled' ? 'vk-token-badge--filled' : '',
+  ].filter(Boolean).join(' ')
+
   return (
-    <span className={`vk-token-badge vk-token-badge--${status}`} data-testid="token-badge">
+    <span className={classes} data-testid="token-badge">
       <span className="vk-token-badge__prefix">{prefix}</span>
       <span className="vk-token-badge__value" data-testid="token-badge-value">{formatNumber(used)}</span>
       {total !== undefined && (

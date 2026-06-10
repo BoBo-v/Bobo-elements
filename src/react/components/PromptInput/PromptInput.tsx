@@ -17,6 +17,10 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   streamingText = 'AI 正在回复...',
   hintText = 'Enter 发送 / Shift+Enter 换行',
   sendAriaLabel = '发送',
+  size = 'default',
+  variant = 'default',
+  clearable = false,
+  clearAriaLabel = '清除',
   children,
   onChange,
   onSubmit,
@@ -82,6 +86,8 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
 
   const classes = [
     'vk-prompt-input',
+    `vk-prompt-input--${size}`,
+    `vk-prompt-input--${variant}`,
     disabled ? 'is-disabled' : '',
     streaming ? 'is-streaming' : '',
   ].filter(Boolean).join(' ')
@@ -112,6 +118,18 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
         </div>
         <div className="vk-prompt-input__actions">
           <span className="vk-prompt-input__hint">{hintText}</span>
+          {clearable && innerValue && (
+            <button
+              type="button"
+              className="vk-prompt-input__clear-btn"
+              data-testid="prompt-input-clear-btn"
+              aria-label={clearAriaLabel}
+              disabled={disabled || streaming}
+              onClick={clear}
+            >
+              <Icon name="xmark" />
+            </button>
+          )}
           {children || (
             <button
               className="vk-prompt-input__send-btn"

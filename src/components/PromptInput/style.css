@@ -113,3 +113,60 @@
   border-radius: 10px;
   background-color: var(--vk-color-primary-light-9);
 }
+
+/* Size variants */
+.vk-prompt-input--small {
+  --vk-prompt-input-padding: 8px;
+}
+.vk-prompt-input--small .vk-prompt-input__textarea {
+  font-size: 12px;
+}
+.vk-prompt-input--small .vk-prompt-input__send-btn {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+
+.vk-prompt-input--large {
+  --vk-prompt-input-padding: 16px;
+}
+.vk-prompt-input--large .vk-prompt-input__textarea {
+  font-size: 15px;
+}
+.vk-prompt-input--large .vk-prompt-input__send-btn {
+  width: 38px;
+  height: 38px;
+  font-size: 16px;
+}
+
+/* Filled variant */
+.vk-prompt-input--filled {
+  border-color: transparent;
+  background-color: var(--vk-fill-color);
+}
+.vk-prompt-input--filled:focus-within {
+  border-color: var(--vk-prompt-input-focus-border-color);
+  background-color: var(--vk-prompt-input-bg-color);
+}
+
+/* Clear button */
+.vk-prompt-input__clear-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--vk-text-color-placeholder);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all var(--vk-transition-duration-fast);
+  padding: 0;
+}
+
+.vk-prompt-input__clear-btn:hover {
+  color: var(--vk-text-color-secondary);
+  background-color: var(--vk-fill-color-light);
+}

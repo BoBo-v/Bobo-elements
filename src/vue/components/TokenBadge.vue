@@ -1,7 +1,11 @@
 <template>
   <span
     class="vk-token-badge"
-    :class="[`vk-token-badge--${status}`]"
+    :class="[
+      `vk-token-badge--${status}`,
+      size !== 'default' ? `vk-token-badge--${size}` : '',
+      variant === 'filled' ? 'vk-token-badge--filled' : ''
+    ]"
     data-testid="token-badge"
   >
     <span class="vk-token-badge__prefix">{{ prefix }}</span>
@@ -19,6 +23,8 @@ defineOptions({ name: 'VkTokenBadge' })
 withDefaults(defineProps<TokenBadgeProps>(), {
   used: 0,
   status: 'normal',
+  size: 'default',
+  variant: 'light',
   prefix: 'Tokens'
 })
 

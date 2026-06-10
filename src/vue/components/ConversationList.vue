@@ -2,7 +2,7 @@
   <div
     ref="containerRef"
     class="vk-conversation-list"
-    :style="{ maxHeight }"
+    :style="{ height, maxHeight }"
     role="log"
     aria-live="polite"
     data-testid="conversation-list"
@@ -22,24 +22,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, useSlots } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import type { ConversationListProps, ConversationListEmits } from '../../core/components/conversation-list.types'
 import '../../components/ConversationList/style.css'
 
 defineOptions({ name: 'VkConversationList' })
 
-withDefaults(defineProps<ConversationListProps>(), {
+const props = withDefaults(defineProps<ConversationListProps>(), {
   autoScroll: true,
   loadingMore: false,
+  height: undefined,
   maxHeight: '100%',
   emptyText: '暂无对话',
   loadingText: '加载中...'
 })
 
 const emits = defineEmits<ConversationListEmits>()
-const slots = useSlots()
 const containerRef = ref<HTMLElement | null>(null)
 let observer: MutationObserver | null = null
+let shouldStickToBottom = true
+
+const SCROLL_THRESHOLD = 50
+
+function isNearBottom(): boolean {
+  const el = containerRef.value
+  if (!el) return true
+  return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_THRESHOLD
+}
 
 function scrollToBottom() {
   const el = containerRef.value
@@ -51,16 +60,22 @@ function scrollToBottom() {
 function handleScroll() {
   const el = containerRef.value
   if (!el) return
+  shouldStickToBottom = isNearBottom()
   emits('scroll', el.scrollTop)
-  if (el.scrollTop === 0) {
+  if (el.scrollTop === 0 && !props.loadingMore) {
     emits('load-more')
   }
 }
 
 onMounted(() => {
   if (containerRef.value) {
-    observer = new MutationObserver(() => {
-      scrollToBottom()
+    shouldStickToBottom = isNearBottom()
+    observer = new MutationObserver((mutations) => {
+      const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0)
+      if (props.autoScroll && hasAddedNodes && shouldStickToBottom) {
+        scrollToBottom()
+      }
+      shouldStickToBottom = isNearBottom()
     })
     observer.observe(containerRef.value, { childList: true, subtree: true })
   }

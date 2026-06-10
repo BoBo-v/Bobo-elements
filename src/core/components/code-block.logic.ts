@@ -65,3 +65,16 @@ export function highlightCode(code: string, language: string): string {
     return escapeHtml(code)
   }
 }
+
+export function wrapLines(html: string, highlightLines: number[]): string {
+  const lines = html.split('\n')
+  return lines
+    .map((line, i) => {
+      const lineNum = i + 1
+      const cls = highlightLines.includes(lineNum)
+        ? 'vk-code-block__line vk-code-block__line--highlighted'
+        : 'vk-code-block__line'
+      return `<span class="${cls}">${line}</span>`
+    })
+    .join('\n')
+}

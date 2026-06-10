@@ -1,5 +1,5 @@
 <template>
-  <div class="vk-code-block" data-testid="code-block">
+  <div class="vk-code-block" :class="{ 'vk-code-block--light': theme === 'light' }" data-testid="code-block">
     <div v-if="title || language || copyable" class="vk-code-block__header">
       <span v-if="title || language" class="vk-code-block__language">
         {{ title || language }}
@@ -15,14 +15,14 @@
         {{ copied ? copiedText : copyText }}
       </button>
     </div>
-    <div class="vk-code-block__body" :style="{ maxHeight }">
+    <div class="vk-code-block__body" :style="{ maxHeight: scrollable ? maxHeight : undefined }">
       <div v-if="showLineNumbers" class="vk-code-block__lines">
         <div class="vk-code-block__line-numbers">
           <span v-for="n in lineNumbers" :key="n" class="vk-code-block__line-number">{{ n }}</span>
         </div>
-        <pre class="vk-code-block__code"><code v-html="highlightedHtml" /></pre>
+        <pre class="vk-code-block__code" :class="{ 'vk-code-block__code--wrap': wrap }"><code v-html="highlightedHtml" /></pre>
       </div>
-      <pre v-else class="vk-code-block__code"><code v-html="highlightedHtml" /></pre>
+      <pre v-else class="vk-code-block__code" :class="{ 'vk-code-block__code--wrap': wrap }"><code v-html="highlightedHtml" /></pre>
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
 import type { CodeBlockProps } from '../../core/components/code-block.types'
-import { copyToClipboard, generateLineNumbers, highlightCode } from '../../core/components/code-block.logic'
+import { copyToClipboard, generateLineNumbers, highlightCode, wrapLines } from '../../core/components/code-block.logic'
 import '../../components/CodeBlock/style.css'
 
 defineOptions({ name: 'VkCodeBlock' })
@@ -40,7 +40,9 @@ const props = withDefaults(defineProps<CodeBlockProps>(), {
   language: '',
   showLineNumbers: false,
   copyable: true,
-  maxHeight: '400px',
+  maxHeight: '500px',
+  scrollable: true,
+  wrap: false,
   copyText: '复制',
   copiedText: '已复制'
 })
@@ -49,7 +51,10 @@ const copied = ref(false)
 let copyTimer: ReturnType<typeof setTimeout> | null = null
 
 const lineNumbers = computed(() => generateLineNumbers(props.code))
-const highlightedHtml = computed(() => highlightCode(props.code, props.language))
+const highlightedHtml = computed(() => {
+  const html = highlightCode(props.code, props.language)
+  return props.highlightLines?.length ? wrapLines(html, props.highlightLines) : html
+})
 
 async function handleCopy() {
   try {

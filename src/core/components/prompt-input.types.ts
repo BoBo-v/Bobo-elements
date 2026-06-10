@@ -1,3 +1,6 @@
+export type PromptInputSize = 'small' | 'default' | 'large'
+export type PromptInputVariant = 'default' | 'filled'
+
 export interface PromptInputProps {
   modelValue?: string
   placeholder?: string
@@ -11,6 +14,10 @@ export interface PromptInputProps {
   streamingText?: string
   hintText?: string
   sendAriaLabel?: string
+  size?: PromptInputSize
+  variant?: PromptInputVariant
+  clearable?: boolean
+  clearAriaLabel?: string
 }
 
 export interface PromptInputEmits {

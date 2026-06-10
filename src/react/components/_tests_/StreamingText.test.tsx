@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
+import { vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { StreamingText } from '../StreamingText'
 
@@ -25,5 +26,11 @@ describe('StreamingText component', () => {
   test('custom cursor char', () => {
     render(<StreamingText text="hi" cursorChar="|" />)
     expect(screen.getByTestId('streaming-text-cursor')).toHaveTextContent('|')
+  })
+
+  test('calls onComplete when text finishes', async () => {
+    const onComplete = vi.fn()
+    render(<StreamingText text="hi" speed={100} interval={10} onComplete={onComplete} />)
+    await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(1))
   })
 })

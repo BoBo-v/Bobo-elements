@@ -57,11 +57,4 @@ describe('MarkdownRenderer.vue', () => {
     })
     expect(wrapper.html()).not.toContain('vk-md-p')
   })
-
-  test('custom tag', () => {
-    const wrapper = mount(MarkdownRenderer, {
-      props: { content: 'text', tag: 'section' }
-    })
-    expect(wrapper.element.tagName).toBe('SECTION')
-  })
 })

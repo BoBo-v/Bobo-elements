@@ -8,17 +8,38 @@ export interface StreamingTextRef {
   isComplete: boolean
 }
 
+const DEFAULT_CURSOR_CHARS: Record<string, string> = {
+  line: '│',
+  block: '█',
+  underline: '_'
+}
+
 export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProps>(function StreamingText({
   text = '',
   speed = 1,
   interval = 50,
   showCursor = true,
-  cursorChar = '│',
+  cursorChar = '',
+  cursorStyle = 'line',
+  onComplete,
 }: StreamingTextProps, ref) {
+  const effectiveCursorChar = cursorChar || DEFAULT_CURSOR_CHARS[cursorStyle]
   const stateRef = useRef(createStreamingState())
   const [displayText, setDisplayText] = useState('')
   const [isDone, setIsDone] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const completedTextRef = useRef<string | null>(null)
+  const onCompleteRef = useRef(onComplete)
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
+
+  const emitCompleteOnce = useCallback((completedText: string) => {
+    if (!completedText || completedTextRef.current === completedText) return
+    completedTextRef.current = completedText
+    onCompleteRef.current?.()
+  }, [])
 
   const stopInterval = useCallback(() => {
     if (timerRef.current !== null) {
@@ -36,27 +57,33 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
       if (state.isComplete(text)) {
         setIsDone(true)
         stopInterval()
+        emitCompleteOnce(text)
       }
     }, interval)
-  }, [text, speed, interval, stopInterval])
+  }, [text, speed, interval, stopInterval, emitCompleteOnce])
 
   useEffect(() => {
     const state = stateRef.current
+    if (completedTextRef.current !== text) {
+      completedTextRef.current = null
+    }
     state.onTextChange(text)
     if (state.isComplete(text)) {
       setIsDone(true)
       setDisplayText(text)
       stopInterval()
+      emitCompleteOnce(text)
     } else {
       setIsDone(false)
       setDisplayText(state.getDisplayText(text))
       startInterval()
     }
     return stopInterval
-  }, [text, startInterval, stopInterval])
+  }, [text, startInterval, stopInterval, emitCompleteOnce])
 
   const reset = useCallback(() => {
     stateRef.current.reset()
+    completedTextRef.current = null
     setDisplayText('')
     setIsDone(false)
     if (text) {
@@ -71,10 +98,10 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
       <span data-testid="streaming-text-content">{displayText}</span>
       {showCursor && (
         <span
-          className={`vk-streaming-text__cursor${isDone ? ' vk-streaming-text__cursor--hidden' : ''}`}
+          className={`vk-streaming-text__cursor${isDone ? ' vk-streaming-text__cursor--hidden' : ''}${cursorStyle === 'block' ? ' vk-streaming-text__cursor--block' : ''}${cursorStyle === 'underline' ? ' vk-streaming-text__cursor--underline' : ''}`}
           data-testid="streaming-text-cursor"
         >
-          {cursorChar}
+          {effectiveCursorChar}
         </span>
       )}
     </span>

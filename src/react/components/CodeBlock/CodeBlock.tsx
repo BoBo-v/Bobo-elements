@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useRef, useEffect, memo } from 'react'
 import type { CodeBlockProps } from '../../../core/components/code-block.types'
-import { copyToClipboard, generateLineNumbers, highlightCode } from '../../../core/components/code-block.logic'
+import { copyToClipboard, generateLineNumbers, highlightCode, wrapLines } from '../../../core/components/code-block.logic'
 import '../../../components/CodeBlock/style.css'
 
 export const CodeBlock = memo(function CodeBlock({
@@ -8,7 +8,11 @@ export const CodeBlock = memo(function CodeBlock({
   language = '',
   showLineNumbers = false,
   copyable = true,
-  maxHeight = '400px',
+  maxHeight = '500px',
+  scrollable = true,
+  wrap = false,
+  theme = 'dark',
+  highlightLines,
   title,
   copyText = '复制',
   copiedText = '已复制',
@@ -17,7 +21,10 @@ export const CodeBlock = memo(function CodeBlock({
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const lineNumbers = useMemo(() => generateLineNumbers(code), [code])
-  const highlightedHtml = useMemo(() => highlightCode(code, language), [code, language])
+  const highlightedHtml = useMemo(() => {
+    const html = highlightCode(code, language)
+    return highlightLines?.length ? wrapLines(html, highlightLines) : html
+  }, [code, language, highlightLines])
 
   useEffect(() => {
     return () => {
@@ -37,7 +44,7 @@ export const CodeBlock = memo(function CodeBlock({
   }, [code])
 
   return (
-    <div className="vk-code-block" data-testid="code-block">
+    <div className={`vk-code-block${theme === 'light' ? ' vk-code-block--light' : ''}`} data-testid="code-block">
       {(title || language || copyable) && (
         <div className="vk-code-block__header">
           {(title || language) ? (
@@ -55,7 +62,7 @@ export const CodeBlock = memo(function CodeBlock({
           )}
         </div>
       )}
-      <div className="vk-code-block__body" style={{ maxHeight }}>
+      <div className="vk-code-block__body" style={{ maxHeight: scrollable ? maxHeight : undefined }}>
         {showLineNumbers ? (
           <div className="vk-code-block__lines">
             <div className="vk-code-block__line-numbers">
@@ -63,10 +70,10 @@ export const CodeBlock = memo(function CodeBlock({
                 <span key={n} className="vk-code-block__line-number">{n}</span>
               ))}
             </div>
-            <pre className="vk-code-block__code"><code dangerouslySetInnerHTML={{ __html: highlightedHtml }} /></pre>
+            <pre className={`vk-code-block__code${wrap ? ' vk-code-block__code--wrap' : ''}`}><code dangerouslySetInnerHTML={{ __html: highlightedHtml }} /></pre>
           </div>
         ) : (
-          <pre className="vk-code-block__code"><code dangerouslySetInnerHTML={{ __html: highlightedHtml }} /></pre>
+          <pre className={`vk-code-block__code${wrap ? ' vk-code-block__code--wrap' : ''}`}><code dangerouslySetInnerHTML={{ __html: highlightedHtml }} /></pre>
         )}
       </div>
     </div>

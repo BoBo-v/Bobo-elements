@@ -38,4 +38,12 @@ describe('StreamingText.vue', () => {
     expect(wrapper.vm.reset).toBeDefined()
     expect(wrapper.vm.isComplete).toBeDefined()
   })
+
+  test('emits complete when text finishes', async () => {
+    const wrapper = mount(StreamingText, {
+      props: { text: 'hi', speed: 100, interval: 10 }
+    })
+    await new Promise(r => setTimeout(r, 100))
+    expect(wrapper.emitted()).toHaveProperty('complete')
+  })
 })

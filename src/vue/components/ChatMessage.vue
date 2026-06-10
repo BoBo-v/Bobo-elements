@@ -16,7 +16,19 @@
     <div class="vk-chat-message__body">
       <div class="vk-chat-message__bubble" data-testid="chat-message-bubble">
         <slot />
-        <ThinkingIndicator v-if="status === 'streaming' && !$slots.default" />
+        <slot v-if="status === 'streaming' && !$slots.default" name="loading">
+          <ThinkingIndicator />
+        </slot>
+      </div>
+      <div v-if="copyable && content" class="vk-chat-message__actions">
+        <button
+          class="vk-chat-message__copy-btn"
+          data-testid="chat-message-copy-btn"
+          :aria-label="copied ? copiedText : copyText"
+          @click="handleCopy"
+        >
+          {{ copied ? copiedText : copyText }}
+        </button>
       </div>
       <div v-if="timestamp" class="vk-chat-message__timestamp" data-testid="chat-message-timestamp">
         {{ formattedTime }}
@@ -32,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onUnmounted } from 'vue'
 import type { ChatMessageProps, ChatMessageEmits } from '../../core/components/chat-message.types'
 import ThinkingIndicator from './ThinkingIndicator.vue'
 import Icon from './Icon.vue'
@@ -45,7 +57,27 @@ const props = withDefaults(defineProps<ChatMessageProps>(), {
   showAvatar: true,
   avatarSize: 'default',
   errorMessage: '发送失败',
-  retryText: '重试'
+  retryText: '重试',
+  copyable: false,
+  copyText: '复制',
+  copiedText: '已复制'
+})
+
+const copied = ref(false)
+let copyTimer: ReturnType<typeof setTimeout> | null = null
+
+async function handleCopy() {
+  if (!props.content) return
+  try {
+    await navigator.clipboard.writeText(props.content)
+    copied.value = true
+    if (copyTimer) clearTimeout(copyTimer)
+    copyTimer = setTimeout(() => { copied.value = false }, 2000)
+  } catch {}
+}
+
+onUnmounted(() => {
+  if (copyTimer) clearTimeout(copyTimer)
 })
 
 const emit = defineEmits<ChatMessageEmits>()

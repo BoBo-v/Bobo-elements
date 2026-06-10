@@ -12,7 +12,12 @@ export interface ChatMessageProps {
   showAvatar?: boolean
   errorMessage?: string
   retryText?: string
+  copyable?: boolean
+  copyText?: string
+  copiedText?: string
+  content?: string
   children?: ReactNode
+  loading?: ReactNode
   onRetry?: () => void
   onAvatarError?: (event: SyntheticEvent<HTMLImageElement>) => void
 }

@@ -5,12 +5,14 @@ import '../../../components/ThinkingIndicator/style.css'
 export const ThinkingIndicator = memo(function ThinkingIndicator({
   variant = 'dots',
   size = 'default',
+  color = 'primary',
   text = '正在思考...',
   ariaLabel = 'AI 正在思考',
 }: ThinkingIndicatorProps) {
   const classes = [
     'vk-thinking-indicator',
     size !== 'default' ? `vk-thinking-indicator--${size}` : '',
+    `vk-thinking-indicator--${color}`,
   ].filter(Boolean).join(' ')
 
   return (

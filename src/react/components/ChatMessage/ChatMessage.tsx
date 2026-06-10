@@ -1,4 +1,4 @@
-import { useMemo, memo } from 'react'
+import { useMemo, useState, useCallback, useRef, useEffect, memo } from 'react'
 import type { ChatMessageProps } from '../../../core/components/chat-message.react.types'
 import { ThinkingIndicator } from '../ThinkingIndicator'
 import Icon from '../Icon'
@@ -19,10 +19,33 @@ export const ChatMessage = memo(function ChatMessage({
   showAvatar = true,
   errorMessage = '发送失败',
   retryText = '重试',
+  copyable = false,
+  copyText = '复制',
+  copiedText = '已复制',
+  content,
   children,
+  loading,
   onRetry,
   onAvatarError,
 }: ChatMessageProps) {
+  const [copied, setCopied] = useState(false)
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
+    }
+  }, [])
+
+  const handleCopy = useCallback(async () => {
+    if (!content) return
+    try {
+      await navigator.clipboard.writeText(content)
+      setCopied(true)
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
+      copyTimerRef.current = setTimeout(() => setCopied(false), 2000)
+    } catch {}
+  }, [content])
   const formattedTime = useMemo(() => {
     if (!timestamp) return ''
     const date = new Date(timestamp)
@@ -44,8 +67,20 @@ export const ChatMessage = memo(function ChatMessage({
       <div className="vk-chat-message__body">
         <div className="vk-chat-message__bubble" data-testid="chat-message-bubble">
           {children}
-          {status === 'streaming' && !children && <ThinkingIndicator />}
+          {status === 'streaming' && !children && (loading || <ThinkingIndicator />)}
         </div>
+        {copyable && content && (
+          <div className="vk-chat-message__actions">
+            <button
+              className="vk-chat-message__copy-btn"
+              data-testid="chat-message-copy-btn"
+              aria-label={copied ? copiedText : copyText}
+              onClick={handleCopy}
+            >
+              {copied ? copiedText : copyText}
+            </button>
+          </div>
+        )}
         {timestamp && (
           <div className="vk-chat-message__timestamp" data-testid="chat-message-timestamp">
             {formattedTime}

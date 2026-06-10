@@ -39,3 +39,30 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+
+/* Size variants */
+.vk-token-badge--small {
+  padding: 1px 6px;
+  font-size: 11px;
+  gap: 2px;
+}
+
+.vk-token-badge--large {
+  padding: 4px 14px;
+  font-size: 13px;
+  gap: 6px;
+}
+
+/* Filled variant */
+.vk-token-badge--filled.vk-token-badge--normal {
+  --vk-token-badge-bg: var(--vk-color-primary);
+  --vk-token-badge-text: var(--vk-color-white);
+}
+.vk-token-badge--filled.vk-token-badge--warning {
+  --vk-token-badge-bg: var(--vk-color-warning);
+  --vk-token-badge-text: var(--vk-color-white);
+}
+.vk-token-badge--filled.vk-token-badge--danger {
+  --vk-token-badge-bg: var(--vk-color-danger);
+  --vk-token-badge-text: var(--vk-color-white);
+}

@@ -94,3 +94,25 @@
   font-size: inherit;
   color: var(--vk-text-color-secondary);
 }
+
+/* Color variants */
+.vk-thinking-indicator--success {
+  --vk-thinking-dot-color: var(--vk-color-success);
+  --vk-thinking-pulse-color: var(--vk-color-success);
+}
+.vk-thinking-indicator--warning {
+  --vk-thinking-dot-color: var(--vk-color-warning);
+  --vk-thinking-pulse-color: var(--vk-color-warning);
+}
+.vk-thinking-indicator--danger {
+  --vk-thinking-dot-color: var(--vk-color-danger);
+  --vk-thinking-pulse-color: var(--vk-color-danger);
+}
+.vk-thinking-indicator--info {
+  --vk-thinking-dot-color: var(--vk-color-info);
+  --vk-thinking-pulse-color: var(--vk-color-info);
+}
+.vk-thinking-indicator--primary {
+  --vk-thinking-dot-color: var(--vk-color-primary);
+  --vk-thinking-pulse-color: var(--vk-color-primary);
+}

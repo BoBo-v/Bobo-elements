@@ -1,6 +1,5 @@
-<template>
-  <component
-    :is="tag"
+ <template>
+  <div
     class="vk-markdown-renderer"
     v-html="html"
     data-testid="markdown-renderer"
@@ -17,7 +16,6 @@ defineOptions({ name: 'VkMarkdownRenderer' })
 
 const props = withDefaults(defineProps<MarkdownRendererProps>(), {
   content: '',
-  tag: 'div',
   breaks: true
 })
 

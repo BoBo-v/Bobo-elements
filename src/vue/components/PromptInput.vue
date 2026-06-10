@@ -1,10 +1,14 @@
 <template>
   <div
     class="vk-prompt-input"
-    :class="{
-      'is-disabled': disabled,
-      'is-streaming': streaming
-    }"
+    :class="[
+      `vk-prompt-input--${size}`,
+      `vk-prompt-input--${variant}`,
+      {
+        'is-disabled': disabled,
+        'is-streaming': streaming
+      }
+    ]"
     data-testid="prompt-input"
   >
     <textarea
@@ -31,6 +35,17 @@
       </div>
       <div class="vk-prompt-input__actions">
         <span class="vk-prompt-input__hint">{{ hintText }}</span>
+        <button
+          v-if="clearable && innerValue"
+          type="button"
+          class="vk-prompt-input__clear-btn"
+          data-testid="prompt-input-clear-btn"
+          :aria-label="clearAriaLabel"
+          :disabled="disabled || streaming"
+          @click="handleClear"
+        >
+          <Icon icon="xmark" />
+        </button>
         <button
           class="vk-prompt-input__send-btn"
           :disabled="!innerValue.trim() || disabled || streaming"
@@ -64,7 +79,11 @@ const props = withDefaults(defineProps<PromptInputProps>(), {
   streaming: false,
   streamingText: 'AI 正在回复...',
   hintText: 'Enter 发送 / Shift+Enter 换行',
-  sendAriaLabel: '发送'
+  sendAriaLabel: '发送',
+  size: 'default',
+  variant: 'default',
+  clearable: false,
+  clearAriaLabel: '清除'
 })
 
 const emits = defineEmits<PromptInputEmits>()
@@ -97,6 +116,11 @@ function handleSubmit() {
   if (trimmed && !props.disabled && !props.streaming) {
     emits('submit', trimmed)
   }
+}
+
+function handleClear() {
+  if (props.disabled || props.streaming) return
+  clear()
 }
 
 function autoResize() {

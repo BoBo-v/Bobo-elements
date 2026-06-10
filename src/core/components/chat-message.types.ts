@@ -10,6 +10,10 @@ export interface ChatMessageProps {
   showAvatar?: boolean
   errorMessage?: string
   retryText?: string
+  copyable?: boolean
+  copyText?: string
+  copiedText?: string
+  content?: string
 }
 
 export interface ChatMessageEmits {
