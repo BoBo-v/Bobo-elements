@@ -1,6 +1,6 @@
 <script setup>
-import { createNotification } from '@/components/Notification/method'
-import Button from '@/components/Button/Button.vue'
+import { createNotification } from '@/vue/components/Notification/method'
+import Button from '@/vue/components/Button.vue'
 const open = (type) => {
   createNotification({ title:'this is the title', message: 'hello world', type })
 }

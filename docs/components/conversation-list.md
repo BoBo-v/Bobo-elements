@@ -25,7 +25,7 @@ import '@bobocn/element/style.css'
 
 function App() {
   return (
-    <ConversationList maxHeight="400px" onLoadMore={() => console.log('load more')}>
+    <ConversationList height="400px" onLoadMore={() => console.log('load more')}>
       <ChatMessage role="user" timestamp={new Date()}>Hello</ChatMessage>
       <ChatMessage role="assistant" timestamp={new Date()}>Hi!</ChatMessage>
     </ConversationList>
@@ -41,6 +41,7 @@ function App() {
 | --- | --- | --- | --- |
 | autoScroll | 新消息自动滚到底部 | `boolean` | `true` |
 | loadingMore | 正在加载历史消息 | `boolean` | `false` |
+| height | 容器高度 | `string` | — |
 | maxHeight | 容器最大高度 | `string` | `'100%'` |
 | emptyText | 空状态文案 | `string` | `'暂无对话'` |
 

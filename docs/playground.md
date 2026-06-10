@@ -33,7 +33,7 @@ import '@bobocn/element/dist/index.css'
 app.use(VElement)
 ```
 
-4. 在 `src/App.vue` 中使用组件：
+4. 在你的 Vue 单文件组件中使用组件：
 
 ```vue
 <template>

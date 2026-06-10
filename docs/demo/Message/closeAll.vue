@@ -1,6 +1,6 @@
 <script setup>
-import { createMessage, closeAll } from '@/components/Message/method'
-import Button from '@/components/Button/Button.vue'
+import { createMessage, closeAll } from '@/vue/components/Message/method'
+import Button from '@/vue/components/Button.vue'
 const open = () => {
   createMessage({ message: 'hello world1', duration: 0 })
   createMessage({ message: 'hello world2', duration: 0 })

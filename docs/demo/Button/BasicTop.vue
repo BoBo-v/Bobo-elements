@@ -1,6 +1,6 @@
 <script setup>
-import Button from '@/components/Button/Button.vue'
-import Icon from '@/components/Icon/Icon.vue'
+import Button from '@/vue/components/Button.vue'
+import Icon from '@/vue/components/Icon.vue'
 </script>
 <template>
   <div class="basic block">

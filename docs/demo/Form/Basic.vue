@@ -2,12 +2,12 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import {reactive, ref} from 'vue'
-import Form from '@/components/Form/Form.vue'
-import FormItem from '@/components/Form/FormItem.vue'
-import Input from '@/components/Input/Input.vue'
-import Button from '@/components/Button/Button.vue'
-import Switch from '@/components/Switch/Switch.vue'
-import Select from '@/components/Select/Select.vue'
+import Form from '@/vue/components/Form/Form.vue'
+import FormItem from '@/vue/components/Form/FormItem.vue'
+import Input from '@/vue/components/Input/Input.vue'
+import Button from '@/vue/components/Button.vue'
+import Switch from '@/vue/components/Switch.vue'
+import Select from '@/vue/components/Select/Select.vue'
 
 const model = reactive({
   email: '',

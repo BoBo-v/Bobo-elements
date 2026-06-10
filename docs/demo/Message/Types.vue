@@ -1,6 +1,6 @@
 <script setup>
-import { createMessage } from '@/components/Message/method'
-import Button from '@/components/Button/Button.vue'
+import { createMessage } from '@/vue/components/Message/method'
+import Button from '@/vue/components/Button.vue'
 const open = (type) => {
   createMessage({ message: 'hello world', type })
 }

@@ -3,8 +3,8 @@ import ConversationList from '@/vue/components/ConversationList.vue'
 import ChatMessage from '@/vue/components/ChatMessage.vue'
 </script>
 <template>
-  <div style="height: 300px; border: 1px solid var(--vk-border-color); border-radius: 4px;">
-    <ConversationList max-height="300px">
+  <div style="border: 1px solid var(--vk-border-color); border-radius: 4px;">
+    <ConversationList height="300px">
       <ChatMessage role="user" :timestamp="new Date(Date.now() - 120000)">
         你好，我想学习 Vue 3
       </ChatMessage>

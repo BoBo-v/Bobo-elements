@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Switch from '@/components/Switch/Switch.vue'
+import Switch from '@/vue/components/Switch.vue'
 const test = ref('right')
 </script>
 <template>

@@ -1,9 +1,11 @@
-<script setup>
+﻿<script setup>
 import { ref } from 'vue'
 import Modal from '@/vue/components/Modal/Modal.vue'
-import Button from '@/components/Button/Button.vue'
+import Button from '@/vue/components/Button.vue'
+
 const visible = ref(false)
 </script>
+
 <template>
   <Button type="primary" @click="visible = true">自定义底部</Button>
   <Modal v-model="visible" title="自定义底部">

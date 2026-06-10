@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import Collapse from '@/components/Collapse/Collapse.vue'
-import Item from '@/components/Collapse/CollapseItem.vue'
+import Collapse from '@/vue/components/Collapse/Collapse.vue'
+import Item from '@/vue/components/Collapse/CollapseItem.vue'
 const openedValue = ref('a')
 </script>
 <template>

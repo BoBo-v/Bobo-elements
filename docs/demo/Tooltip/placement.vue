@@ -1,6 +1,6 @@
 <script setup>
-import Tooltip from '@/components/Tooltip/Tooltip.vue'
-import Button from '@/components/Button/Button.vue'
+import Tooltip from '@/vue/components/Tooltip/Tooltip.vue'
+import Button from '@/vue/components/Button.vue'
 </script>
 <template>
   <div class="basic block">

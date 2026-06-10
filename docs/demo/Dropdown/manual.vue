@@ -1,7 +1,7 @@
 <script setup>
 import { h, ref } from 'vue'
-import Dropdown from '@/components/Dropdown/Dropdown.vue'
-import Button from '@/components/Button/Button.vue'
+import Dropdown from '@/vue/components/Dropdown/Dropdown.vue'
+import Button from '@/vue/components/Button.vue'
 const options = [
 { key: 1, label: h('b', 'this is bold') },
 { key: 2, label: 'item2', disabled: true },

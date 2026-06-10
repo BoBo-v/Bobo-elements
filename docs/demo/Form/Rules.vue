@@ -1,40 +1,46 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+﻿<script setup>
 import { reactive, ref } from 'vue'
-import Form from '@/components/Form/Form.vue'
-import FormItem from '@/components/Form/FormItem.vue'
-import Input from '@/components/Input/Input.vue'
-import Button from '@/components/Button/Button.vue'
-import Switch from '@/components/Switch/Switch.vue'
-import Select from '@/components/Select/Select.vue'
+import Form from '@/vue/components/Form/Form.vue'
+import FormItem from '@/vue/components/Form/FormItem.vue'
+import Input from '@/vue/components/Input/Input.vue'
+import Button from '@/vue/components/Button.vue'
+import Switch from '@/vue/components/Switch.vue'
+import Select from '@/vue/components/Select/Select.vue'
+
 const model = reactive({
   email: '',
   password: '',
   agreement: false,
   zone: ''
 })
+
 const rules = {
-  // name: [{ type: 'string', required: true, trigger: 'blur' }, { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },],
   email: [{ type: 'email', required: true, trigger: 'blur' }],
-  password: [{ type: 'string', required: true, trigger: 'blur' }, { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' } ],
-  agreement: [{ type: 'enum', required: true, enum: [true], message: '请同意协议'} ],
-  zone: [{ type: 'string', required: true, trigger: 'change' }],
+  password: [
+    { type: 'string', required: true, trigger: 'blur' },
+    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }
+  ],
+  agreement: [{ type: 'enum', required: true, enum: [true], message: '请同意协议' }],
+  zone: [{ type: 'string', required: true, trigger: 'change' }]
 }
+
 const options = [
   { label: 'zone 1', value: 'one' },
   { label: 'zone 2', value: 'two' },
   { label: 'zone 3', value: 'three' }
 ]
+
 const formRef = ref()
+
 const submit = async () => {
   try {
     await formRef.value.validate()
     console.log('passed!')
-  } catch(e) {
+  } catch (e) {
     console.log('the promise', e)
   }
 }
+
 const reset = () => {
   formRef.value.resetFields()
 }
@@ -43,9 +49,6 @@ const reset = () => {
 <template>
   <div>
     <Form :model="model" :rules="rules" ref="formRef">
-      <!-- <FormItem prop="name" label="enter your name" #default="{ validate }">
-        <input v-model="model.name" @blur="validate('blur')" @input="validate('input')"/>
-      </FormItem> -->
       <FormItem prop="email" label="the email">
         <Input v-model="model.email" />
       </FormItem>
@@ -64,13 +67,7 @@ const reset = () => {
       </FormItem>
     </Form>
 
-    <p>
-      form value:
-      <pre>{{model}}</pre>
-    </p>
+    <p>form value:</p>
+    <pre>{{ model }}</pre>
   </div>
 </template>
-
-<style>
-
-</style>
