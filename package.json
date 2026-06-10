@@ -1,7 +1,7 @@
 {
   "name": "@bobocn/element",
   "version": "1.3.0",
-  "description": "Vue3 + React components library",
+  "description": "AI-native Vue3 and React component library with shared styles and TypeScript types",
   "type": "module",
   "author": "Bobo",
   "license": "MIT",
@@ -9,7 +9,12 @@
     "Component",
     "UI",
     "Vue3",
-    "React"
+    "React",
+    "AI",
+    "Chat",
+    "Streaming",
+    "TypeScript",
+    "VitePress"
   ],
   "homepage": "https://www.bobocn.bond/",
   "repository": {
