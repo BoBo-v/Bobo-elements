@@ -67,10 +67,10 @@
 
       <!-- Right: Info -->
       <div class="hero-right">
-        <p class="hero-subtitle">Vue3 + React 双框架组件库</p>
+        <p class="hero-subtitle">为 AI 应用而生的双框架组件库</p>
         <p class="hero-desc">
-          基于 TypeScript 构建，支持 Vue3 和 React 子路径导出<br />
-          轻量高效，开箱即用，一套代码两个框架
+          9 个 AI 原生组件 + 17 个基础组件，Vue3 与 React 共享核心<br />
+          覆盖流式对话、代码展示、思维链、聊天气泡等智能应用场景
         </p>
         <div class="hero-actions">
           <a class="btn-primary" href="/Shiyong">
@@ -79,7 +79,7 @@
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </a>
-          <a class="btn-outline" href="/components/button">浏览组件</a>
+          <a class="btn-outline" href="/components/thinking-indicator">浏览 AI 组件</a>
           <a class="btn-ghost" href="https://github.com/BoBo-v/Bobo-elements.git" target="_blank">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -129,6 +129,140 @@
     </div>
   </section>
 
+  <!-- AI Showcase -->
+  <section class="ai-showcase">
+    <div class="ai-showcase__inner">
+      <div class="ai-showcase__header">
+        <h2 class="ai-showcase__title">AI 原生组件，开箱即用</h2>
+        <p class="ai-showcase__subtitle">为智能对话、流式输出、代码展示等 AI 应用场景而生</p>
+      </div>
+
+      <div class="ai-showcase__content">
+        <!-- Left: Live Chat Demo -->
+        <div class="ai-demo">
+          <div class="ai-demo__window">
+            <!-- Header -->
+            <div class="ai-demo__titlebar">
+              <div class="ai-demo__dots">
+                <span /><span /><span />
+              </div>
+              <span class="ai-demo__title-text">AI Assistant</span>
+            </div>
+
+            <!-- Messages -->
+            <div class="ai-demo__messages">
+              <!-- User Message -->
+              <div class="ai-demo__msg ai-demo__msg--user">
+                <div class="ai-demo__bubble ai-demo__bubble--user">
+                  {{ demoUserMsg }}
+                </div>
+              </div>
+
+              <!-- Assistant Message -->
+              <div v-if="demoStreamText" class="ai-demo__msg ai-demo__msg--assistant">
+                <div class="ai-demo__bubble ai-demo__bubble--assistant">
+                  <!-- Thinking Phase -->
+                  <ThinkingIndicator
+                    v-if="demoStreamText === '__thinking__'"
+                    color="primary"
+                    text="正在分析..."
+                    size="small"
+                  />
+                  <!-- Streaming + Content Phases -->
+                  <template v-else>
+                    <StreamingText
+                      :text="displayStreamText"
+                      :speed="2"
+                      :interval="30"
+                      :show-cursor="demoStreamText !== '__done__' && !demoStreamText.endsWith('__')"
+                    />
+
+                    <!-- ReasoningBlock -->
+                    <div v-if="showReasoning" class="ai-demo__section">
+                      <ReasoningBlock
+                        title="推理过程"
+                        :duration="currentScenario.duration"
+                        :expanded="demoReasonExpanded"
+                      >
+                        <p style="margin:0;font-size:13px;color:var(--vk-text-color-secondary);line-height:1.7">
+                          {{ currentScenario.reasoning }}
+                        </p>
+                      </ReasoningBlock>
+                    </div>
+
+                    <!-- CodeBlock -->
+                    <div v-if="showCode" class="ai-demo__section">
+                      <CodeBlock
+                        :code="currentScenario.code"
+                        language="typescript"
+                        :show-line-numbers="true"
+                        theme="dark"
+                        :max-height="'220px'"
+                        title="solution.ts"
+                      />
+                    </div>
+
+                    <!-- TokenBadge -->
+                    <div v-if="showTokens" class="ai-demo__tokens">
+                      <TokenBadge :used="currentScenario.tokens" :total="4096" />
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="ai-demo__input-bar">
+              <span class="ai-demo__input-text">输入消息...</span>
+              <div class="ai-demo__send-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Capability List -->
+        <div class="ai-caps">
+          <a
+            v-for="cap in aiCapabilities"
+            :key="cap.name"
+            :href="cap.link"
+            class="ai-cap-card"
+          >
+            <div class="ai-cap-card__icon" v-html="cap.icon" />
+            <div class="ai-cap-card__info">
+              <div class="ai-cap-card__head">
+                <span class="ai-cap-card__name">{{ cap.name }}</span>
+                <span class="ai-cap-card__label">{{ cap.label }}</span>
+              </div>
+              <p class="ai-cap-card__desc">{{ cap.desc }}</p>
+              <div class="ai-cap-card__tags">
+                <span v-for="tag in cap.tags" :key="tag" class="ai-cap-card__tag">{{ tag }}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tech Tags -->
+      <div class="ai-tech-tags">
+        <span v-for="tag in aiTechTags" :key="tag" class="ai-tech-tag">{{ tag }}</span>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="ai-showcase__cta">
+        <a class="btn-primary" href="/components/thinking-indicator">
+          <span>查看 AI 组件</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Rest of page: constrained -->
   <div class="home-wrapper">
 
@@ -148,12 +282,13 @@
     <!-- Components -->
     <section class="components-section">
       <h2 class="section-title">组件总览</h2>
-      <p class="section-desc">涵盖基础、表单、数据展示、反馈四大类别，满足日常开发需求</p>
+      <p class="section-desc">9 个 AI 原生组件 + 17 个基础组件，覆盖全场景开发需求</p>
       <div class="component-groups">
-        <div class="component-group" v-for="g in componentGroups" :key="g.name">
+        <div class="component-group" :class="{ 'component-group--ai': g.isAI }" v-for="g in componentGroups" :key="g.name">
           <h3 class="group-title">
             <span class="group-icon">{{ g.icon }}</span>
             {{ g.name }}
+            <span v-if="g.isAI" class="group-badge">AI</span>
           </h3>
           <div class="group-items">
             <a
@@ -236,12 +371,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import StreamingText from '../../../src/vue/components/StreamingText.vue'
+import ThinkingIndicator from '../../../src/vue/components/ThinkingIndicator.vue'
+import CodeBlock from '../../../src/vue/components/CodeBlock.vue'
+import ReasoningBlock from '../../../src/vue/components/ReasoningBlock.vue'
+import TokenBadge from '../../../src/vue/components/TokenBadge.vue'
 
-const heroTags = ['TypeScript', 'Vue3', 'React', '轻量']
+const heroTags = ['AI 原生', 'Vue3', 'React', 'TypeScript', '流式输出']
 
 const stats = [
-  { value: '17', label: '组件' },
+  { value: '9', label: 'AI 组件' },
+  { value: '17', label: '基础组件' },
   { value: '2', label: '框架' },
   { value: '100%', label: 'TypeScript' },
 ]
@@ -273,6 +414,174 @@ function copyInstall() {
   setTimeout(() => (copied.value = false), 2000)
 }
 
+// ===== AI Showcase Demo =====
+const demoPhase = ref(0)
+const demoUserMsg = ref('')
+const demoStreamText = ref('')
+const demoReasonExpanded = ref(false)
+const demoTimers: ReturnType<typeof setTimeout>[] = []
+
+const demoScenarios = [
+  {
+    user: '帮我写一个防抖函数',
+    thinking: 1200,
+    streamText: '好的，这是一个通用的 TypeScript 防抖函数，支持自定义延迟和取消操作：',
+    reasoning: '用户需要一个防抖函数，我需要考虑：泛型支持、返回值类型、cancel 和 flush 方法，以及正确的 this 绑定和定时器管理。',
+    duration: 856,
+    code: `type AnyFn = (...args: any[]) => any
+
+function debounce<T extends AnyFn>(
+  fn: T,
+  delay: number
+): T & { cancel: () => void; flush: () => void } {
+  let timer: ReturnType<typeof setTimeout> | null = null
+  let lastArgs: Parameters<T> | null = null
+
+  const debounced = ((...args: Parameters<T>) => {
+    lastArgs = args
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn(...args)
+      timer = null
+      lastArgs = null
+    }, delay)
+  }) as T & { cancel: () => void; flush: () => void }
+
+  debounced.cancel = () => {
+    if (timer) { clearTimeout(timer); timer = null }
+    lastArgs = null
+  }
+
+  debounced.flush = () => {
+    if (timer && lastArgs) {
+      fn(...lastArgs)
+      clearTimeout(timer)
+      timer = null
+      lastArgs = null
+    }
+  }
+
+  return debounced
+}`,
+    tokens: 1247,
+    pause: 4000,
+  },
+  {
+    user: '写一个 Python 快速排序',
+    thinking: 980,
+    streamText: '这是一个简洁的 Python 快速排序实现，使用列表推导式使代码更 Pythonic：',
+    reasoning: '快速排序核心是分治思想：选基准值，分三部分（小于、等于、大于），递归拼接。列表推导式可以让实现更简洁。',
+    duration: 620,
+    code: `from typing import List
+
+def quicksort(arr: List[int]) -> List[int]:
+    """简洁的快速排序实现"""
+    if len(arr) <= 1:
+        return arr
+
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+
+    return quicksort(left) + middle + quicksort(right)
+
+# 使用示例
+numbers = [3, 6, 8, 10, 1, 2, 1]
+print(quicksort(numbers))
+# 输出: [1, 1, 2, 3, 6, 8, 10]`,
+    tokens: 892,
+    pause: 3500,
+  },
+]
+
+const aiCapabilities = [
+  { icon: '&#9889;', name: 'StreamingText', label: '流式文本', desc: '逐字流式输出，3 种光标样式，自动检测追加与重置', tags: ['逐字输出', '光标样式'], link: '/components/streaming-text' },
+  { icon: '&#128187;', name: 'CodeBlock', label: '代码块', desc: '语法高亮 + 行号 + 一键复制，亮色 / 暗色主题切换', tags: ['语法高亮', '亮暗主题'], link: '/components/code-block' },
+  { icon: '&#129504;', name: 'ReasoningBlock', label: '思维链', desc: '可折叠面板展示推理过程，附带耗时与 Token 元信息', tags: ['折叠展示', '元信息'], link: '/components/reasoning-block' },
+  { icon: '&#128172;', name: 'ChatMessage', label: '聊天气泡', desc: '区分 user / assistant / system 角色，支持状态指示与重试', tags: ['多角色', '状态指示'], link: '/components/chat-message' },
+  { icon: '&#9997;', name: 'PromptInput', label: '提示词输入', desc: '自适应高度，Enter 发送，流式输出时自动禁用', tags: ['自适应', '流式感知'], link: '/components/prompt-input' },
+  { icon: '&#128203;', name: 'TokenBadge', label: 'Token 标签', desc: '显示 Token 消耗量，支持正常 / 警告 / 危险三种状态', tags: ['自动格式化', '状态色'], link: '/components/token-badge' },
+]
+
+function scheduleNext(fn: () => void, delay: number) {
+  const t = setTimeout(fn, delay)
+  demoTimers.push(t)
+  return t
+}
+
+function runDemo() {
+  const scenario = demoScenarios[demoPhase.value % demoScenarios.length]
+
+  // Reset
+  demoStreamText.value = ''
+  demoReasonExpanded.value = false
+  demoUserMsg.value = scenario.user
+
+  // Phase 1: Thinking
+  scheduleNext(() => {
+    demoStreamText.value = '__thinking__'
+  }, 600)
+
+  // Phase 2: Streaming text
+  scheduleNext(() => {
+    demoStreamText.value = scenario.streamText
+  }, 600 + scenario.thinking)
+
+  // Phase 3: Reasoning + Code
+  const streamDelay = scenario.streamText.length * 40 + 400
+  scheduleNext(() => {
+    demoStreamText.value = scenario.streamText + '__done__'
+  }, 600 + scenario.thinking + streamDelay)
+
+  scheduleNext(() => {
+    demoStreamText.value = scenario.streamText + '__reasoning__'
+  }, 600 + scenario.thinking + streamDelay + 400)
+
+  scheduleNext(() => {
+    demoStreamText.value = scenario.streamText + '__code__'
+  }, 600 + scenario.thinking + streamDelay + 1800)
+
+  scheduleNext(() => {
+    demoStreamText.value = scenario.streamText + '__tokens__'
+  }, 600 + scenario.thinking + streamDelay + 2200)
+
+  // Next round
+  const totalDelay = 600 + scenario.thinking + streamDelay + 2200 + scenario.pause
+  scheduleNext(() => {
+    demoPhase.value++
+    runDemo()
+  }, totalDelay)
+}
+
+onMounted(() => {
+  scheduleNext(runDemo, 1500)
+})
+
+onUnmounted(() => {
+  demoTimers.forEach(clearTimeout)
+})
+
+const currentScenario = computed(() => demoScenarios[demoPhase.value % demoScenarios.length])
+
+const displayStreamText = computed(() => {
+  const v = demoStreamText.value
+  if (v === '__thinking__') return ''
+  return v.replace(/__(done|reasoning|code|tokens)__$/, '')
+})
+
+const showReasoning = computed(() =>
+  demoStreamText.value.endsWith('__reasoning__') ||
+  demoStreamText.value.endsWith('__code__') ||
+  demoStreamText.value.endsWith('__tokens__')
+)
+const showCode = computed(() =>
+  demoStreamText.value.endsWith('__code__') || demoStreamText.value.endsWith('__tokens__')
+)
+const showTokens = computed(() => demoStreamText.value.endsWith('__tokens__'))
+
+const aiTechTags = ['流式输出', '代码高亮', '思维链', '多轮对话', 'Token 统计', '自适应输入', '自动滚底', '亮暗主题', '无障碍', 'TypeScript']
+
 const features = [
   {
     icon: '⚡',
@@ -301,19 +610,35 @@ const features = [
   },
   {
     icon: '🧩',
-    title: '17 个组件 · 覆盖全场景',
-    details: '从按钮到弹窗，从表单到通知，涵盖日常开发中最常用的 UI 组件。',
+    title: '26 个组件 · 覆盖全场景',
+    details: '从按钮到弹窗，从表单到通知，再到 AI 对话、流式输出、代码展示，涵盖日常开发中最常用的 UI 组件。',
   },
 ]
 
 const componentGroups = [
   {
+    name: 'AI 组件',
+    icon: '🤖',
+    isAI: true,
+    items: [
+      { name: 'ThinkingIndicator', label: '思考指示器', link: 'thinking-indicator', vue: true, react: true },
+      { name: 'StreamingText', label: '流式文本', link: 'streaming-text', vue: true, react: true },
+      { name: 'CodeBlock', label: '代码块', link: 'code-block', vue: true, react: true },
+      { name: 'PromptInput', label: '提示词输入', link: 'prompt-input', vue: true, react: true },
+      { name: 'ReasoningBlock', label: '思维链', link: 'reasoning-block', vue: true, react: true },
+      { name: 'ChatMessage', label: '聊天气泡', link: 'chat-message', vue: true, react: true },
+      { name: 'TokenBadge', label: 'Token 标签', link: 'token-badge', vue: true, react: true },
+      { name: 'MarkdownRenderer', label: 'Markdown 渲染', link: 'markdown-renderer', vue: true, react: true },
+      { name: 'ConversationList', label: '对话列表', link: 'conversation-list', vue: true, react: true },
+    ],
+  },
+  {
     name: '基础组件',
     icon: '🧱',
     items: [
-      { name: 'Button', label: '按钮', link: 'button', vue: true, react: false },
-      { name: 'Icon', label: '图标', link: 'button', vue: true, react: false },
-      { name: 'Alert', label: '提示', link: 'alert', vue: true, react: false },
+      { name: 'Button', label: '按钮', link: 'button', vue: true, react: true },
+      { name: 'Icon', label: '图标', link: 'button', vue: true, react: true },
+      { name: 'Alert', label: '提示', link: 'alert', vue: true, react: true },
       { name: 'Tag', label: '标签', link: 'tag', vue: true, react: true },
     ],
   },
@@ -322,9 +647,9 @@ const componentGroups = [
     icon: '📝',
     items: [
       { name: 'Form', label: '表单', link: 'form', vue: true, react: true },
-      { name: 'Input', label: '输入框', link: 'input', vue: true, react: false },
+      { name: 'Input', label: '输入框', link: 'input', vue: true, react: true },
       { name: 'Select', label: '选择器', link: 'select', vue: true, react: true },
-      { name: 'Switch', label: '开关', link: 'switch', vue: true, react: false },
+      { name: 'Switch', label: '开关', link: 'switch', vue: true, react: true },
       { name: 'Radio', label: '单选框', link: 'radio', vue: true, react: true },
       { name: 'Checkbox', label: '多选框', link: 'checkbox', vue: true, react: true },
     ],
@@ -1066,6 +1391,73 @@ const componentGroups = [
   border-radius: 12px;
   padding: 24px;
   background: var(--vp-c-bg);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.component-group:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.dark .component-group:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+.component-group--ai {
+  grid-column: 1 / -1;
+  position: relative;
+  overflow: hidden;
+  border-color: transparent;
+  background:
+    linear-gradient(var(--vp-c-bg), var(--vp-c-bg)) padding-box,
+    linear-gradient(135deg, rgba(100, 108, 255, 0.45), rgba(66, 184, 131, 0.38)) border-box;
+  box-shadow: 0 18px 48px rgba(100, 108, 255, 0.1);
+}
+
+.component-group--ai::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(100, 108, 255, 0.08), rgba(66, 184, 131, 0.06));
+  pointer-events: none;
+}
+
+.component-group--ai > * {
+  position: relative;
+}
+
+.component-group--ai .group-items {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.component-group--ai .component-item {
+  border: 1px solid rgba(100, 108, 255, 0.12);
+  background: rgba(100, 108, 255, 0.06);
+}
+
+.component-group--ai .component-item:hover {
+  border-color: rgba(100, 108, 255, 0.32);
+  background: rgba(100, 108, 255, 0.11);
+}
+
+.dark .component-group--ai {
+  background:
+    linear-gradient(rgba(25, 25, 40, 0.88), rgba(25, 25, 40, 0.88)) padding-box,
+    linear-gradient(135deg, rgba(100, 108, 255, 0.55), rgba(66, 184, 131, 0.42)) border-box;
+}
+
+.group-badge {
+  margin-left: auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+  background: linear-gradient(135deg, #646cff, #42b883);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.28);
 }
 
 .group-title {
@@ -1217,6 +1609,351 @@ const componentGroups = [
   gap: 12px;
 }
 
+/* ===== AI Showcase ===== */
+.ai-showcase {
+  --ai-bg: #f5f5fa;
+  --ai-bg-deep: #eaeaf2;
+  --ai-text: #1a1a2e;
+  --ai-text-muted: #6a6a8a;
+  --ai-text-dim: #9a9ab0;
+  --ai-border: rgba(0, 0, 0, 0.08);
+  --ai-card-bg: #ffffff;
+  --ai-card-hover: rgba(100, 108, 255, 0.04);
+  --ai-accent: #646cff;
+  --ai-accent-soft: rgba(100, 108, 255, 0.08);
+  --ai-green: #42b883;
+  --ai-chat-bg: #ffffff;
+  --ai-chat-header: #f8f8fc;
+  --ai-chat-input-bg: #f5f5fa;
+  --ai-bubble-user: linear-gradient(135deg, #3451b2, #646cff);
+  --ai-bubble-assistant-bg: #f0f0f8;
+  --ai-bubble-assistant-text: #2a2a4a;
+  --ai-tag-bg: rgba(100, 108, 255, 0.08);
+  --ai-tag-text: #5a5a8a;
+
+  position: relative;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  width: 100vw;
+  background: linear-gradient(to bottom, var(--vp-c-bg) 0px, var(--ai-bg) 140px);
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.dark .ai-showcase {
+  --ai-bg: #0f0f1a;
+  --ai-bg-deep: #0a0a14;
+  --ai-text: rgba(255, 255, 255, 0.9);
+  --ai-text-muted: rgba(255, 255, 255, 0.5);
+  --ai-text-dim: rgba(255, 255, 255, 0.35);
+  --ai-border: rgba(255, 255, 255, 0.06);
+  --ai-card-bg: rgba(255, 255, 255, 0.03);
+  --ai-card-hover: rgba(100, 108, 255, 0.08);
+  --ai-accent-soft: rgba(100, 108, 255, 0.1);
+  --ai-chat-bg: #1a1a2e;
+  --ai-chat-header: rgba(255, 255, 255, 0.03);
+  --ai-chat-input-bg: rgba(255, 255, 255, 0.02);
+  --ai-bubble-assistant-bg: rgba(255, 255, 255, 0.06);
+  --ai-bubble-assistant-text: rgba(255, 255, 255, 0.9);
+  --ai-tag-bg: rgba(100, 108, 255, 0.1);
+  --ai-tag-text: rgba(255, 255, 255, 0.5);
+
+  background: linear-gradient(to bottom, var(--vp-c-bg) 0px, var(--ai-bg) 140px);
+}
+
+.ai-showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(100, 108, 255, 0.04), transparent),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(66, 184, 131, 0.03), transparent);
+  pointer-events: none;
+}
+
+.dark .ai-showcase::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(100, 108, 255, 0.06), transparent),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(66, 184, 131, 0.04), transparent);
+}
+
+.ai-showcase__inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.ai-showcase__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.ai-showcase__title {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 0 0 12px;
+  background: linear-gradient(135deg, #646cff, #42b883);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ai-showcase__subtitle {
+  font-size: 18px;
+  color: var(--ai-text-muted);
+  margin: 0;
+}
+
+.ai-showcase__content {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+/* Chat Demo Window */
+.ai-demo {
+  flex: 1.2;
+  min-width: 0;
+}
+
+.ai-demo__window {
+  background: var(--ai-chat-bg);
+  border-radius: 16px;
+  border: 1px solid var(--ai-border);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.dark .ai-demo__window {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.ai-demo__titlebar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--ai-chat-header);
+  border-bottom: 1px solid var(--ai-border);
+}
+
+.ai-demo__dots {
+  display: flex;
+  gap: 6px;
+}
+
+.ai-demo__dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.ai-demo__dots span:nth-child(1) { background: #ff5f57; }
+.ai-demo__dots span:nth-child(2) { background: #febc2e; }
+.ai-demo__dots span:nth-child(3) { background: #28c840; }
+
+.ai-demo__title-text {
+  font-size: 13px;
+  color: var(--ai-text-dim);
+  font-weight: 500;
+}
+
+.ai-demo__messages {
+  padding: 24px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ai-demo__msg {
+  display: flex;
+  animation: demo-msg-in 0.35s ease;
+}
+
+.ai-demo__msg--user {
+  justify-content: flex-end;
+}
+
+.ai-demo__msg--assistant {
+  justify-content: flex-start;
+}
+
+@keyframes demo-msg-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ai-demo__bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.ai-demo__bubble--user {
+  background: linear-gradient(135deg, #3451b2, #646cff);
+  color: #fff;
+  border-top-right-radius: 4px;
+}
+
+.ai-demo__bubble--assistant {
+  background: var(--ai-bubble-assistant-bg);
+  color: var(--ai-bubble-assistant-text);
+  border-top-left-radius: 4px;
+}
+
+.ai-demo__section {
+  margin-top: 12px;
+}
+
+.ai-demo__tokens {
+  margin-top: 12px;
+  display: flex;
+}
+
+.ai-demo__input-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--ai-border);
+  background: var(--ai-chat-input-bg);
+}
+
+.ai-demo__input-text {
+  font-size: 14px;
+  color: var(--ai-text-dim);
+}
+
+.ai-demo__send-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3451b2, #646cff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* Capability Cards */
+.ai-caps {
+  flex: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-cap-card {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--ai-border);
+  background: var(--ai-card-bg);
+  transition: all 0.25s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ai-cap-card:hover {
+  border-color: rgba(100, 108, 255, 0.3);
+  background: var(--ai-card-hover);
+  transform: translateX(-4px);
+}
+
+.ai-cap-card__icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--ai-accent-soft);
+}
+
+.ai-cap-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-cap-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ai-cap-card__name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ai-text);
+  font-family: var(--vp-font-family-mono);
+}
+
+.ai-cap-card__label {
+  font-size: 12px;
+  color: var(--ai-text-dim);
+}
+
+.ai-cap-card__desc {
+  font-size: 13px;
+  color: var(--ai-text-muted);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.ai-cap-card__tags {
+  display: flex;
+  gap: 6px;
+}
+
+.ai-cap-card__tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--ai-tag-bg);
+  color: var(--ai-tag-text);
+}
+
+/* Tech Tags */
+.ai-tech-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--ai-border);
+}
+
+.ai-tech-tag {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--ai-text-muted);
+  border: 1px solid var(--ai-border);
+  transition: all 0.2s;
+}
+
+.ai-tech-tag:hover {
+  color: var(--ai-accent);
+  border-color: rgba(100, 108, 255, 0.3);
+  background: var(--ai-accent-soft);
+}
+
+.ai-showcase__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 1200px) {
   .deco-card { display: none; }
@@ -1247,6 +1984,19 @@ const componentGroups = [
   }
 
   .deco-shape { display: none; }
+
+  .ai-showcase__content {
+    flex-direction: column;
+  }
+
+  .ai-caps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .component-group--ai .group-items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -1314,6 +2064,10 @@ const componentGroups = [
     grid-template-columns: 1fr;
   }
 
+  .component-group--ai .group-items {
+    grid-template-columns: 1fr;
+  }
+
   .usage-grid {
     grid-template-columns: 1fr;
   }
@@ -1321,6 +2075,27 @@ const componentGroups = [
   .hero-actions {
     flex-direction: column;
     align-items: center;
+  }
+
+  .ai-showcase {
+    padding: 50px 0;
+  }
+
+  .ai-showcase__title {
+    font-size: 28px;
+  }
+
+  .ai-showcase__subtitle {
+    font-size: 15px;
+  }
+
+  .ai-demo__messages {
+    min-height: 300px;
+    padding: 16px;
+  }
+
+  .ai-caps {
+    grid-template-columns: 1fr;
   }
 }
 

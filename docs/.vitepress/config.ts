@@ -5,7 +5,7 @@ import { containerPreview, componentPreview } from '@vitepress-demo-preview/plug
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     title: "Bobo-elements",
-    description: "基于vue3+Typescript,开发者的组件库",
+    description: "AI 原生的 Vue3 + React 双框架组件库",
     vite: {
         plugins: [
             vueJsx(),
@@ -38,6 +38,20 @@ export default defineConfig({
 
         sidebar: {
             '/components/': [
+                {
+                    text: 'AI 组件',
+                    items: [
+                        { text: 'ThinkingIndicator 思考指示器', link: '/components/thinking-indicator' },
+                        { text: 'StreamingText 流式文本', link: '/components/streaming-text' },
+                        { text: 'CodeBlock 代码块', link: '/components/code-block' },
+                        { text: 'TokenBadge Token标签', link: '/components/token-badge' },
+                        { text: 'MarkdownRenderer Markdown渲染', link: '/components/markdown-renderer' },
+                        { text: 'PromptInput 提示词输入', link: '/components/prompt-input' },
+                        { text: 'ReasoningBlock 思维链', link: '/components/reasoning-block' },
+                        { text: 'ChatMessage 聊天气泡', link: '/components/chat-message' },
+                        { text: 'ConversationList 对话列表', link: '/components/conversation-list' },
+                    ]
+                },
                 {
                     text: '基础组件',
                     items: [
@@ -72,20 +86,6 @@ export default defineConfig({
                         { text: 'Modal 对话框', link: '/components/modal' },
                         { text: 'Message 消息', link: '/components/message' },
                         { text: 'Notification 通知', link: '/components/notification' },
-                    ]
-                },
-                {
-                    text: 'AI 组件',
-                    items: [
-                        { text: 'ThinkingIndicator 思考指示器', link: '/components/thinking-indicator' },
-                        { text: 'StreamingText 流式文本', link: '/components/streaming-text' },
-                        { text: 'CodeBlock 代码块', link: '/components/code-block' },
-                        { text: 'TokenBadge Token标签', link: '/components/token-badge' },
-                        { text: 'MarkdownRenderer Markdown渲染', link: '/components/markdown-renderer' },
-                        { text: 'PromptInput 提示词输入', link: '/components/prompt-input' },
-                        { text: 'ReasoningBlock 思维链', link: '/components/reasoning-block' },
-                        { text: 'ChatMessage 聊天气泡', link: '/components/chat-message' },
-                        { text: 'ConversationList 对话列表', link: '/components/conversation-list' },
                     ]
                 },
             ],
