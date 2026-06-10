@@ -27,7 +27,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { inject, computed } from 'vue'
+import { inject, computed, unref } from 'vue'
 import type { CollapseItemProps } from '../../../core/components/collapse/types'
 import { collapseContextKey } from '../../../core/components/collapse/types'
 import Icon from '../Icon.vue'
@@ -36,7 +36,7 @@ defineOptions({
 })
 const props = defineProps<CollapseItemProps>()
 const collapseContext = inject(collapseContextKey)
-const isActive = computed(() => collapseContext?.activeNames.value.includes(props.name))
+const isActive = computed(() => unref(collapseContext?.activeNames)?.includes(props.name) ?? false)
 const handleClick = () => {
   if (props.disabled) { return }
   collapseContext?.handleItemClick(props.name)

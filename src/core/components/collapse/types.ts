@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 import type { ReactNode } from 'react';
 
 export type NameType = string | number
@@ -18,7 +18,7 @@ export interface CollapseItemProps {
 }
 
 export interface CollapseContext {
-    activeNames: NameType[]
+    activeNames: NameType[] | Ref<NameType[]>
     handleItemClick: (name: NameType) => void
 }
 

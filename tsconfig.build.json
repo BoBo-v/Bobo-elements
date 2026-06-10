@@ -21,10 +21,16 @@
   },
   "include": [
     "src/index.ts",
-    "src/components/**/*",
+    "src/components/**/*.css",
     "src/core/components/**/*",
     "src/hooks/**/*",
     "src/vue/**/*",
     "src/react/**/*"
+  ],
+  "exclude": [
+    "src/**/*.test.*",
+    "src/**/_tests__/**",
+    "src/App.vue",
+    "src/indexold.ts"
   ]
 }

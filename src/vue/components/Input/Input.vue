@@ -102,7 +102,7 @@ const attrs = useAttrs()
 const innerValue = ref(props.modelValue)
 const isFocus = ref(false)
 const passwordVisible = ref(false)
-const inputRef = ref() as Ref<HTMLInputElement>
+const inputRef = ref<HTMLInputElement | HTMLTextAreaElement>()
 const formItemContext = inject(formItemContextKey, undefined)
 const runValidation = (trigger?: string) => {
   formItemContext?.validate(trigger).catch((e: any) => console.log(e.errors))
@@ -124,7 +124,7 @@ const togglePasswordVisible = () => {
 const NOOP = () => {}
 const keepFocus = async () => {
   await nextTick()
-  inputRef.value.focus()
+  inputRef.value?.focus()
 }
 const handleInput = () => {
   emits('update:modelValue', innerValue.value)

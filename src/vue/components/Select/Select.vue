@@ -239,6 +239,6 @@ const itemSelect = (e: SelectOption) => {
   emits('change', e.value)
   emits('update:modelValue', e.value)
   controlDropdown(false)
-  inputRef.value.ref.focus()
+  inputRef.value.ref.value?.focus()
 }
 </script>

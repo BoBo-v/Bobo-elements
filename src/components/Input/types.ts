@@ -1,3 +1,5 @@
+import type { Ref } from 'vue'
+
 export interface InputProps {
   type?: string;
   modelValue: string;
@@ -23,5 +25,5 @@ export interface InputEmits {
 }
 
 export interface InputInstance {
-  ref: HTMLInputElement | HTMLTextAreaElement;
+  ref: Ref<HTMLInputElement | HTMLTextAreaElement | undefined>;
 }

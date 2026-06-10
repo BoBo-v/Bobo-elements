@@ -47,7 +47,7 @@
     "build-react-es": "vite build --config vite.react.es.config.ts",
     "build-react-umd": "vite build --config vite.react.umd.config.ts",
     "build-css": "move-file dist/vue/index.css dist/index.css",
-    "type-check": "vue-tsc --noEmit",
+    "type-check": "vue-tsc --noEmit -p tsconfig.build.json",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

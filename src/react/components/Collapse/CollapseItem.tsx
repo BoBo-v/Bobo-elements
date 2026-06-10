@@ -11,7 +11,8 @@ export const CollapseItem = memo(function CollapseItem({
     children,
 }: CollapseItemProps) {
     const { activeNames, handleItemClick } = useCollapseContext()
-    const isActive = activeNames.includes(name)
+    const names = Array.isArray(activeNames) ? activeNames : activeNames.value
+    const isActive = names.includes(name)
 
     const onClick = () => {
         if (!disabled) handleItemClick(name)
