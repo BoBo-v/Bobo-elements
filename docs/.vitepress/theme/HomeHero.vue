@@ -1779,6 +1779,8 @@ const componentGroups = [
   border: 1px solid var(--ai-border);
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .dark .ai-demo__window {
@@ -1820,10 +1822,14 @@ const componentGroups = [
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .ai-demo__msg {
   display: flex;
+  min-width: 0;
+  max-width: 100%;
   animation: demo-msg-in 0.35s ease;
 }
 
@@ -1842,10 +1848,16 @@ const componentGroups = [
 
 .ai-demo__bubble {
   max-width: 85%;
+  min-width: 0;
+  overflow-wrap: anywhere;
   padding: 12px 16px;
   border-radius: 14px;
   font-size: 14px;
   line-height: 1.7;
+}
+
+.ai-demo__bubble > * {
+  max-width: 100%;
 }
 
 .ai-demo__bubble--user {

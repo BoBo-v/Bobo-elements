@@ -66,16 +66,29 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  max-width: 100%;
 }
 
 .vk-chat-message__bubble {
   position: relative;
   max-width: var(--vk-chat-msg-max-width);
+  min-width: 0;
+  overflow-wrap: anywhere;
   padding: var(--vk-chat-msg-padding);
   border-radius: var(--vk-chat-msg-border-radius);
   font-size: var(--vk-font-size-base);
   line-height: 1.6;
   word-break: break-word;
+}
+
+.vk-chat-message__bubble > * {
+  max-width: 100%;
+}
+
+.vk-chat-message__bubble pre,
+.vk-chat-message__bubble code,
+.vk-chat-message__bubble table {
+  max-width: 100%;
 }
 
 .vk-chat-message--user .vk-chat-message__bubble {

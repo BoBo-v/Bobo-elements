@@ -12,6 +12,9 @@ export interface PromptInputProps {
   showCount?: boolean
   streaming?: boolean
   streamingText?: string
+  stopable?: boolean
+  stopText?: string
+  stopAriaLabel?: string
   hintText?: string
   sendAriaLabel?: string
   size?: PromptInputSize
@@ -23,6 +26,7 @@ export interface PromptInputProps {
 export interface PromptInputEmits {
   (e: 'update:modelValue', value: string): void
   (e: 'submit', value: string): void
+  (e: 'stop'): void
   (e: 'keydown', event: KeyboardEvent): void
 }
 

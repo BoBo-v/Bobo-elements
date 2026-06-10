@@ -50,6 +50,25 @@ describe('PromptInput component', () => {
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
+  test('does not submit while composing text', () => {
+    const onSubmit = vi.fn()
+    render(<PromptInput value="你好" onSubmit={onSubmit} />)
+    const textarea = screen.getByTestId('prompt-input-textarea')
+    fireEvent.compositionStart(textarea)
+    fireEvent.keyDown(textarea, { key: 'Enter' })
+    expect(onSubmit).not.toHaveBeenCalled()
+    fireEvent.compositionEnd(textarea)
+    fireEvent.keyDown(textarea, { key: 'Enter' })
+    expect(onSubmit).toHaveBeenCalledWith('你好')
+  })
+
+  test('calls onStop when stop button is clicked', () => {
+    const onStop = vi.fn()
+    render(<PromptInput streaming stopable onStop={onStop} />)
+    fireEvent.click(screen.getByTestId('prompt-input-stop-btn'))
+    expect(onStop).toHaveBeenCalledTimes(1)
+  })
+
   test('shows count', () => {
     render(<PromptInput value="hello" showCount maxLength={100} />)
     expect(screen.getByText('5 / 100')).toBeInTheDocument()

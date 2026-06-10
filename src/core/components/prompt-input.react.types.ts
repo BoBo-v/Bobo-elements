@@ -14,6 +14,9 @@ export interface PromptInputProps {
   showCount?: boolean
   streaming?: boolean
   streamingText?: string
+  stopable?: boolean
+  stopText?: string
+  stopAriaLabel?: string
   hintText?: string
   sendAriaLabel?: string
   size?: PromptInputSize
@@ -23,6 +26,7 @@ export interface PromptInputProps {
   children?: ReactNode
   onChange?: (value: string) => void
   onSubmit?: (value: string) => void
+  onStop?: () => void
   onKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>) => void
 }
 

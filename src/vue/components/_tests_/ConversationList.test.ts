@@ -35,4 +35,10 @@ describe('ConversationList.vue', () => {
     })
     expect(wrapper.attributes('style')).toContain('max-height: 500px')
   })
+
+  test('exposes scrollToBottom and getElement', () => {
+    const wrapper = mount(ConversationList)
+    expect(wrapper.vm.scrollToBottom).toBeDefined()
+    expect(wrapper.vm.getElement).toBeDefined()
+  })
 })

@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ChatMessage from '../ChatMessage.vue'
 
@@ -72,5 +72,17 @@ describe('ChatMessage.vue', () => {
       global: { stubs: ['Icon', 'ThinkingIndicator'] }
     })
     expect(wrapper.find('[data-testid="chat-message-error"]').text()).toContain('Failed')
+  })
+
+  test('copies copyContent when provided', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.assign(navigator, { clipboard: { writeText } })
+    const wrapper = mount(ChatMessage, {
+      props: { role: 'assistant', copyable: true, copyContent: 'copy me' },
+      slots: { default: 'Rendered content' },
+      global: { stubs: ['Icon', 'ThinkingIndicator'] }
+    })
+    await wrapper.find('[data-testid="chat-message-copy-btn"]').trigger('click')
+    expect(writeText).toHaveBeenCalledWith('copy me')
   })
 })

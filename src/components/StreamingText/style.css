@@ -5,6 +5,8 @@
 .vk-streaming-text {
   display: inline;
   position: relative;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .vk-streaming-text__cursor {

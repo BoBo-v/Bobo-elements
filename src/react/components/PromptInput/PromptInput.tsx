@@ -15,6 +15,9 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   showCount = false,
   streaming = false,
   streamingText = 'AI 正在回复...',
+  stopable = false,
+  stopText = '停止',
+  stopAriaLabel = '停止生成',
   hintText = 'Enter 发送 / Shift+Enter 换行',
   sendAriaLabel = '发送',
   size = 'default',
@@ -24,9 +27,11 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   children,
   onChange,
   onSubmit,
+  onStop,
   onKeyDown,
 }: PromptInputProps, ref) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const isComposingRef = useRef(false)
   const [innerValue, setInnerValue] = useState(controlledValue || '')
 
   useEffect(() => {
@@ -63,11 +68,19 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
 
   const handleKeydown = useCallback((e: KeyboardEvent<HTMLTextAreaElement>) => {
     onKeyDown?.(e)
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !isComposingRef.current) {
       e.preventDefault()
       handleSubmit()
     }
   }, [onKeyDown, handleSubmit])
+
+  const handleCompositionStart = useCallback(() => {
+    isComposingRef.current = true
+  }, [])
+
+  const handleCompositionEnd = useCallback(() => {
+    isComposingRef.current = false
+  }, [])
 
   const focus = useCallback(() => textareaRef.current?.focus(), [])
   const blur = useCallback(() => textareaRef.current?.blur(), [])
@@ -106,6 +119,8 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
         data-testid="prompt-input-textarea"
         onChange={handleInput}
         onKeyDown={handleKeydown}
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={handleCompositionEnd}
       />
       <div className="vk-prompt-input__footer">
         <div className="vk-prompt-input__actions">
@@ -130,8 +145,20 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
               <Icon name="xmark" />
             </button>
           )}
-          {children || (
+          {children || (streaming && stopable ? (
             <button
+              type="button"
+              className="vk-prompt-input__stop-btn"
+              data-testid="prompt-input-stop-btn"
+              aria-label={stopAriaLabel}
+              disabled={disabled}
+              onClick={onStop}
+            >
+              {stopText}
+            </button>
+          ) : (
+            <button
+              type="button"
               className="vk-prompt-input__send-btn"
               disabled={!innerValue.trim() || disabled || streaming}
               data-testid="prompt-input-send-btn"
@@ -140,7 +167,7 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
             >
               <Icon name="arrow-up" />
             </button>
-          )}
+          ))}
         </div>
       </div>
     </div>

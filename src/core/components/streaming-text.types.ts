@@ -7,6 +7,7 @@ export interface StreamingTextProps {
   showCursor?: boolean
   cursorChar?: string
   cursorStyle?: CursorStyle
+  paused?: boolean
   onComplete?: () => void
 }
 

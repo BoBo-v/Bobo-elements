@@ -12,13 +12,24 @@ export const TokenBadge = memo(function TokenBadge({
   used = 0,
   total,
   status = 'normal',
+  autoStatus = false,
+  warningThreshold = 0.8,
+  dangerThreshold = 1,
   size = 'default',
   variant = 'light',
   prefix = 'Tokens',
 }: TokenBadgeProps) {
+  const computedStatus = autoStatus && total !== undefined && total > 0
+    ? used / total >= dangerThreshold
+      ? 'danger'
+      : used / total >= warningThreshold
+        ? 'warning'
+        : 'normal'
+    : status
+
   const classes = [
     'vk-token-badge',
-    `vk-token-badge--${status}`,
+    `vk-token-badge--${computedStatus}`,
     size !== 'default' ? `vk-token-badge--${size}` : '',
     variant === 'filled' ? 'vk-token-badge--filled' : '',
   ].filter(Boolean).join(' ')

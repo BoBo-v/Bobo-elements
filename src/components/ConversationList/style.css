@@ -6,13 +6,17 @@
 .vk-conversation-list {
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: var(--vk-conversation-list-bg);
+  max-width: 100%;
 }
 
 .vk-conversation-list__content {
   display: flex;
   flex-direction: column;
   padding: 16px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .vk-conversation-list__empty {

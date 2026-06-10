@@ -8,7 +8,7 @@ describe('ReasoningBlock.vue', () => {
       global: { stubs: ['Icon'] }
     })
     expect(wrapper.classes()).toContain('vk-reasoning-block')
-    expect(wrapper.find('.vk-reasoning-block__title').text()).toBe('思考过程')
+    expect(wrapper.find('.vk-reasoning-block__title').text()).toBe('分析过程')
   })
 
   test('custom title', () => {

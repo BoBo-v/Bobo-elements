@@ -62,6 +62,11 @@ function App() {
 | maxRows | 最大行数 | `number` | `6` |
 | showCount | 显示字数统计 | `boolean` | `false` |
 | streaming | 流式输出中 | `boolean` | `false` |
+| stopable | streaming 时是否显示停止按钮 | `boolean` | `false` |
+| stopText | 停止按钮文案 | `string` | `'停止'` |
+| size | 输入框尺寸 | `'small' \| 'default' \| 'large'` | `'default'` |
+| variant | 输入框样式 | `'default' \| 'filled'` | `'default'` |
+| clearable | 是否显示清除按钮 | `boolean` | `false` |
 
 ### 事件 (Events)
 
@@ -69,6 +74,7 @@ function App() {
 | --- | --- | --- |
 | update:modelValue / onChange | 输入时触发 | `(value: string)` |
 | submit / onSubmit | Enter 提交时触发 | `(value: string)` |
+| stop / onStop | 点击停止生成时触发 | — |
 | keydown | 按键时触发 | `(event: KeyboardEvent)` |
 
 ### 方法 (Exposes / Ref)
@@ -79,3 +85,9 @@ function App() {
 | blur | 失焦 | `() => void` |
 | clear | 清空内容 | `() => void` |
 | textareaRef | textarea DOM 引用 | `HTMLTextAreaElement` |
+
+### 插槽 / Children
+
+| 名称 | 说明 |
+| --- | --- |
+| actions / children | 自定义右侧操作按钮 |

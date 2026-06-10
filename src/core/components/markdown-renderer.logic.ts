@@ -4,6 +4,45 @@ function escapeHtml(str: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function escapeAttribute(str: string): string {
+  return escapeHtml(str).replace(/`/g, '&#96;')
+}
+
+function sanitizeUrl(rawUrl: string): string {
+  const url = rawUrl.trim()
+  const lower = url.replace(/[\u0000-\u001F\u007F\s]+/g, '').toLowerCase()
+  if (
+    lower.startsWith('http://') ||
+    lower.startsWith('https://') ||
+    lower.startsWith('mailto:') ||
+    lower.startsWith('tel:') ||
+    lower.startsWith('/') ||
+    lower.startsWith('./') ||
+    lower.startsWith('../') ||
+    lower.startsWith('#')
+  ) {
+    return escapeAttribute(url)
+  }
+  return '#'
+}
+
+function sanitizeImageUrl(rawUrl: string): string {
+  const url = rawUrl.trim()
+  const lower = url.replace(/[\u0000-\u001F\u007F\s]+/g, '').toLowerCase()
+  if (
+    lower.startsWith('http://') ||
+    lower.startsWith('https://') ||
+    lower.startsWith('/') ||
+    lower.startsWith('./') ||
+    lower.startsWith('../') ||
+    lower.startsWith('data:image/')
+  ) {
+    return escapeAttribute(url)
+  }
+  return ''
 }
 
 export function parseMarkdown(md: string, breaks = true): string {
@@ -46,11 +85,17 @@ export function parseMarkdown(md: string, breaks = true): string {
   // ordered list: 1. ...
   html = html.replace(/^\d+\.\s+(.+)$/gm, '<li class="vk-md-li">$1</li>')
 
-  // links: [text](url)
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="vk-md-link" href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-
   // images: ![alt](url)
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img class="vk-md-img" src="$2" alt="$1" />')
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => {
+    const src = sanitizeImageUrl(url)
+    if (!src) return escapeHtml(alt)
+    return `<img class="vk-md-img" src="${src}" alt="${escapeAttribute(alt)}" />`
+  })
+
+  // links: [text](url)
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => {
+    return `<a class="vk-md-link" href="${sanitizeUrl(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`
+  })
 
   // horizontal rule: ---
   html = html.replace(/^---+$/gm, '<hr class="vk-md-hr" />')

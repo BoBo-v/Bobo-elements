@@ -57,4 +57,11 @@ describe('TokenBadge.vue', () => {
     expect(wrapper.find('[data-testid="token-badge-value"]').text()).toBe('1.5M')
     expect(wrapper.find('[data-testid="token-badge-total"]').text()).toBe('/ 2.0M')
   })
+
+  test('can derive status from token ratio', () => {
+    const wrapper = mount(TokenBadge, {
+      props: { used: 3500, total: 4000, autoStatus: true }
+    })
+    expect(wrapper.classes()).toContain('vk-token-badge--warning')
+  })
 })

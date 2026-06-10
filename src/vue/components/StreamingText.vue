@@ -28,7 +28,8 @@ const props = withDefaults(defineProps<StreamingTextProps>(), {
   interval: 50,
   showCursor: true,
   cursorChar: '',
-  cursorStyle: 'line'
+  cursorStyle: 'line',
+  paused: false
 })
 
 const DEFAULT_CURSOR_CHARS: Record<string, string> = {
@@ -57,6 +58,7 @@ function emitCompleteOnce(text: string) {
 
 function startInterval() {
   stopInterval()
+  if (props.paused || !props.text) return
   timer = setInterval(() => {
     state.tick(props.text.length, props.speed)
     displayText.value = state.getDisplayText(props.text)
@@ -65,7 +67,7 @@ function startInterval() {
       stopInterval()
       emitCompleteOnce(props.text)
     }
-  }, props.interval)
+  }, Math.max(16, props.interval))
 }
 
 function stopInterval() {
@@ -87,6 +89,15 @@ watch(() => props.text, (newText) => {
     emitCompleteOnce(newText)
   }
   displayText.value = state.getDisplayText(newText)
+})
+
+watch(() => [props.paused, props.speed, props.interval] as const, () => {
+  if (isDone.value || !props.text) return
+  if (props.paused) {
+    stopInterval()
+  } else {
+    startInterval()
+  }
 })
 
 onMounted(() => {
@@ -111,5 +122,21 @@ function reset() {
   }
 }
 
-defineExpose({ reset, isComplete: computed(() => isDone.value) })
+function finish() {
+  stopInterval()
+  state.finish(props.text.length)
+  displayText.value = props.text
+  isDone.value = true
+  emitCompleteOnce(props.text)
+}
+
+function pause() {
+  stopInterval()
+}
+
+function resume() {
+  if (!isDone.value) startInterval()
+}
+
+defineExpose({ reset, finish, pause, resume, isComplete: computed(() => isDone.value) })
 </script>

@@ -23,6 +23,7 @@ export const ChatMessage = memo(function ChatMessage({
   copyText = '复制',
   copiedText = '已复制',
   content,
+  copyContent,
   children,
   loading,
   onRetry,
@@ -38,14 +39,16 @@ export const ChatMessage = memo(function ChatMessage({
   }, [])
 
   const handleCopy = useCallback(async () => {
-    if (!content) return
+    const text = copyContent || content || ''
+    if (!text) return
     try {
-      await navigator.clipboard.writeText(content)
+      await navigator.clipboard.writeText(text)
       setCopied(true)
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
       copyTimerRef.current = setTimeout(() => setCopied(false), 2000)
     } catch {}
-  }, [content])
+  }, [content, copyContent])
+  const effectiveCopyContent = copyContent || content || ''
   const formattedTime = useMemo(() => {
     if (!timestamp) return ''
     const date = new Date(timestamp)
@@ -69,7 +72,7 @@ export const ChatMessage = memo(function ChatMessage({
           {children}
           {status === 'streaming' && !children && (loading || <ThinkingIndicator />)}
         </div>
-        {copyable && content && (
+        {copyable && effectiveCopyContent && (
           <div className="vk-chat-message__actions">
             <button
               className="vk-chat-message__copy-btn"

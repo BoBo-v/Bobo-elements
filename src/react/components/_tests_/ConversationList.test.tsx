@@ -1,6 +1,8 @@
+import { createRef } from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { ConversationList } from '../ConversationList'
+import type { ConversationListRef } from '../../../core/components/conversation-list.react.types'
 
 describe('ConversationList component', () => {
   test('basic render', () => {
@@ -29,5 +31,12 @@ describe('ConversationList component', () => {
   test('applies max height', () => {
     render(<ConversationList maxHeight="500px">content</ConversationList>)
     expect(screen.getByTestId('conversation-list')).toHaveStyle({ maxHeight: '500px' })
+  })
+
+  test('exposes scroll helpers', () => {
+    const ref = createRef<ConversationListRef>()
+    render(<ConversationList ref={ref}>content</ConversationList>)
+    expect(ref.current?.scrollToBottom).toBeDefined()
+    expect(ref.current?.getElement()).toBe(screen.getByTestId('conversation-list'))
   })
 })

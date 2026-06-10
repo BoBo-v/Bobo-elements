@@ -27,6 +27,12 @@ describe('MarkdownRenderer component', () => {
     expect(container.querySelector('.vk-md-inline-code')).toBeTruthy()
   })
 
+  test('sanitizes unsafe links and images', () => {
+    const { container } = render(<MarkdownRenderer content={'[bad](javascript:alert(1))\n![bad](javascript:alert(1))'} />)
+    expect(container.innerHTML).not.toContain('javascript:alert')
+    expect(container.innerHTML).toContain('href="#"')
+  })
+
   test('renders empty content', () => {
     const { container } = render(<MarkdownRenderer content="" />)
     expect(container.querySelector('.vk-md-p')).toBeNull()

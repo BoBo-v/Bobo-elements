@@ -3,4 +3,5 @@ export interface ReasoningBlockProps {
   expanded?: boolean
   duration?: number
   tokenCount?: number
+  onExpandedChange?: (expanded: boolean) => void
 }

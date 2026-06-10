@@ -6,6 +6,9 @@ export interface TokenBadgeProps {
   used?: number
   total?: number
   status?: TokenBadgeStatus
+  autoStatus?: boolean
+  warningThreshold?: number
+  dangerThreshold?: number
   size?: TokenBadgeSize
   variant?: TokenBadgeVariant
   prefix?: string

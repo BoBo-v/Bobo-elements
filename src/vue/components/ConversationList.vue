@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import type { ConversationListProps, ConversationListEmits } from '../../core/components/conversation-list.types'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../../core/components/conversation-list.types'
 import '../../components/ConversationList/style.css'
 
 defineOptions({ name: 'VkConversationList' })
@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<ConversationListProps>(), {
   loadingMore: false,
   height: undefined,
   maxHeight: '100%',
+  preserveScrollOnPrepend: true,
   emptyText: '暂无对话',
   loadingText: '加载中...'
 })
@@ -40,7 +41,9 @@ const props = withDefaults(defineProps<ConversationListProps>(), {
 const emits = defineEmits<ConversationListEmits>()
 const containerRef = ref<HTMLElement | null>(null)
 let observer: MutationObserver | null = null
+let resizeObserver: ResizeObserver | null = null
 let shouldStickToBottom = true
+let previousScrollHeight = 0
 
 const SCROLL_THRESHOLD = 50
 
@@ -57,6 +60,10 @@ function scrollToBottom() {
   }
 }
 
+function getElement() {
+  return containerRef.value
+}
+
 function handleScroll() {
   const el = containerRef.value
   if (!el) return
@@ -69,19 +76,44 @@ function handleScroll() {
 
 onMounted(() => {
   if (containerRef.value) {
+    previousScrollHeight = containerRef.value.scrollHeight
     shouldStickToBottom = isNearBottom()
     observer = new MutationObserver((mutations) => {
       const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0)
-      if (props.autoScroll && hasAddedNodes && shouldStickToBottom) {
-        scrollToBottom()
-      }
-      shouldStickToBottom = isNearBottom()
+      if (!hasAddedNodes) return
+      const el = containerRef.value
+      if (!el) return
+      const oldScrollHeight = previousScrollHeight
+      nextTick(() => {
+        if (props.autoScroll && shouldStickToBottom) {
+          scrollToBottom()
+        } else if (props.preserveScrollOnPrepend && el.scrollTop <= SCROLL_THRESHOLD && el.scrollHeight > oldScrollHeight) {
+          el.scrollTop = el.scrollHeight - oldScrollHeight
+        }
+        previousScrollHeight = el.scrollHeight
+        shouldStickToBottom = isNearBottom()
+      })
     })
     observer.observe(containerRef.value, { childList: true, subtree: true })
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        const el = containerRef.value
+        if (!el) return
+        if (props.autoScroll && shouldStickToBottom) {
+          scrollToBottom()
+        }
+        previousScrollHeight = el.scrollHeight
+        shouldStickToBottom = isNearBottom()
+      })
+      resizeObserver.observe(containerRef.value)
+    }
   }
 })
 
 onUnmounted(() => {
   observer?.disconnect()
+  resizeObserver?.disconnect()
 })
+
+defineExpose<ConversationListInstance>({ scrollToBottom, getElement })
 </script>

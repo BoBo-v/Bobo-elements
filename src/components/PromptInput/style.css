@@ -103,6 +103,33 @@
   opacity: 0.85;
 }
 
+.vk-prompt-input__stop-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  border: none;
+  background-color: var(--vk-color-danger);
+  color: var(--vk-color-white);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: opacity var(--vk-transition-duration-fast);
+}
+
+.vk-prompt-input__stop-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.vk-prompt-input__stop-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
 .vk-prompt-input__streaming-badge {
   display: inline-flex;
   align-items: center;

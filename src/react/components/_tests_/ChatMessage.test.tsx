@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 import { ChatMessage } from '../ChatMessage'
@@ -41,5 +41,13 @@ describe('ChatMessage component', () => {
     expect(screen.getByTestId('chat-message-error')).toHaveTextContent('发送失败')
     fireEvent.click(screen.getByTestId('chat-message-retry'))
     expect(onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  test('copies copyContent when provided', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.assign(navigator, { clipboard: { writeText } })
+    render(<ChatMessage role="assistant" copyable copyContent="copy me">Rendered content</ChatMessage>)
+    fireEvent.click(screen.getByTestId('chat-message-copy-btn'))
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith('copy me'))
   })
 })

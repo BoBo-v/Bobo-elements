@@ -43,6 +43,8 @@
   font-family: 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
   font-size: 13px;
   line-height: 1.6;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .vk-code-block__header {
@@ -83,10 +85,12 @@
 .vk-code-block__body {
   overflow: auto;
   padding: 16px;
+  max-width: 100%;
 }
 
 .vk-code-block__lines {
   display: flex;
+  min-width: 0;
 }
 
 .vk-code-block__line-numbers {
@@ -105,6 +109,8 @@
 
 .vk-code-block__code {
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   white-space: pre;
   color: var(--vk-code-block-text);

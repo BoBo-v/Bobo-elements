@@ -44,10 +44,16 @@ function App() {
 
 | 属性名 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| title | 标题 | `string` | `'思考过程'` |
+| title | 标题 | `string` | `'分析过程'` |
 | expanded | 是否默认展开 | `boolean` | `false` |
 | duration | 推理耗时 (ms) | `number` | — |
 | tokenCount | token 消耗量 | `number` | — |
+
+### 事件 (Events)
+
+| 事件名 | 说明 | 回调参数 |
+| --- | --- | --- |
+| update:expanded / onExpandedChange | 展开状态变化时触发 | `(expanded: boolean)` |
 
 ### 插槽 (Slots)
 

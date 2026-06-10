@@ -1,6 +1,9 @@
 <template>
   <div class="vk-reasoning-block" data-testid="reasoning-block">
-    <Collapse :model-value="expanded ? ['reasoning'] : []">
+    <Collapse
+      :model-value="expanded ? ['reasoning'] : []"
+      @change="handleChange"
+    >
       <CollapseItem name="reasoning">
         <template #title>
           <div class="vk-reasoning-block__header">
@@ -33,10 +36,20 @@ import '../../components/ReasoningBlock/style.css'
 
 defineOptions({ name: 'VkReasoningBlock' })
 
-withDefaults(defineProps<ReasoningBlockProps>(), {
-  title: '思考过程',
+const props = withDefaults(defineProps<ReasoningBlockProps>(), {
+  title: '分析过程',
   expanded: false
 })
+
+const emit = defineEmits<{
+  (e: 'update:expanded', value: boolean): void
+}>()
+
+function handleChange(names: Array<string | number>) {
+  const nextExpanded = names.includes('reasoning')
+  emit('update:expanded', nextExpanded)
+  props.onExpandedChange?.(nextExpanded)
+}
 
 function formatDuration(ms: number): string {
   if (ms < 1000) return ms + 'ms'

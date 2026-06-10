@@ -11,7 +11,7 @@ describe('ReasoningBlock component', () => {
 
   test('shows title', () => {
     render(<ReasoningBlock>content</ReasoningBlock>)
-    expect(screen.getByText('思考过程')).toBeInTheDocument()
+    expect(screen.getByText('分析过程')).toBeInTheDocument()
   })
 
   test('custom title', () => {

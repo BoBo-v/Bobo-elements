@@ -55,10 +55,15 @@ function App() {
 | interval | 每 tick 间隔 (ms) | `number` | `50` |
 | showCursor | 是否显示光标 | `boolean` | `true` |
 | cursorChar | 光标字符 | `string` | `'│'` |
+| cursorStyle | 光标样式 | `'line' \| 'block' \| 'underline'` | `'line'` |
+| paused | 是否暂停打字动画 | `boolean` | `false` |
 
 ### 方法 (Exposes / Ref)
 
 | 方法名 | 说明 | 类型 |
 | --- | --- | --- |
 | reset | 重置到初始状态 | `() => void` |
+| finish | 立即完成输出 | `() => void` |
+| pause | 暂停输出动画 | `() => void` |
+| resume | 继续输出动画 | `() => void` |
 | isComplete | 是否已完成输出 | `boolean` |

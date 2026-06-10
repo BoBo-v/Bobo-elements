@@ -36,6 +36,9 @@ describe('StreamingText.vue', () => {
       props: { text: 'hi' }
     })
     expect(wrapper.vm.reset).toBeDefined()
+    expect(wrapper.vm.finish).toBeDefined()
+    expect(wrapper.vm.pause).toBeDefined()
+    expect(wrapper.vm.resume).toBeDefined()
     expect(wrapper.vm.isComplete).toBeDefined()
   })
 

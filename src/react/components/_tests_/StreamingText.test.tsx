@@ -1,7 +1,9 @@
+import { createRef } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { StreamingText } from '../StreamingText'
+import type { StreamingTextRef } from '../StreamingText'
 
 describe('StreamingText component', () => {
   test('renders with empty text', () => {
@@ -32,5 +34,14 @@ describe('StreamingText component', () => {
     const onComplete = vi.fn()
     render(<StreamingText text="hi" speed={100} interval={10} onComplete={onComplete} />)
     await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(1))
+  })
+
+  test('exposes control methods', () => {
+    const ref = createRef<StreamingTextRef>()
+    render(<StreamingText ref={ref} text="hello" paused />)
+    expect(ref.current?.reset).toBeDefined()
+    expect(ref.current?.finish).toBeDefined()
+    expect(ref.current?.pause).toBeDefined()
+    expect(ref.current?.resume).toBeDefined()
   })
 })

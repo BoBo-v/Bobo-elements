@@ -40,5 +40,8 @@ function App() {
 | 属性名 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | content | Markdown 源文本 | `string` | `''` |
-| tag | 根元素 HTML 标签 | `string` | `'div'` |
 | breaks | 换行转 `<br>` | `boolean` | `true` |
+
+::: tip 安全说明
+组件会转义 HTML，并只允许安全的链接 / 图片 URL 协议，避免 AI 输出内容直接注入危险脚本。
+:::

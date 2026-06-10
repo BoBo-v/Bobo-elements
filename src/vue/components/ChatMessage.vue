@@ -20,7 +20,7 @@
           <ThinkingIndicator />
         </slot>
       </div>
-      <div v-if="copyable && content" class="vk-chat-message__actions">
+      <div v-if="copyable && effectiveCopyContent" class="vk-chat-message__actions">
         <button
           class="vk-chat-message__copy-btn"
           data-testid="chat-message-copy-btn"
@@ -67,9 +67,10 @@ const copied = ref(false)
 let copyTimer: ReturnType<typeof setTimeout> | null = null
 
 async function handleCopy() {
-  if (!props.content) return
+  const text = effectiveCopyContent.value
+  if (!text) return
   try {
-    await navigator.clipboard.writeText(props.content)
+    await navigator.clipboard.writeText(text)
     copied.value = true
     if (copyTimer) clearTimeout(copyTimer)
     copyTimer = setTimeout(() => { copied.value = false }, 2000)
@@ -94,6 +95,8 @@ const defaultIcon = computed(() => {
     default: return 'user'
   }
 })
+
+const effectiveCopyContent = computed(() => props.copyContent || props.content || '')
 
 const formattedTime = computed(() => {
   if (!props.timestamp) return ''

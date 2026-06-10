@@ -39,4 +39,9 @@ describe('TokenBadge component', () => {
     render(<TokenBadge prefix="字符" />)
     expect(screen.getByText('字符')).toBeInTheDocument()
   })
+
+  test('can derive status from token ratio', () => {
+    render(<TokenBadge used={4000} total={4000} autoStatus />)
+    expect(screen.getByTestId('token-badge')).toHaveClass('vk-token-badge--danger')
+  })
 })

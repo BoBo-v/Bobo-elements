@@ -44,6 +44,14 @@ describe('MarkdownRenderer.vue', () => {
     expect(wrapper.html()).toContain('https://google.com')
   })
 
+  test('sanitizes unsafe links and images', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: { content: '[bad](javascript:alert(1))\n![bad](javascript:alert(1))' }
+    })
+    expect(wrapper.html()).not.toContain('javascript:alert')
+    expect(wrapper.html()).toContain('href="#"')
+  })
+
   test('renders blockquote', () => {
     const wrapper = mount(MarkdownRenderer, {
       props: { content: '> quoted text' }

@@ -45,4 +45,7 @@ function App() {
 | used | 已用 token 数 | `number` | `0` |
 | total | 总限额 | `number` | — |
 | status | 状态颜色 | `'normal' \| 'warning' \| 'danger'` | `'normal'` |
+| autoStatus | 根据 used / total 自动推导状态 | `boolean` | `false` |
+| warningThreshold | 自动 warning 阈值 | `number` | `0.8` |
+| dangerThreshold | 自动 danger 阈值 | `number` | `1` |
 | prefix | 前缀文案 | `string` | `'Tokens'` |

@@ -43,6 +43,7 @@ function App() {
 | loadingMore | 正在加载历史消息 | `boolean` | `false` |
 | height | 容器高度 | `string` | — |
 | maxHeight | 容器最大高度 | `string` | `'100%'` |
+| preserveScrollOnPrepend | 加载历史消息时保持当前滚动位置 | `boolean` | `true` |
 | emptyText | 空状态文案 | `string` | `'暂无对话'` |
 
 ### 事件 (Events)
@@ -51,6 +52,13 @@ function App() {
 | --- | --- | --- |
 | load-more / onLoadMore | 滚动到顶部时触发 | — |
 | scroll / onScroll | 滚动时触发 | `(scrollTop: number)` |
+
+### 方法 (Exposes / Ref)
+
+| 方法名 | 说明 | 类型 |
+| --- | --- | --- |
+| scrollToBottom | 滚动到底部 | `() => void` |
+| getElement | 获取滚动容器 DOM | `() => HTMLElement \| null` |
 
 ### 插槽 (Slots)
 

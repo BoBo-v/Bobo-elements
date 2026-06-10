@@ -10,6 +10,12 @@ import {
   faCircleCheck,
   faCircleInfo,
   faCircleExclamation,
+  faArrowUp,
+  faRobot,
+  faUser,
+  faBrain,
+  faClock,
+  faRotateRight,
 } from '@fortawesome/free-solid-svg-icons';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import type { MouseEvent } from 'react';
@@ -24,6 +30,12 @@ const iconMap: Record<string, IconDefinition> = {
   'circle-check': faCircleCheck,
   'circle-info': faCircleInfo,
   'circle-exclamation': faCircleExclamation,
+  'arrow-up': faArrowUp,
+  robot: faRobot,
+  user: faUser,
+  brain: faBrain,
+  clock: faClock,
+  'rotate-right': faRotateRight,
 };
 
 type IconProps = {

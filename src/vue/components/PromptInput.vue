@@ -23,6 +23,8 @@
       data-testid="prompt-input-textarea"
       @input="handleInput"
       @keydown="handleKeydown"
+      @compositionstart="handleCompositionStart"
+      @compositionend="handleCompositionEnd"
     />
     <div class="vk-prompt-input__footer">
       <div class="vk-prompt-input__actions">
@@ -46,15 +48,30 @@
         >
           <Icon icon="xmark" />
         </button>
-        <button
-          class="vk-prompt-input__send-btn"
-          :disabled="!innerValue.trim() || disabled || streaming"
-          data-testid="prompt-input-send-btn"
-          :aria-label="sendAriaLabel"
-          @click="handleSubmit"
-        >
-          <Icon icon="arrow-up" />
-        </button>
+        <slot name="actions">
+          <button
+            v-if="streaming && stopable"
+            type="button"
+            class="vk-prompt-input__stop-btn"
+            data-testid="prompt-input-stop-btn"
+            :aria-label="stopAriaLabel"
+            :disabled="disabled"
+            @click="handleStop"
+          >
+            {{ stopText }}
+          </button>
+          <button
+            v-else
+            type="button"
+            class="vk-prompt-input__send-btn"
+            :disabled="!innerValue.trim() || disabled || streaming"
+            data-testid="prompt-input-send-btn"
+            :aria-label="sendAriaLabel"
+            @click="handleSubmit"
+          >
+            <Icon icon="arrow-up" />
+          </button>
+        </slot>
       </div>
     </div>
   </div>
@@ -78,6 +95,9 @@ const props = withDefaults(defineProps<PromptInputProps>(), {
   showCount: false,
   streaming: false,
   streamingText: 'AI 正在回复...',
+  stopable: false,
+  stopText: '停止',
+  stopAriaLabel: '停止生成',
   hintText: 'Enter 发送 / Shift+Enter 换行',
   sendAriaLabel: '发送',
   size: 'default',
@@ -89,6 +109,7 @@ const props = withDefaults(defineProps<PromptInputProps>(), {
 const emits = defineEmits<PromptInputEmits>()
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const innerValue = ref(props.modelValue)
+const isComposing = ref(false)
 
 watch(() => props.modelValue, (val) => {
   innerValue.value = val
@@ -105,10 +126,18 @@ function handleInput(e: Event) {
 
 function handleKeydown(e: KeyboardEvent) {
   emits('keydown', e)
-  if (e.key === 'Enter' && !e.shiftKey) {
+  if (e.key === 'Enter' && !e.shiftKey && !isComposing.value) {
     e.preventDefault()
     handleSubmit()
   }
+}
+
+function handleCompositionStart() {
+  isComposing.value = true
+}
+
+function handleCompositionEnd() {
+  isComposing.value = false
 }
 
 function handleSubmit() {
@@ -121,6 +150,11 @@ function handleSubmit() {
 function handleClear() {
   if (props.disabled || props.streaming) return
   clear()
+}
+
+function handleStop() {
+  if (props.disabled) return
+  emits('stop')
 }
 
 function autoResize() {

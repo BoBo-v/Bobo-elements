@@ -75,4 +75,27 @@ describe('PromptInput.vue', () => {
     await wrapper.find('textarea').trigger('keydown', { key: 'Enter', shiftKey: true })
     expect(wrapper.emitted('submit')).toBeFalsy()
   })
+
+  test('does not submit while composing text', async () => {
+    const wrapper = mount(PromptInput, {
+      props: { modelValue: '你好' },
+      global: { stubs: ['Icon'] }
+    })
+    const textarea = wrapper.find('textarea')
+    await textarea.trigger('compositionstart')
+    await textarea.trigger('keydown', { key: 'Enter', shiftKey: false })
+    expect(wrapper.emitted('submit')).toBeFalsy()
+    await textarea.trigger('compositionend')
+    await textarea.trigger('keydown', { key: 'Enter', shiftKey: false })
+    expect(wrapper.emitted('submit')).toBeTruthy()
+  })
+
+  test('emits stop when stop button is clicked', async () => {
+    const wrapper = mount(PromptInput, {
+      props: { streaming: true, stopable: true },
+      global: { stubs: ['Icon'] }
+    })
+    await wrapper.find('[data-testid="prompt-input-stop-btn"]').trigger('click')
+    expect(wrapper.emitted('stop')).toBeTruthy()
+  })
 })

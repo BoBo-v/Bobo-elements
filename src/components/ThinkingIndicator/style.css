@@ -116,3 +116,16 @@
   --vk-thinking-dot-color: var(--vk-color-primary);
   --vk-thinking-pulse-color: var(--vk-color-primary);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .vk-thinking-indicator__dot,
+  .vk-thinking-indicator__pulse,
+  .vk-thinking-indicator__wave-bar {
+    animation: none;
+  }
+
+  .vk-thinking-indicator__pulse {
+    opacity: 0.7;
+    transform: none;
+  }
+}

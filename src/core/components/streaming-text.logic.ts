@@ -3,7 +3,7 @@ export function createStreamingState() {
   let prevText = ''
 
   function tick(targetLength: number, speed: number): number {
-    currentIndex = Math.min(currentIndex + speed, targetLength)
+    currentIndex = Math.min(currentIndex + Math.max(1, speed), targetLength)
     return currentIndex
   }
 
@@ -34,5 +34,10 @@ export function createStreamingState() {
     return currentIndex
   }
 
-  return { tick, onTextChange, reset, getDisplayText, isComplete, getCurrentIndex }
+  function finish(targetLength: number): number {
+    currentIndex = targetLength
+    return currentIndex
+  }
+
+  return { tick, onTextChange, reset, getDisplayText, isComplete, getCurrentIndex, finish }
 }

@@ -14,6 +14,7 @@ export interface ChatMessageProps {
   copyText?: string
   copiedText?: string
   content?: string
+  copyContent?: string
 }
 
 export interface ChatMessageEmits {

@@ -5,6 +5,9 @@ import '../../../components/StreamingText/style.css'
 
 export interface StreamingTextRef {
   reset: () => void
+  finish: () => void
+  pause: () => void
+  resume: () => void
   isComplete: boolean
 }
 
@@ -21,6 +24,7 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
   showCursor = true,
   cursorChar = '',
   cursorStyle = 'line',
+  paused = false,
   onComplete,
 }: StreamingTextProps, ref) {
   const effectiveCursorChar = cursorChar || DEFAULT_CURSOR_CHARS[cursorStyle]
@@ -50,6 +54,7 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
 
   const startInterval = useCallback(() => {
     stopInterval()
+    if (paused || !text) return
     timerRef.current = setInterval(() => {
       const state = stateRef.current
       state.tick(text.length, speed)
@@ -59,8 +64,8 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
         stopInterval()
         emitCompleteOnce(text)
       }
-    }, interval)
-  }, [text, speed, interval, stopInterval, emitCompleteOnce])
+    }, Math.max(16, interval))
+  }, [text, speed, interval, paused, stopInterval, emitCompleteOnce])
 
   useEffect(() => {
     const state = stateRef.current
@@ -91,7 +96,31 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
     }
   }, [text, startInterval])
 
-  useImperativeHandle(ref, () => ({ reset, isComplete: isDone }), [reset, isDone])
+  const finish = useCallback(() => {
+    stopInterval()
+    stateRef.current.finish(text.length)
+    setDisplayText(text)
+    setIsDone(true)
+    emitCompleteOnce(text)
+  }, [text, stopInterval, emitCompleteOnce])
+
+  const pause = useCallback(() => {
+    stopInterval()
+  }, [stopInterval])
+
+  const resume = useCallback(() => {
+    if (!isDone) startInterval()
+  }, [isDone, startInterval])
+
+  useEffect(() => {
+    if (paused) {
+      stopInterval()
+    } else if (!isDone && text) {
+      startInterval()
+    }
+  }, [paused, isDone, text, startInterval, stopInterval])
+
+  useImperativeHandle(ref, () => ({ reset, finish, pause, resume, isComplete: isDone }), [reset, finish, pause, resume, isDone])
 
   return (
     <span className="vk-streaming-text" data-testid="streaming-text" role="status" aria-live="polite">

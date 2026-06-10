@@ -58,6 +58,9 @@ function App() {
 | showAvatar | 是否显示头像 | `boolean` | `true` |
 | errorMessage | 错误信息 | `string` | `'发送失败'` |
 | retryText | 重试按钮文案 | `string` | `'重试'` |
+| copyable | 是否显示复制按钮 | `boolean` | `false` |
+| content | 可复制的纯文本内容 | `string` | — |
+| copyContent | 自定义复制内容，优先级高于 content | `string` | — |
 
 ### 事件 (Events)
 

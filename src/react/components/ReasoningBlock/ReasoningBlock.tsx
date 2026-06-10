@@ -15,10 +15,11 @@ interface ReasoningBlockInternalProps extends ReasoningBlockProps {
 }
 
 export const ReasoningBlock = memo(function ReasoningBlock({
-  title = '思考过程',
+  title = '分析过程',
   expanded = false,
   duration,
   tokenCount,
+  onExpandedChange,
   children,
 }: ReasoningBlockInternalProps) {
   const titleContent = useMemo(() => (
@@ -42,9 +43,13 @@ export const ReasoningBlock = memo(function ReasoningBlock({
     </div>
   ), [title, duration, tokenCount])
 
+  const handleChange = (names: Array<string | number>) => {
+    onExpandedChange?.(names.includes('reasoning'))
+  }
+
   return (
     <div className="vk-reasoning-block" data-testid="reasoning-block">
-      <Collapse modelValue={expanded ? ['reasoning'] : []}>
+      <Collapse modelValue={expanded ? ['reasoning'] : []} onChange={handleChange}>
         <CollapseItem name="reasoning" title={titleContent}>
           <div className="vk-reasoning-block__content">{children}</div>
         </CollapseItem>
