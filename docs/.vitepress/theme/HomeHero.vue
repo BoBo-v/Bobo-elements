@@ -88,7 +88,12 @@
           </a>
         </div>
         <div class="hero-stats">
-          <div class="stat-item" v-for="(stat, i) in stats" :key="stat.label">
+          <div
+            class="stat-item"
+            :class="{ 'stat-item--ai': stat.highlight }"
+            v-for="stat in stats"
+            :key="stat.label"
+          >
             <span class="stat-number">{{ stat.value }}</span>
             <span class="stat-label">{{ stat.label }}</span>
           </div>
@@ -269,9 +274,9 @@
     <!-- Features -->
     <section class="features-section">
       <h2 class="section-title">为什么选择 Bobo-elements</h2>
-      <p class="section-desc">专为现代前端开发设计，兼顾灵活性与开发体验</p>
+      <p class="section-desc">围绕 AI 应用界面补齐高频交互，同时保留双框架基础组件能力</p>
       <div class="features-grid">
-        <div class="feature-card" v-for="f in features" :key="f.title">
+        <div class="feature-card" :class="{ 'feature-card--ai': f.highlight }" v-for="f in features" :key="f.title">
           <div class="feature-icon">{{ f.icon }}</div>
           <h3 class="feature-title">{{ f.title }}</h3>
           <p class="feature-desc">{{ f.details }}</p>
@@ -290,6 +295,7 @@
             {{ g.name }}
             <span v-if="g.isAI" class="group-badge">AI</span>
           </h3>
+          <p v-if="g.desc" class="group-desc">{{ g.desc }}</p>
           <div class="group-items">
             <a
               v-for="c in g.items"
@@ -381,7 +387,7 @@ import TokenBadge from '../../../src/vue/components/TokenBadge.vue'
 const heroTags = ['AI 原生', 'Vue3', 'React', 'TypeScript', '流式输出']
 
 const stats = [
-  { value: '9', label: 'AI 组件' },
+  { value: '9', label: 'AI 组件', highlight: true },
   { value: '17', label: '基础组件' },
   { value: '2', label: '框架' },
   { value: '100%', label: 'TypeScript' },
@@ -585,13 +591,14 @@ const aiTechTags = ['流式输出', '代码高亮', '思维链', '多轮对话',
 const features = [
   {
     icon: '⚡',
-    title: '双框架 · 一套核心',
-    details: 'Vue3 和 React 共享类型定义与核心逻辑，API 风格统一，切换框架零学习成本。',
+    title: 'AI 原生 · 直接组合',
+    details: '内置流式文本、思维链、代码块、聊天消息、Token 信息和对话列表，适合快速搭建智能应用界面。',
+    highlight: true,
   },
   {
     icon: '📦',
-    title: '子路径导出 · 按需引入',
-    details: '通过 @bobocn/element/vue 和 /react 独立导出，Tree Shaking 友好，不引入多余代码。',
+    title: '双框架 · 一套体验',
+    details: 'Vue3 与 React 组件目录独立，API 和视觉体验保持一致，团队切换框架时不用重学一套组件。',
   },
   {
     icon: '🔷',
@@ -600,18 +607,18 @@ const features = [
   },
   {
     icon: '🎨',
-    title: 'CSS 共享 · 风格统一',
-    details: '两个框架共用一套 CSS 样式，确保视觉一致性，维护成本减半。',
+    title: '样式共享 · 视觉统一',
+    details: '基础组件和 AI 组件共用样式体系，Vue 与 React 项目可以保持一致的产品界面。',
   },
   {
     icon: '✅',
-    title: '表单验证 · 开箱即用',
-    details: '内置 async-validator 集成，支持复杂校验规则、异步验证、自定义校验函数。',
+    title: '交互细节 · 开箱即用',
+    details: '对复制、加载、自动滚动、清除按钮、光标状态等常见 AI 产品交互做了内置处理。',
   },
   {
     icon: '🧩',
     title: '26 个组件 · 覆盖全场景',
-    details: '从按钮到弹窗，从表单到通知，再到 AI 对话、流式输出、代码展示，涵盖日常开发中最常用的 UI 组件。',
+    details: '9 个 AI 原生组件配合 17 个基础组件，从对话体验到表单、反馈和数据展示都能衔接使用。',
   },
 ]
 
@@ -620,6 +627,7 @@ const componentGroups = [
     name: 'AI 组件',
     icon: '🤖',
     isAI: true,
+    desc: '面向 AI 对话、流式输出、代码解释、Markdown 渲染和历史消息列表的高频组件。',
     items: [
       { name: 'ThinkingIndicator', label: '思考指示器', link: 'thinking-indicator', vue: true, react: true },
       { name: 'StreamingText', label: '流式文本', link: 'streaming-text', vue: true, react: true },
@@ -1204,6 +1212,7 @@ const componentGroups = [
   min-width: 64px;
   text-align: center;
   position: relative;
+  padding: 4px 0;
 }
 
 .stat-item:not(:last-child)::after {
@@ -1215,6 +1224,27 @@ const componentGroups = [
   width: 1px;
   height: 40px;
   background: var(--vp-c-divider);
+}
+
+.stat-item--ai {
+  min-width: 108px;
+  padding: 10px 16px;
+  border: 1px solid rgba(100, 108, 255, 0.18);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(100, 108, 255, 0.1), rgba(66, 184, 131, 0.08));
+  box-shadow: 0 12px 28px rgba(100, 108, 255, 0.12);
+}
+
+.stat-item--ai .stat-number {
+  background: linear-gradient(135deg, #646cff, #42b883);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-item--ai .stat-label {
+  color: var(--vp-c-text-1);
+  font-weight: 700;
 }
 
 .stat-number {
@@ -1346,6 +1376,14 @@ const componentGroups = [
   transition: all 0.3s;
 }
 
+.feature-card--ai {
+  border-color: rgba(100, 108, 255, 0.2);
+  background:
+    linear-gradient(var(--vp-c-bg), var(--vp-c-bg)) padding-box,
+    linear-gradient(135deg, rgba(100, 108, 255, 0.32), rgba(66, 184, 131, 0.24)) border-box;
+  box-shadow: 0 12px 30px rgba(100, 108, 255, 0.08);
+}
+
 .feature-card:hover {
   border-color: var(--vp-c-brand-1);
   transform: translateY(-2px);
@@ -1464,10 +1502,21 @@ const componentGroups = [
   font-size: 16px;
   font-weight: 600;
   color: var(--vp-c-text-1);
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.group-desc {
+  margin: -4px 0 18px;
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.component-group--ai .group-desc {
+  max-width: 720px;
 }
 
 .group-icon {
@@ -1489,6 +1538,8 @@ const componentGroups = [
   text-decoration: none;
   transition: all 0.2s;
   background: var(--vp-c-bg-soft);
+  min-width: 0;
+  min-height: 44px;
 }
 
 .component-item:hover {
@@ -1500,17 +1551,21 @@ const componentGroups = [
   font-weight: 600;
   color: var(--vp-c-text-1);
   min-width: 100px;
+  overflow-wrap: anywhere;
 }
 
 .item-label {
   font-size: 13px;
   color: var(--vp-c-text-3);
   flex: 1;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .item-frameworks {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .fw-tag {
