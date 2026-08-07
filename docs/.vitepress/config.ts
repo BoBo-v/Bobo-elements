@@ -17,7 +17,10 @@ export default defineConfig({
         }
     },
     head: [
-        ['link', { rel: 'icon', href: '/favicon.ico' }]
+        ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/bobo-favicon.png' }],
+        ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/bobo-docs-logo.png' }],
+        ['meta', { property: 'og:image', content: '/bobo-logo-preview.png' }],
+        ['meta', { name: 'twitter:image', content: '/bobo-logo-preview.png' }],
     ],
     markdown: {
         config(md) {
@@ -27,7 +30,7 @@ export default defineConfig({
     },
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
-        logo: '/logo.png',
+        logo: '/bobo-docs-logo.png',
         nav: [
             { text: '开始使用', link: '/Shiyong' },
             { text: '组件', link: '/components/button' },
