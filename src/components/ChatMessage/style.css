@@ -2,16 +2,16 @@
   --vk-chat-msg-max-width: 80%;
   --vk-chat-msg-gap: 12px;
   --vk-chat-msg-avatar-size: 36px;
-  --vk-chat-msg-padding: 12px 16px;
-  --vk-chat-msg-border-radius: var(--vk-border-radius-base);
+  --vk-chat-msg-padding: 12px 18px;
+  --vk-chat-msg-border-radius: var(--vk-ai-radius-lg, 16px);
   --vk-chat-msg-user-bg: var(--vk-color-primary);
   --vk-chat-msg-user-text: var(--vk-color-white);
-  --vk-chat-msg-ai-bg: var(--vk-fill-color-light);
+  --vk-chat-msg-ai-bg: var(--vk-ai-bg-assistant, #f8fafc);
   --vk-chat-msg-ai-text: var(--vk-text-color-primary);
-  --vk-chat-msg-system-bg: var(--vk-fill-color-lighter);
+  --vk-chat-msg-system-bg: var(--vk-fill-color-light);
   --vk-chat-msg-system-text: var(--vk-text-color-secondary);
-  --vk-chat-msg-timestamp-color: var(--vk-text-color-secondary);
-  --vk-chat-msg-avatar-bg: var(--vk-fill-color);
+  --vk-chat-msg-timestamp-color: var(--vk-text-color-placeholder);
+  --vk-chat-msg-avatar-bg: var(--vk-fill-color-light);
   --vk-chat-msg-error-color: var(--vk-color-danger);
 }
 
@@ -19,7 +19,7 @@
   display: flex;
   gap: var(--vk-chat-msg-gap);
   align-items: flex-start;
-  padding: 8px 0;
+  padding: 6px 0;
   max-width: 100%;
 }
 
@@ -31,6 +31,7 @@
   justify-content: center;
 }
 
+/* Avatar styling */
 .vk-chat-message__avatar {
   flex-shrink: 0;
   width: var(--vk-chat-msg-avatar-size);
@@ -41,6 +42,8 @@
   align-items: center;
   justify-content: center;
   background-color: var(--vk-chat-msg-avatar-bg);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .vk-chat-message__avatar img {
@@ -50,16 +53,22 @@
 }
 
 .vk-chat-message__avatar-icon {
-  font-size: 18px;
+  font-size: 17px;
   color: var(--vk-text-color-secondary);
 }
 
 .vk-chat-message__avatar--small {
   --vk-chat-msg-avatar-size: 28px;
 }
+.vk-chat-message__avatar--small .vk-chat-message__avatar-icon {
+  font-size: 14px;
+}
 
 .vk-chat-message__avatar--large {
   --vk-chat-msg-avatar-size: 44px;
+}
+.vk-chat-message__avatar--large .vk-chat-message__avatar-icon {
+  font-size: 20px;
 }
 
 .vk-chat-message__body {
@@ -69,6 +78,11 @@
   max-width: 100%;
 }
 
+.vk-chat-message--user .vk-chat-message__body {
+  align-items: flex-end;
+}
+
+/* Bubble styling */
 .vk-chat-message__bubble {
   position: relative;
   max-width: var(--vk-chat-msg-max-width);
@@ -77,8 +91,9 @@
   padding: var(--vk-chat-msg-padding);
   border-radius: var(--vk-chat-msg-border-radius);
   font-size: var(--vk-font-size-base);
-  line-height: 1.6;
+  line-height: 1.65;
   word-break: break-word;
+  transition: all var(--vk-transition-duration-fast);
 }
 
 .vk-chat-message__bubble > * {
@@ -91,48 +106,64 @@
   max-width: 100%;
 }
 
+/* User Bubble: Sleek gradient with top-right tail */
 .vk-chat-message--user .vk-chat-message__bubble {
-  background-color: var(--vk-chat-msg-user-bg);
+  background: linear-gradient(135deg, var(--vk-chat-msg-user-bg), #337ecc);
   color: var(--vk-chat-msg-user-text);
-  border-top-right-radius: 2px;
+  border-radius: var(--vk-chat-msg-border-radius);
+  border-top-right-radius: 4px;
+  box-shadow: 0 2px 10px rgba(64, 158, 255, 0.22);
 }
 
+/* Assistant Bubble: Soft card with subtle border & top-left tail */
 .vk-chat-message--assistant .vk-chat-message__bubble {
   background-color: var(--vk-chat-msg-ai-bg);
   color: var(--vk-chat-msg-ai-text);
-  border-top-left-radius: 2px;
+  border: 1px solid var(--vk-ai-border-subtle, rgba(0, 0, 0, 0.06));
+  border-radius: var(--vk-chat-msg-border-radius);
+  border-top-left-radius: 4px;
+  box-shadow: var(--vk-ai-shadow-card, 0 2px 8px rgba(0, 0, 0, 0.04));
 }
 
+/* System Bubble: Soft centered pill */
 .vk-chat-message--system .vk-chat-message__bubble {
   background-color: var(--vk-chat-msg-system-bg);
   color: var(--vk-chat-msg-system-text);
-  font-size: 13px;
+  font-size: 12.5px;
   text-align: center;
-  padding: 6px 16px;
-  border-radius: 16px;
+  padding: 6px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--vk-border-color-lighter);
 }
 
+/* Timestamp */
 .vk-chat-message__timestamp {
   font-size: 11px;
   color: var(--vk-chat-msg-timestamp-color);
   margin-top: 4px;
+  padding: 0 4px;
   user-select: none;
+  font-variant-numeric: tabular-nums;
 }
 
 .vk-chat-message--user .vk-chat-message__timestamp {
   text-align: right;
 }
 
+/* Status & Error */
 .vk-chat-message__status {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  margin-top: 4px;
+  gap: 6px;
+  font-size: 11.5px;
+  margin-top: 5px;
 }
 
 .vk-chat-message__status--error {
   color: var(--vk-chat-msg-error-color);
+  background-color: var(--vk-color-danger-light-9, rgba(245, 108, 108, 0.1));
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
 .vk-chat-message__retry {
@@ -143,37 +174,98 @@
   background: transparent;
   color: var(--vk-color-primary);
   cursor: pointer;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: 4px;
+  transition: all var(--vk-transition-duration-fast);
 }
 
 .vk-chat-message__retry:hover {
   background-color: var(--vk-color-primary-light-9);
+  text-decoration: underline;
 }
 
+/* Actions & Copy button */
 .vk-chat-message__actions {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 .vk-chat-message__copy-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  border: none;
-  background: transparent;
+  border: 1px solid var(--vk-border-color-lighter);
+  background: var(--vk-fill-color-light);
   color: var(--vk-text-color-secondary);
   cursor: pointer;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 3px;
+  font-size: 11.5px;
+  padding: 2px 10px;
+  border-radius: 12px;
   transition: all var(--vk-transition-duration-fast);
 }
 
 .vk-chat-message__copy-btn:hover {
   color: var(--vk-color-primary);
   background-color: var(--vk-color-primary-light-9);
+  border-color: rgba(64, 158, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.vk-chat-message__copy-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive adjustment */
+@media (max-width: 640px) {
+  .vk-chat-message__bubble {
+    max-width: 90%;
+  }
+}
+
+/* Dark mode overrides */
+.dark .vk-chat-message--assistant .vk-chat-message__bubble {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.dark .vk-chat-message--system .vk-chat-message__bubble {
+  background-color: #1e293b;
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .vk-chat-message__avatar {
+  background-color: #1e293b;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark .vk-chat-message__avatar-icon {
+  color: #94a3b8;
+}
+
+.dark .vk-chat-message__timestamp {
+  color: #94a3b8;
+}
+
+.dark .vk-chat-message__copy-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+}
+
+.dark .vk-chat-message__copy-btn:hover {
+  color: #60a5fa;
+  background-color: rgba(96, 165, 250, 0.15);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.dark .vk-chat-message__status--error {
+  background-color: rgba(245, 108, 108, 0.2);
+  color: #f89898;
 }
