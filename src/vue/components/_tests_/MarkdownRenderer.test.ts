@@ -65,4 +65,46 @@ describe('MarkdownRenderer.vue', () => {
     })
     expect(wrapper.html()).not.toContain('vk-md-p')
   })
+
+  test('renders ordered list with ol and li classes', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: { content: '1. First item\n2. Second item' }
+    })
+    expect(wrapper.find('ol.vk-md-ol').exists()).toBe(true)
+    const items = wrapper.findAll('li.vk-md-li')
+    expect(items.length).toBe(2)
+    expect(items[0].text()).toBe('First item')
+    expect(items[1].text()).toBe('Second item')
+  })
+
+  test('renders nested lists properly', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: {
+        content: '- Parent 1\n  - Child 1\n  - Child 2\n- Parent 2'
+      }
+    })
+    expect(wrapper.findAll('ul.vk-md-ul').length).toBeGreaterThanOrEqual(2)
+    expect(wrapper.findAll('li.vk-md-li').length).toBe(4)
+  })
+
+  test('blocks SVG data URL in images while allowing raster images', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: {
+        content: '![xss svg](data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=)\n![safe png](data:image/png;base64,iVBORw0KGgo=)'
+      }
+    })
+    const html = wrapper.html()
+    expect(html).not.toContain('data:image/svg+xml')
+    expect(html).toContain('data:image/png;base64')
+  })
+
+  test('disables raw HTML tags to prevent XSS injection', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: {
+        content: '<script>alert(1)</script><img src="x" onerror="alert(2)">'
+      }
+    })
+    expect(wrapper.find('script').exists()).toBe(false)
+    expect(wrapper.find('img').exists()).toBe(false)
+  })
 })

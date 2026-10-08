@@ -13,6 +13,7 @@ export default defineConfig({
         globals: true,
         environment: 'jsdom',
         include: [
+            'src/core/**/*.{test,spec}.{ts,tsx,js,jsx}',
             'src/vue/**/*.{test,spec}.{ts,tsx,js,jsx}',
             'src/react/**/*.{test,spec}.{ts,tsx,js,jsx}',
         ],

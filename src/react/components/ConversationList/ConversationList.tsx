@@ -17,8 +17,13 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
   onScroll,
 }: ConversationListProps, ref) {
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const contentRef = useRef<HTMLDivElement | null>(null)
   const shouldStickToBottomRef = useRef(true)
   const previousScrollHeightRef = useRef(0)
+  const rafIdRef = useRef<number | null>(null)
+  const pendingHasAddedNodesRef = useRef(false)
+  const snapshotScrollTopRef = useRef(0)
+  const snapshotScrollHeightRef = useRef(0)
 
   const isNearBottom = useCallback(() => {
     const el = containerRef.current
@@ -26,54 +31,104 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
     return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_THRESHOLD
   }, [])
 
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom = useCallback((instant = false) => {
     const el = containerRef.current
-    if (el) el.scrollTop = el.scrollHeight
+    if (el) {
+      if (instant && typeof el.scrollTo === 'function') {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'instant' as ScrollBehavior })
+      } else {
+        el.scrollTop = el.scrollHeight
+      }
+    }
   }, [])
 
   const getElement = useCallback(() => containerRef.current, [])
 
-  useImperativeHandle(ref, () => ({ scrollToBottom, getElement }), [scrollToBottom, getElement])
+  useImperativeHandle(ref, () => ({ scrollToBottom: () => scrollToBottom(false), getElement }), [scrollToBottom, getElement])
+
+  const scheduleUpdate = useCallback((hasAddedNodes = false) => {
+    if (hasAddedNodes) {
+      pendingHasAddedNodesRef.current = true
+    }
+    const el = containerRef.current
+    if (!el) return
+
+    if (rafIdRef.current === null) {
+      snapshotScrollTopRef.current = el.scrollTop
+      snapshotScrollHeightRef.current = previousScrollHeightRef.current > 0 ? previousScrollHeightRef.current : el.scrollHeight
+    }
+
+    if (rafIdRef.current !== null) return
+
+    rafIdRef.current = requestAnimationFrame(() => {
+      rafIdRef.current = null
+      const currentEl = containerRef.current
+      if (!currentEl) return
+
+      const newScrollHeight = currentEl.scrollHeight
+      const wasPrepend = pendingHasAddedNodesRef.current
+      pendingHasAddedNodesRef.current = false
+      const oldScrollTop = snapshotScrollTopRef.current
+      const oldScrollHeight = snapshotScrollHeightRef.current
+
+      if (
+        preserveScrollOnPrepend &&
+        wasPrepend &&
+        !shouldStickToBottomRef.current &&
+        oldScrollTop <= SCROLL_THRESHOLD &&
+        newScrollHeight > oldScrollHeight
+      ) {
+        const diff = newScrollHeight - oldScrollHeight
+        const targetScrollTop = oldScrollTop + diff
+        if (typeof currentEl.scrollTo === 'function') {
+          currentEl.scrollTo({ top: targetScrollTop, behavior: 'instant' as ScrollBehavior })
+        } else {
+          currentEl.scrollTop = targetScrollTop
+        }
+      } else if (autoScroll && shouldStickToBottomRef.current) {
+        scrollToBottom(true)
+      }
+
+      previousScrollHeightRef.current = currentEl.scrollHeight
+      shouldStickToBottomRef.current = isNearBottom()
+    })
+  }, [autoScroll, preserveScrollOnPrepend, scrollToBottom, isNearBottom])
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
     previousScrollHeightRef.current = el.scrollHeight
     shouldStickToBottomRef.current = isNearBottom()
+
     const observer = new MutationObserver((mutations) => {
       const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0)
-      if (!hasAddedNodes) return
-      const oldScrollHeight = previousScrollHeightRef.current
-      requestAnimationFrame(() => {
-        if (autoScroll && shouldStickToBottomRef.current) {
-          scrollToBottom()
-        } else if (preserveScrollOnPrepend && el.scrollTop <= SCROLL_THRESHOLD && el.scrollHeight > oldScrollHeight) {
-          el.scrollTop = el.scrollHeight - oldScrollHeight
-        }
-        previousScrollHeightRef.current = el.scrollHeight
-        shouldStickToBottomRef.current = isNearBottom()
-      })
+      scheduleUpdate(hasAddedNodes)
     })
-    observer.observe(el, { childList: true, subtree: true })
+    observer.observe(el, { childList: true, subtree: true, characterData: true })
+
+    const target = contentRef.current || el
     const resizeObserver = typeof ResizeObserver !== 'undefined'
       ? new ResizeObserver(() => {
-        if (autoScroll && shouldStickToBottomRef.current) {
-          scrollToBottom()
-        }
-        previousScrollHeightRef.current = el.scrollHeight
-        shouldStickToBottomRef.current = isNearBottom()
+        scheduleUpdate(false)
       })
       : null
-    resizeObserver?.observe(el)
+    resizeObserver?.observe(target)
+
     return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
       observer.disconnect()
       resizeObserver?.disconnect()
     }
-  }, [autoScroll, preserveScrollOnPrepend, scrollToBottom, isNearBottom])
+  }, [scheduleUpdate, isNearBottom])
 
   const handleScroll = useCallback(() => {
     const el = containerRef.current
     if (!el) return
+    if (previousScrollHeightRef.current === 0 && el.scrollHeight > 0) {
+      previousScrollHeightRef.current = el.scrollHeight
+    }
     shouldStickToBottomRef.current = isNearBottom()
     onScroll?.(el.scrollTop)
     if (el.scrollTop === 0 && !loadingMore) {
@@ -97,7 +152,7 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
           {loadingText}
         </div>
       )}
-      <div className="vk-conversation-list__content">
+      <div ref={contentRef} className="vk-conversation-list__content">
         {children}
       </div>
       {!children && (

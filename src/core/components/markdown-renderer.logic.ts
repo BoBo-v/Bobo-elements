@@ -1,15 +1,4 @@
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
-function escapeAttribute(str: string): string {
-  return escapeHtml(str).replace(/`/g, '&#96;')
-}
+import MarkdownIt from 'markdown-it'
 
 function sanitizeUrl(rawUrl: string): string {
   const url = rawUrl.trim()
@@ -24,7 +13,7 @@ function sanitizeUrl(rawUrl: string): string {
     lower.startsWith('../') ||
     lower.startsWith('#')
   ) {
-    return escapeAttribute(url)
+    return url
   }
   return '#'
 }
@@ -32,85 +21,128 @@ function sanitizeUrl(rawUrl: string): string {
 function sanitizeImageUrl(rawUrl: string): string {
   const url = rawUrl.trim()
   const lower = url.replace(/[\u0000-\u001F\u007F\s]+/g, '').toLowerCase()
+  // Explicitly block SVG data URLs to prevent script execution inside SVG
+  if (lower.startsWith('data:image/svg')) {
+    return ''
+  }
   if (
     lower.startsWith('http://') ||
     lower.startsWith('https://') ||
     lower.startsWith('/') ||
     lower.startsWith('./') ||
-    lower.startsWith('../') ||
-    lower.startsWith('data:image/')
+    lower.startsWith('../')
   ) {
-    return escapeAttribute(url)
+    return url
+  }
+  // Allow only safe raster image data URLs
+  if (/^data:image\/(png|jpe?g|gif|webp);base64,/i.test(lower)) {
+    return url
   }
   return ''
 }
 
-export function parseMarkdown(md: string, breaks = true): string {
-  if (!md) return ''
-
-  let html = escapeHtml(md)
-
-  // code blocks: ```...```
-  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_match, lang, code) => {
-    return `<pre class="vk-md-pre"><code class="vk-md-code${lang ? ' vk-md-lang-' + lang : ''}">${code.trim()}</code></pre>`
+function createMarkdownParser(breaks: boolean): MarkdownIt {
+  const md = new MarkdownIt({
+    html: false, // Strictly disable raw HTML to prevent XSS
+    xhtmlOut: true,
+    breaks,
+    langPrefix: 'vk-md-lang-',
+    linkify: false,
+    typographer: false
   })
 
-  // inline code: `...`
-  html = html.replace(/`([^`]+)`/g, '<code class="vk-md-inline-code">$1</code>')
+  // Allow custom sanitizers in renderer rules to inspect and sanitize all URLs
+  md.validateLink = () => true
 
-  // headings: # ## ### etc.
-  html = html.replace(/^######\s+(.+)$/gm, '<h6 class="vk-md-h6">$1</h6>')
-  html = html.replace(/^#####\s+(.+)$/gm, '<h5 class="vk-md-h5">$1</h5>')
-  html = html.replace(/^####\s+(.+)$/gm, '<h4 class="vk-md-h4">$1</h4>')
-  html = html.replace(/^###\s+(.+)$/gm, '<h3 class="vk-md-h3">$1</h3>')
-  html = html.replace(/^##\s+(.+)$/gm, '<h2 class="vk-md-h2">$1</h2>')
-  html = html.replace(/^#\s+(.+)$/gm, '<h1 class="vk-md-h1">$1</h1>')
-
-  // bold: **...**
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="vk-md-bold">$1</strong>')
-
-  // italic: *...*
-  html = html.replace(/\*(.+?)\*/g, '<em class="vk-md-italic">$1</em>')
-
-  // strikethrough: ~~...~~
-  html = html.replace(/~~(.+?)~~/g, '<del class="vk-md-del">$1</del>')
-
-  // blockquote: > ...
-  html = html.replace(/^&gt;\s+(.+)$/gm, '<blockquote class="vk-md-blockquote">$1</blockquote>')
-
-  // unordered list: - ...
-  html = html.replace(/^[-*]\s+(.+)$/gm, '<li class="vk-md-li">$1</li>')
-  html = html.replace(/(<li class="vk-md-li">.*<\/li>\n?)+/g, '<ul class="vk-md-ul">$&</ul>')
-
-  // ordered list: 1. ...
-  html = html.replace(/^\d+\.\s+(.+)$/gm, '<li class="vk-md-li">$1</li>')
-
-  // images: ![alt](url)
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => {
-    const src = sanitizeImageUrl(url)
-    if (!src) return escapeHtml(alt)
-    return `<img class="vk-md-img" src="${src}" alt="${escapeAttribute(alt)}" />`
-  })
-
-  // links: [text](url)
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => {
-    return `<a class="vk-md-link" href="${sanitizeUrl(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`
-  })
-
-  // horizontal rule: ---
-  html = html.replace(/^---+$/gm, '<hr class="vk-md-hr" />')
-
-  // line breaks
-  if (breaks) {
-    html = html.replace(/\n/g, '<br />')
+  // Headings
+  md.renderer.rules.heading_open = (tokens, idx) => {
+    const level = tokens[idx].tag
+    return `<${level} class="vk-md-${level}">`
   }
 
-  // paragraphs: wrap remaining loose text
-  // (simple approach: don't wrap lines that already start with an HTML tag)
-  html = html.replace(/^(?!<)(.+)$/gm, '<p class="vk-md-p">$1</p>')
+  // Paragraphs
+  md.renderer.rules.paragraph_open = () => '<p class="vk-md-p">'
 
-  // clean up empty paragraphs
-  html = html.replace(/<p class="vk-md-p"><\/p>/g, '')
+  // Lists
+  md.renderer.rules.bullet_list_open = () => '<ul class="vk-md-ul">\n'
+  md.renderer.rules.ordered_list_open = (tokens, idx) => {
+    const token = tokens[idx]
+    const start = token.attrGet('start')
+    const startAttr = start ? ` start="${start}"` : ''
+    return `<ol class="vk-md-ol"${startAttr}>\n`
+  }
+  md.renderer.rules.list_item_open = () => '<li class="vk-md-li">'
 
-  return html
+  // Blockquote
+  md.renderer.rules.blockquote_open = () => '<blockquote class="vk-md-blockquote">\n'
+
+  // Horizontal Rule
+  md.renderer.rules.hr = () => '<hr class="vk-md-hr" />\n'
+
+  // Text formatting
+  md.renderer.rules.strong_open = () => '<strong class="vk-md-bold">'
+  md.renderer.rules.strong_close = () => '</strong>'
+  md.renderer.rules.em_open = () => '<em class="vk-md-italic">'
+  md.renderer.rules.em_close = () => '</em>'
+  md.renderer.rules.s_open = () => '<del class="vk-md-del">'
+  md.renderer.rules.s_close = () => '</del>'
+
+  // Inline Code
+  md.renderer.rules.code_inline = (tokens, idx) => {
+    return `<code class="vk-md-inline-code">${md.utils.escapeHtml(tokens[idx].content)}</code>`
+  }
+
+  // Code Block (Fenced)
+  md.renderer.rules.fence = (tokens, idx) => {
+    const token = tokens[idx]
+    const info = token.info ? token.info.trim() : ''
+    const langName = info ? info.split(/\s+/)[0] : ''
+    const langClass = langName ? ` vk-md-lang-${md.utils.escapeHtml(langName)}` : ''
+    const code = md.utils.escapeHtml(token.content.trim())
+    return `<pre class="vk-md-pre"><code class="vk-md-code${langClass}">${code}</code></pre>\n`
+  }
+
+  // Code Block (Indented)
+  md.renderer.rules.code_block = (tokens, idx) => {
+    const token = tokens[idx]
+    const code = md.utils.escapeHtml(token.content.trim())
+    return `<pre class="vk-md-pre"><code class="vk-md-code">${code}</code></pre>\n`
+  }
+
+  // Links
+  md.renderer.rules.link_open = (tokens, idx) => {
+    const token = tokens[idx]
+    const rawHref = token.attrGet('href') || ''
+    const safeHref = sanitizeUrl(rawHref)
+    return `<a class="vk-md-link" href="${md.utils.escapeHtml(safeHref)}" target="_blank" rel="noopener noreferrer">`
+  }
+
+  // Images
+  md.renderer.rules.image = (tokens, idx) => {
+    const token = tokens[idx]
+    const rawSrc = token.attrGet('src') || ''
+    const alt = token.content || ''
+    const safeSrc = sanitizeImageUrl(rawSrc)
+    if (!safeSrc) {
+      return md.utils.escapeHtml(alt)
+    }
+    return `<img class="vk-md-img" src="${md.utils.escapeHtml(safeSrc)}" alt="${md.utils.escapeHtml(alt)}" />`
+  }
+
+  // Tables
+  md.renderer.rules.table_open = () => '<table class="vk-md-table">\n'
+  md.renderer.rules.th_open = () => '<th class="vk-md-th">'
+  md.renderer.rules.td_open = () => '<td class="vk-md-td">'
+  md.renderer.rules.tr_open = () => '<tr class="vk-md-tr">'
+
+  return md
+}
+
+const parserWithBreaks = createMarkdownParser(true)
+const parserWithoutBreaks = createMarkdownParser(false)
+
+export function parseMarkdown(md: string, breaks = true): string {
+  if (!md || !md.trim()) return ''
+  const parser = breaks ? parserWithBreaks : parserWithoutBreaks
+  return parser.render(md).trim()
 }

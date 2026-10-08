@@ -44,4 +44,11 @@ describe('StreamingText component', () => {
     expect(ref.current?.pause).toBeDefined()
     expect(ref.current?.resume).toBeDefined()
   })
+
+  test('correctly streams complex emoji grapheme clusters', async () => {
+    const onComplete = vi.fn()
+    render(<StreamingText text="Hello 👨‍👩‍👧‍👦 🎉" speed={10} interval={10} onComplete={onComplete} />)
+    await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(1))
+    expect(screen.getByTestId('streaming-text-content')).toHaveTextContent('Hello 👨‍👩‍👧‍👦 🎉')
+  })
 })

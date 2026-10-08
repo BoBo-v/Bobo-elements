@@ -49,4 +49,13 @@ describe('StreamingText.vue', () => {
     await new Promise(r => setTimeout(r, 100))
     expect(wrapper.emitted()).toHaveProperty('complete')
   })
+
+  test('correctly streams complex emoji grapheme clusters', async () => {
+    const wrapper = mount(StreamingText, {
+      props: { text: 'Hello 👨‍👩‍👧‍👦 🎉', speed: 10, interval: 10 }
+    })
+    await new Promise(r => setTimeout(r, 100))
+    expect(wrapper.find('[data-testid="streaming-text-content"]').text()).toBe('Hello 👨‍👩‍👧‍👦 🎉')
+    expect(wrapper.vm.isComplete).toBe(true)
+  })
 })
