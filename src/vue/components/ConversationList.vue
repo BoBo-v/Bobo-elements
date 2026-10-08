@@ -20,9 +20,8 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../../core/components/conversation-list.types'
 import '../../components/ConversationList/style.css'
 

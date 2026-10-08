@@ -9,7 +9,8 @@ export default defineConfig({
         react(),
         dts({
             tsconfigPath: './tsconfig.build.json',
-            outDir: 'dist/react/types',
+            outDir: resolve(__dirname, 'dist/react/types'),
+            entryRoot: 'src',
             include: ['src/react/**/*', 'src/core/**/*', 'src/hooks/**/*']
         })
     ],

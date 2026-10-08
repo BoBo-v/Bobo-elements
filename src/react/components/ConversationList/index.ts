@@ -1,2 +1,2 @@
 export { ConversationList } from './ConversationList'
-export type { ConversationListProps } from '../../../core/components/conversation-list.react.types'
+export type { ConversationListProps, ConversationListRef } from '../../../core/components/conversation-list.react.types'

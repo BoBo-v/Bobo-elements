@@ -2,16 +2,10 @@ import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import dts from 'vite-plugin-dts'
 
 export default defineConfig({
     plugins: [
-        react(),
-        dts({
-            tsconfigPath: './tsconfig.build.json',
-            outDir: 'dist/react/types',
-            include: ['src/react/**/*', 'src/core/**/*', 'src/hooks/**/*']
-        })
+        react()
     ],
     resolve: {
         alias: {
@@ -32,7 +26,6 @@ export default defineConfig({
             external: [
                 'react',
                 'react-dom',
-                'react/jsx-runtime',
                 '@fortawesome/fontawesome-svg-core',
                 '@fortawesome/free-solid-svg-icons',
                 '@fortawesome/react-fontawesome',

@@ -9,7 +9,8 @@ export default defineConfig({
         vue(),
         dts({
             tsconfigPath: './tsconfig.build.json',
-            outDir: 'dist/vue/types',
+            outDir: resolve(__dirname, 'dist/vue/types'),
+            entryRoot: 'src',
             include: ['src/vue/**/*', 'src/core/**/*', 'src/hooks/**/*', 'src/components/**/*']
         })
     ],

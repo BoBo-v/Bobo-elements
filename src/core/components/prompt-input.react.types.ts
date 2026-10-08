@@ -12,8 +12,13 @@ export interface PromptInputProps {
   autoResize?: boolean
   maxRows?: number
   showCount?: boolean
+  id?: string
+  ariaLabel?: string
+  ariaLabelledby?: string
   streaming?: boolean
   streamingText?: string
+  stoppable?: boolean
+  /** @deprecated Use `stoppable` instead */
   stopable?: boolean
   stopText?: string
   stopAriaLabel?: string

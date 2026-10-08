@@ -14,12 +14,14 @@
     <textarea
       ref="textareaRef"
       class="vk-prompt-input__textarea"
+      :id="id"
       :value="innerValue"
       :placeholder="placeholder"
       :disabled="disabled"
       :maxlength="maxLength"
       :rows="rows"
-      :aria-label="placeholder"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledby"
       data-testid="prompt-input-textarea"
       @input="handleInput"
       @keydown="handleKeydown"
@@ -50,7 +52,7 @@
         </button>
         <slot name="actions">
           <button
-            v-if="streaming && stopable"
+            v-if="streaming && isStoppable"
             type="button"
             class="vk-prompt-input__stop-btn"
             data-testid="prompt-input-stop-btn"
@@ -78,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, computed, getCurrentInstance } from 'vue'
 import type { PromptInputProps, PromptInputEmits, PromptInputInstance } from '../../core/components/prompt-input.types'
 import Icon from './Icon.vue'
 import '../../components/PromptInput/style.css'
@@ -95,7 +97,6 @@ const props = withDefaults(defineProps<PromptInputProps>(), {
   showCount: false,
   streaming: false,
   streamingText: 'AI 正在回复...',
-  stopable: false,
   stopText: '停止',
   stopAriaLabel: '停止生成',
   hintText: 'Enter 发送 / Shift+Enter 换行',
@@ -104,6 +105,20 @@ const props = withDefaults(defineProps<PromptInputProps>(), {
   variant: 'default',
   clearable: false,
   clearAriaLabel: '清除'
+})
+
+const instance = getCurrentInstance()
+const isStoppable = computed(() => {
+  const rawProps = instance?.vnode?.props
+  if (rawProps) {
+    if ('stoppable' in rawProps || 'stop-table' in rawProps) {
+      return Boolean(props.stoppable)
+    }
+    if ('stopable' in rawProps || 'stop-able' in rawProps) {
+      return Boolean(props.stopable)
+    }
+  }
+  return Boolean(props.stoppable ?? props.stopable ?? false)
 })
 
 const emits = defineEmits<PromptInputEmits>()
@@ -126,7 +141,9 @@ function handleInput(e: Event) {
 
 function handleKeydown(e: KeyboardEvent) {
   emits('keydown', e)
-  if (e.key === 'Enter' && !e.shiftKey && !isComposing.value) {
+  if (e.defaultPrevented) return
+  const isImeComposing = isComposing.value || e.isComposing || (e as any).keyCode === 229
+  if (e.key === 'Enter' && !e.shiftKey && !isImeComposing) {
     e.preventDefault()
     handleSubmit()
   }

@@ -13,9 +13,13 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   autoResize = true,
   maxRows = 6,
   showCount = false,
+  id,
+  ariaLabel,
+  ariaLabelledby,
   streaming = false,
   streamingText = 'AI 正在回复...',
-  stopable = false,
+  stoppable: propStoppable,
+  stopable: propStopable,
   stopText = '停止',
   stopAriaLabel = '停止生成',
   hintText = 'Enter 发送 / Shift+Enter 换行',
@@ -33,6 +37,10 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const isComposingRef = useRef(false)
   const [innerValue, setInnerValue] = useState(controlledValue || '')
+
+  const effectiveStoppable = propStoppable !== undefined
+    ? propStoppable
+    : (propStopable !== undefined ? propStopable : false)
 
   useEffect(() => {
     if (controlledValue !== undefined) {
@@ -68,7 +76,9 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
 
   const handleKeydown = useCallback((e: KeyboardEvent<HTMLTextAreaElement>) => {
     onKeyDown?.(e)
-    if (e.key === 'Enter' && !e.shiftKey && !isComposingRef.current) {
+    if (e.defaultPrevented) return
+    const isImeComposing = isComposingRef.current || e.nativeEvent.isComposing || (e.nativeEvent as any).keyCode === 229
+    if (e.key === 'Enter' && !e.shiftKey && !isImeComposing) {
       e.preventDefault()
       handleSubmit()
     }
@@ -110,12 +120,14 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
       <textarea
         ref={textareaRef}
         className="vk-prompt-input__textarea"
+        id={id}
         value={innerValue}
         placeholder={placeholder}
         disabled={disabled}
         maxLength={maxLength}
         rows={rows}
-        aria-label={placeholder}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledby}
         data-testid="prompt-input-textarea"
         onChange={handleInput}
         onKeyDown={handleKeydown}
@@ -145,7 +157,7 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
               <Icon name="xmark" />
             </button>
           )}
-          {children || (streaming && stopable ? (
+          {children || (streaming && effectiveStoppable ? (
             <button
               type="button"
               className="vk-prompt-input__stop-btn"

@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import { createStreamingState } from '../streaming-text.logic'
 
 describe('createStreamingState Unicode grapheme clustering', () => {

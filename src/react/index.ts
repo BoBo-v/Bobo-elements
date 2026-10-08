@@ -79,11 +79,11 @@ export type {
   CheckboxValueType,
 } from '../core/components/checkbox/types';
 export type { ThinkingIndicatorProps, ThinkingIndicatorVariant } from '../core/components/thinking-indicator.types';
-export type { StreamingTextProps } from '../core/components/streaming-text.types';
+export type { StreamingTextProps, StreamingTextRef } from './components/StreamingText';
 export type { CodeBlockProps } from '../core/components/code-block.types';
 export type { TokenBadgeProps, TokenBadgeStatus } from '../core/components/token-badge.types';
 export type { MarkdownRendererProps } from '../core/components/markdown-renderer.types';
 export type { PromptInputProps, PromptInputRef } from '../core/components/prompt-input.react.types';
 export type { ReasoningBlockProps } from '../core/components/reasoning-block.types';
 export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus } from '../core/components/chat-message.react.types';
-export type { ConversationListProps } from '../core/components/conversation-list.react.types';
+export type { ConversationListProps, ConversationListRef } from '../core/components/conversation-list.react.types';

@@ -2,6 +2,7 @@ import MarkdownIt from 'markdown-it'
 
 function sanitizeUrl(rawUrl: string): string {
   const url = rawUrl.trim()
+  // eslint-disable-next-line no-control-regex
   const lower = url.replace(/[\u0000-\u001F\u007F\s]+/g, '').toLowerCase()
   if (
     lower.startsWith('http://') ||
@@ -20,6 +21,7 @@ function sanitizeUrl(rawUrl: string): string {
 
 function sanitizeImageUrl(rawUrl: string): string {
   const url = rawUrl.trim()
+  // eslint-disable-next-line no-control-regex
   const lower = url.replace(/[\u0000-\u001F\u007F\s]+/g, '').toLowerCase()
   // Explicitly block SVG data URLs to prevent script execution inside SVG
   if (lower.startsWith('data:image/svg')) {

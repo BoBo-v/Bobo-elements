@@ -73,4 +73,56 @@ describe('PromptInput component', () => {
     render(<PromptInput value="hello" showCount maxLength={100} />)
     expect(screen.getByText('5 / 100')).toBeInTheDocument()
   })
+
+  test('does not trigger onSubmit if onKeyDown calls preventDefault', () => {
+    const onSubmit = vi.fn()
+    const onKeyDown = vi.fn((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      e.preventDefault()
+    })
+    render(<PromptInput value="hello" onSubmit={onSubmit} onKeyDown={onKeyDown} />)
+    const textarea = screen.getByTestId('prompt-input-textarea')
+    fireEvent.keyDown(textarea, { key: 'Enter', shiftKey: false })
+    expect(onKeyDown).toHaveBeenCalled()
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  test('does not submit when native isComposing or keyCode 229', () => {
+    const onSubmit = vi.fn()
+    render(<PromptInput value="hello" onSubmit={onSubmit} />)
+    const textarea = screen.getByTestId('prompt-input-textarea')
+    fireEvent.keyDown(textarea, { key: 'Enter', isComposing: true })
+    expect(onSubmit).not.toHaveBeenCalled()
+
+    fireEvent.keyDown(textarea, { key: 'Enter', keyCode: 229 })
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  test('respects accessibility attributes and avoids forcing placeholder as aria-label', () => {
+    const { rerender } = render(<PromptInput placeholder="Type here..." />)
+    const textarea1 = screen.getByTestId('prompt-input-textarea')
+    expect(textarea1).not.toHaveAttribute('aria-label')
+
+    rerender(
+      <PromptInput
+        id="user-input"
+        ariaLabel="Message content"
+        ariaLabelledby="input-label"
+      />
+    )
+    const textarea2 = screen.getByTestId('prompt-input-textarea')
+    expect(textarea2).toHaveAttribute('id', 'user-input')
+    expect(textarea2).toHaveAttribute('aria-label', 'Message content')
+    expect(textarea2).toHaveAttribute('aria-labelledby', 'input-label')
+  })
+
+  test('stoppable alias works and takes precedence over deprecated stopable', () => {
+    const { rerender } = render(<PromptInput streaming stoppable />)
+    expect(screen.getByTestId('prompt-input-stop-btn')).toBeInTheDocument()
+
+    rerender(<PromptInput streaming stopable />)
+    expect(screen.getByTestId('prompt-input-stop-btn')).toBeInTheDocument()
+
+    rerender(<PromptInput streaming stoppable={false} stopable={true} />)
+    expect(screen.queryByTestId('prompt-input-stop-btn')).not.toBeInTheDocument()
+  })
 })
