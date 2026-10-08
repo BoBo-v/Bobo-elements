@@ -1,5 +1,5 @@
 .vk-streaming-text {
-  --vk-streaming-cursor-color: var(--vk-text-color-primary);
+  --vk-streaming-cursor-color: var(--vk-color-primary);
 }
 
 .vk-streaming-text {
@@ -12,22 +12,27 @@
 .vk-streaming-text__cursor {
   display: inline-block;
   color: var(--vk-streaming-cursor-color);
-  animation: vk-cursor-blink 1s step-end infinite;
-  margin-left: 1px;
-  font-weight: 300;
+  animation: vk-cursor-breathe 0.9s infinite ease-in-out;
+  margin-left: 2px;
+  font-weight: 400;
+  user-select: none;
+  vertical-align: baseline;
+  transition: opacity 0.2s ease;
 }
 
 .vk-streaming-text__cursor--hidden {
   animation: none;
   opacity: 0;
+  pointer-events: none;
 }
 
 .vk-streaming-text__cursor--block {
   background-color: var(--vk-streaming-cursor-color);
-  color: var(--vk-code-block-bg, #1e1e2e);
+  color: var(--vk-color-white, #ffffff);
   padding: 0 2px;
   border-radius: 2px;
   font-weight: 400;
+  box-shadow: 0 1px 4px rgba(64, 158, 255, 0.35);
 }
 
 .vk-streaming-text__cursor--underline {
@@ -35,7 +40,20 @@
   padding-bottom: 1px;
 }
 
-@keyframes vk-cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+/* Smooth breathing pulse animation */
+@keyframes vk-cursor-breathe {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.15; transform: scaleY(0.94); }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .vk-streaming-text__cursor {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+.dark .vk-streaming-text {
+  --vk-streaming-cursor-color: #60a5fa;
+}
+
