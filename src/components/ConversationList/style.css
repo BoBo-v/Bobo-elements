@@ -9,38 +9,63 @@
   overflow-x: hidden;
   background-color: var(--vk-conversation-list-bg);
   max-width: 100%;
+  scroll-behavior: smooth;
+}
+
+/* Elegant thin scrollbar */
+.vk-conversation-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vk-conversation-list::-webkit-scrollbar-thumb {
+  background: var(--vk-border-color-dark, #dcdfe6);
+  border-radius: 3px;
+}
+
+.vk-conversation-list::-webkit-scrollbar-thumb:hover {
+  background: var(--vk-text-color-disabled, #c0c4cc);
 }
 
 .vk-conversation-list__content {
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  gap: 16px;
+  padding: 16px 20px;
   min-width: 0;
   max-width: 100%;
 }
 
 .vk-conversation-list__empty {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 16px;
+  gap: 8px;
+  padding: 60px 16px;
   color: var(--vk-conversation-list-empty-color);
   font-size: var(--vk-font-size-base);
+  letter-spacing: 0.02em;
+  user-select: none;
 }
 
 .vk-conversation-list__load-more {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 10px 16px;
+  margin: 8px auto;
+  border-radius: 16px;
+  background-color: var(--vk-fill-color-light);
   font-size: 12px;
   color: var(--vk-text-color-secondary);
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .vk-conversation-list__loading-spinner {
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 2px solid var(--vk-border-color-light);
   border-top-color: var(--vk-color-primary);
   border-radius: 50%;
@@ -51,3 +76,28 @@
 @keyframes vk-conversation-spin {
   to { transform: rotate(360deg); }
 }
+
+.dark .vk-conversation-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dark .vk-conversation-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.dark .vk-conversation-list {
+  --vk-conversation-list-bg: #0f172a;
+  --vk-conversation-list-empty-color: #64748b;
+}
+
+.dark .vk-conversation-list__load-more {
+  background-color: #1e293b;
+  color: #94a3b8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark .vk-conversation-list__loading-spinner {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #60a5fa;
+}
+

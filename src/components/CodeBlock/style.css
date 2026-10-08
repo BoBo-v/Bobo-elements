@@ -1,38 +1,40 @@
 .vk-code-block {
   --vk-code-block-bg: #1e1e2e;
   --vk-code-block-text: #cdd6f4;
-  --vk-code-block-header-bg: #313244;
+  --vk-code-block-header-bg: #282a3a;
   --vk-code-block-header-text: #bac2de;
-  --vk-code-block-border-radius: var(--vk-border-radius-base);
-  --vk-code-block-line-number-color: #585b70;
+  --vk-code-block-border-radius: var(--vk-ai-radius-sm, 8px);
+  --vk-code-block-line-number-color: #62657e;
   --vk-code-block-copy-color: #a6adc8;
-  --vk-code-block-copy-hover-color: #cdd6f4;
-  --vk-code-block-highlight-bg: rgba(255, 255, 255, 0.06);
+  --vk-code-block-copy-hover-color: #ffffff;
+  --vk-code-block-highlight-bg: rgba(255, 255, 255, 0.07);
   --vk-code-block-highlight-border: var(--vk-color-primary);
   --vk-code-keyword: #cba6f7;
   --vk-code-string: #a6e3a1;
-  --vk-code-comment: #6c7086;
+  --vk-code-comment: #7d829e;
   --vk-code-function: #89b4fa;
   --vk-code-number: #fab387;
   --vk-code-operator: #89dceb;
+  --vk-code-block-border: rgba(255, 255, 255, 0.08);
 }
 
 .vk-code-block--light {
-  --vk-code-block-bg: #fafafa;
-  --vk-code-block-text: #383a42;
-  --vk-code-block-header-bg: #f0f0f0;
-  --vk-code-block-header-text: #6a6a6a;
-  --vk-code-block-line-number-color: #b0b0b0;
-  --vk-code-block-copy-color: #8a8a8a;
-  --vk-code-block-copy-hover-color: #383a42;
-  --vk-code-block-highlight-bg: rgba(0, 0, 0, 0.04);
+  --vk-code-block-bg: #f8fafc;
+  --vk-code-block-text: #334155;
+  --vk-code-block-header-bg: #eef2f6;
+  --vk-code-block-header-text: #64748b;
+  --vk-code-block-line-number-color: #94a3b8;
+  --vk-code-block-copy-color: #64748b;
+  --vk-code-block-copy-hover-color: #0f172a;
+  --vk-code-block-highlight-bg: rgba(64, 158, 255, 0.08);
   --vk-code-block-highlight-border: var(--vk-color-primary);
-  --vk-code-keyword: #a626a4;
-  --vk-code-string: #50a14f;
-  --vk-code-comment: #a0a1a7;
-  --vk-code-function: #4078f2;
-  --vk-code-number: #986801;
-  --vk-code-operator: #0184bc;
+  --vk-code-keyword: #8b5cf6;
+  --vk-code-string: #10b981;
+  --vk-code-comment: #94a3b8;
+  --vk-code-function: #3b82f6;
+  --vk-code-number: #f59e0b;
+  --vk-code-operator: #06b6d4;
+  --vk-code-block-border: var(--vk-border-color-lighter);
 }
 
 .vk-code-block {
@@ -40,11 +42,13 @@
   border-radius: var(--vk-code-block-border-radius);
   overflow: hidden;
   background-color: var(--vk-code-block-bg);
+  border: 1px solid var(--vk-code-block-border);
   font-family: 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.65;
   max-width: 100%;
   min-width: 0;
+  box-shadow: var(--vk-ai-shadow-card, 0 2px 8px rgba(0, 0, 0, 0.04));
 }
 
 .vk-code-block__header {
@@ -55,37 +59,78 @@
   background-color: var(--vk-code-block-header-bg);
   color: var(--vk-code-block-header-text);
   font-size: 12px;
+  border-bottom: 1px solid var(--vk-code-block-border);
+  letter-spacing: 0.02em;
 }
 
 .vk-code-block__language {
   text-transform: lowercase;
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .vk-code-block__copy-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border: none;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.06);
   color: var(--vk-code-block-copy-color);
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 12px;
   font-family: inherit;
   transition: all var(--vk-transition-duration-fast);
 }
 
+.vk-code-block--light .vk-code-block__copy-btn {
+  background: rgba(0, 0, 0, 0.04);
+}
+
 .vk-code-block__copy-btn:hover {
   color: var(--vk-code-block-copy-hover-color);
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.vk-code-block--light .vk-code-block__copy-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.vk-code-block__copy-btn:active {
+  transform: translateY(0);
 }
 
 .vk-code-block__body {
   overflow: auto;
   padding: 16px;
   max-width: 100%;
+}
+
+/* Elegant scrollbar styling */
+.vk-code-block__body::-webkit-scrollbar,
+.vk-code-block__code::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.vk-code-block__body::-webkit-scrollbar-thumb,
+.vk-code-block__code::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+}
+
+.vk-code-block--light .vk-code-block__body::-webkit-scrollbar-thumb,
+.vk-code-block--light .vk-code-block__code::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.vk-code-block__body::-webkit-scrollbar-thumb:hover,
+.vk-code-block__code::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
 }
 
 .vk-code-block__lines {
@@ -99,7 +144,7 @@
   text-align: right;
   color: var(--vk-code-block-line-number-color);
   user-select: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  border-right: 1px solid var(--vk-code-block-border);
   margin-right: 16px;
 }
 
@@ -126,9 +171,10 @@
 
 .vk-code-block__line {
   display: block;
-  padding: 0 4px;
-  margin: 0 -4px;
+  padding: 0 6px;
+  margin: 0 -6px;
   border-left: 3px solid transparent;
+  border-radius: 2px;
 }
 
 .vk-code-block__line--highlighted {
