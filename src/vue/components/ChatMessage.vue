@@ -1,7 +1,10 @@
 <template>
   <div
     class="vk-chat-message"
-    :class="[`vk-chat-message--${role}`]"
+    :class="[
+      `vk-chat-message--${role}`,
+      contentVisibility === 'visible' ? 'vk-chat-message--visible' : ''
+    ]"
     data-testid="chat-message"
   >
     <div
@@ -60,7 +63,8 @@ const props = withDefaults(defineProps<ChatMessageProps>(), {
   retryText: '重试',
   copyable: false,
   copyText: '复制',
-  copiedText: '已复制'
+  copiedText: '已复制',
+  contentVisibility: 'auto'
 })
 
 const copied = ref(false)

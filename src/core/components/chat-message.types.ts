@@ -15,6 +15,7 @@ export interface ChatMessageProps {
   copiedText?: string
   content?: string
   copyContent?: string
+  contentVisibility?: 'auto' | 'visible'
 }
 
 export interface ChatMessageEmits {

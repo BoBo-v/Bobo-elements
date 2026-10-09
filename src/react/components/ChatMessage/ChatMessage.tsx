@@ -22,6 +22,7 @@ export const ChatMessage = memo(function ChatMessage({
   copyable = false,
   copyText = '复制',
   copiedText = '已复制',
+  contentVisibility = 'auto',
   content,
   copyContent,
   children,
@@ -56,8 +57,14 @@ export const ChatMessage = memo(function ChatMessage({
     return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
   }, [timestamp])
 
+  const rootClass = [
+    'vk-chat-message',
+    `vk-chat-message--${role}`,
+    contentVisibility === 'visible' ? 'vk-chat-message--visible' : '',
+  ].filter(Boolean).join(' ')
+
   return (
-    <div className={`vk-chat-message vk-chat-message--${role}`} data-testid="chat-message">
+    <div className={rootClass} data-testid="chat-message">
       {showAvatar && (
         <div className={`vk-chat-message__avatar vk-chat-message__avatar--${avatarSize}`} data-testid="chat-message-avatar">
           {avatar ? (

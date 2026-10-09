@@ -85,4 +85,13 @@ describe('ChatMessage.vue', () => {
     await wrapper.find('[data-testid="chat-message-copy-btn"]').trigger('click')
     expect(writeText).toHaveBeenCalledWith('copy me')
   })
+
+  test('supports visible contentVisibility mode', () => {
+    const wrapper = mount(ChatMessage, {
+      props: { role: 'user', contentVisibility: 'visible' },
+      slots: { default: 'Hello' },
+      global: { stubs: ['Icon', 'ThinkingIndicator'] }
+    })
+    expect(wrapper.classes()).toContain('vk-chat-message--visible')
+  })
 })

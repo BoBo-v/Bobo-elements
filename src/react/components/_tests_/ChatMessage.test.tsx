@@ -50,4 +50,9 @@ describe('ChatMessage component', () => {
     fireEvent.click(screen.getByTestId('chat-message-copy-btn'))
     await waitFor(() => expect(writeText).toHaveBeenCalledWith('copy me'))
   })
+
+  test('supports visible contentVisibility mode', () => {
+    render(<ChatMessage role="user" contentVisibility="visible">text</ChatMessage>)
+    expect(screen.getByTestId('chat-message')).toHaveClass('vk-chat-message--visible')
+  })
 })

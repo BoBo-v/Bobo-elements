@@ -21,6 +21,12 @@
   align-items: flex-start;
   padding: 6px 0;
   max-width: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
+}
+
+.vk-chat-message--visible {
+  content-visibility: visible;
 }
 
 .vk-chat-message--user {

@@ -17,6 +17,7 @@ export interface ChatMessageProps {
   copiedText?: string
   content?: string
   copyContent?: string
+  contentVisibility?: 'auto' | 'visible'
   children?: ReactNode
   loading?: ReactNode
   onRetry?: () => void
