@@ -1,19 +1,21 @@
 import { memo } from 'react';
 import type { ButtonProps } from '../../core/components/button.react.types';
+import { useButtonLogic } from '../../core/components/button.react.logic';
 import Icon from './Icon';
 
-const Button = memo(function Button({
-    children,
-    onClick,
-    disabled,
-    type = 'primary',
-    icon,
-    loading = false,
-}: ButtonProps) {
+const Button = memo(function Button(props: ButtonProps) {
+    const {
+        children,
+        onClick,
+        icon,
+        loading = false,
+    } = props;
+    const { isDisabled, classes } = useButtonLogic(props);
+
     return (
         <button
-            className={`vk-button vk-button--${type} ${loading ? 'is-loading' : ''}`}
-            disabled={disabled || loading}
+            className={classes}
+            disabled={isDisabled}
             onClick={onClick}
             data-testid="button"
         >

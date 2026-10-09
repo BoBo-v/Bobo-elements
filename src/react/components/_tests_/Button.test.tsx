@@ -52,4 +52,17 @@ describe('Button component', () => {
         expect(screen.queryByTestId('button-icon')).toBeNull();
         expect(screen.getByTestId('button-text')).toHaveTextContent('Loading');
     });
+
+    test('supports size, plain, round, and circle props', () => {
+        render(
+            <Button size="small" plain round circle>
+                Decorated
+            </Button>
+        );
+        const btn = screen.getByTestId('button');
+        expect(btn).toHaveClass('vk-button--small');
+        expect(btn).toHaveClass('is-plain');
+        expect(btn).toHaveClass('is-round');
+        expect(btn).toHaveClass('is-circle');
+    });
 });

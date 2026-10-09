@@ -47,7 +47,9 @@ export const ChatMessage = memo(function ChatMessage({
       setCopied(true)
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
       copyTimerRef.current = setTimeout(() => setCopied(false), 2000)
-    } catch {}
+    } catch {
+      // Ignore clipboard failure in unsupported environments
+    }
   }, [content, copyContent])
   const effectiveCopyContent = copyContent || content || ''
   const formattedTime = useMemo(() => {

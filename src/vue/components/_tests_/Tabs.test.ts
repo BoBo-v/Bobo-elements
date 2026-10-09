@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick, h, defineComponent } from 'vue'
 import Tabs from '../Tabs/Tabs.vue'

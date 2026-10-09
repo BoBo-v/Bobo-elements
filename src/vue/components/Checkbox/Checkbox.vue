@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { computed, inject } from 'vue'
-import type { CheckboxProps, CheckboxEmits, CheckboxValueType } from '../../../core/components/checkbox/types'
+import type { CheckboxProps, CheckboxEmits } from '../../../core/components/checkbox/types'
 import { checkboxGroupContextKey } from '../../../core/components/checkbox/types'
 import '../../../components/Checkbox/style.css'
 

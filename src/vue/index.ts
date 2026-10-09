@@ -31,3 +31,31 @@ export { default as PromptInput } from './components/PromptInput.vue';
 export { default as ReasoningBlock } from './components/ReasoningBlock.vue';
 export { default as ChatMessage } from './components/ChatMessage.vue';
 export { default as ConversationList } from './components/ConversationList.vue';
+
+// Type re-exports
+export type { ButtonProps, ButtonType, ButtonSize, NativeType, ButtonInstance } from '../core/components/button.types';
+export type { AlertProps, AlertType, AlertEmits, AlertInstance } from '../core/components/alert.types';
+export type { CollapseProps, CollapseItemProps, CollapseEmits, CollapseContext, NameType } from '../core/components/collapse/types';
+export type { TooltipProps, TooltipEmits, TooltipInstance } from '../components/Tooltip/types';
+export type { DropdownProps, DropdownEmits, DropdownInstance, MenuOption } from '../components/Dropdown/types';
+export type { InputProps, InputEmits, InputInstance } from '../components/Input/types';
+export type { SwtichProps as SwitchProps, SwtichEmits as SwitchEmits } from '../components/Switch/types';
+export type { SelectProps, SelectEmits, SelectOption, SelectStates } from '../components/Select/types';
+export type { MessageProps, CreateMessageProps, MessageContext } from '../components/Message/types';
+export type { NotificationProps, CreateNotificationProps, NotificationContext } from '../components/Notification/types';
+export type { ModalProps, ModalEmits } from '../core/components/modal.types';
+export type { TabsProps, TabPaneProps, TabsEmits, TabsType } from '../core/components/tabs/types';
+export type { TagProps, TagEmits, TagType, TagSize, TagEffect } from '../core/components/tag.types';
+export type { RadioProps, RadioGroupProps, RadioEmits, RadioGroupEmits, RadioValueType, RadioGroupContext } from '../core/components/radio/types';
+export type { CheckboxProps, CheckboxGroupProps, CheckboxEmits, CheckboxGroupEmits, CheckboxValueType, CheckboxGroupContext } from '../core/components/checkbox/types';
+export type { ThinkingIndicatorProps, ThinkingIndicatorVariant, ThinkingIndicatorColor } from '../core/components/thinking-indicator.types';
+export type { StreamingTextProps, StreamingTextEmits, CursorStyle } from '../core/components/streaming-text.types';
+export type { CodeBlockProps } from '../core/components/code-block.types';
+export type { TokenBadgeProps, TokenBadgeStatus, TokenBadgeVariant, TokenBadgeSize } from '../core/components/token-badge.types';
+export type { MarkdownRendererProps } from '../core/components/markdown-renderer.types';
+export type { PromptInputProps, PromptInputEmits, PromptInputInstance, PromptInputSize, PromptInputVariant } from '../core/components/prompt-input.types';
+export type { ReasoningBlockProps } from '../core/components/reasoning-block.types';
+export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus } from '../core/components/chat-message.types';
+export type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../core/components/conversation-list.types';
+export type { FormProps, FormItemProps, FormRules, FormItemRule, FormInstance, FormItemInstance, FormContext, FormItemContext, ValidateStatusProp, FormValidateFailure } from '../components/Form/types';
+

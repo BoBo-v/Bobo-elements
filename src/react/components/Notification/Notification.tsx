@@ -65,7 +65,7 @@ export default function Notification({
       clearTimer();
       document.removeEventListener('keydown', handleKeydown);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   // Measure height after becoming visible
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function Notification({
       const height = notifyRef.current.getBoundingClientRect().height;
       onUpdateHeight(height);
     }
-  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [visible]);
 
   // Destroy after leave animation
   useEffect(() => {

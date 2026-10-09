@@ -24,7 +24,7 @@
 import { ref } from 'vue'
 import type { AlertProps, AlertEmits, AlertInstance } from '../../core/components/alert.types'
 import Icon from './Icon.vue'
-import '../../core/styles/alert.css'
+import '../../components/Alert/style.css'
 
 defineOptions({ name: 'VkAlert' })
 

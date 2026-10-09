@@ -10,7 +10,7 @@ let seed = 1;
 let zIndex = 2000;
 const instances: NotificationContext[] = [];
 
-export const getLastBottomOffset = (id: string): number => {
+const getLastBottomOffset = (id: string): number => {
   const idx = instances.findIndex((inst) => inst.id === id);
   if (idx <= 0) return 0;
   return instances[idx - 1].bottomOffset;

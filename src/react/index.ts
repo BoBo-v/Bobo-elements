@@ -28,8 +28,8 @@ export { ConversationList } from './components/ConversationList';
 
 // Type re-exports
 export type { AlertRef } from './components/Alert';
-export type { ButtonProps, ButtonType, ButtonSize } from '../core/components/button.react.types';
-export type { AlertProps } from '../core/components/alert.react.types';
+export type { ButtonProps, ButtonType, ButtonSize, NativeType, ButtonRef } from '../core/components/button.react.types';
+export type { AlertProps, AlertType } from '../core/components/alert.react.types';
 export type { SwitchProps, SwitchValueType } from '../core/components/switch.react.types';
 export type { InputProps, InputRef } from '../core/components/input.react.types';
 export type {

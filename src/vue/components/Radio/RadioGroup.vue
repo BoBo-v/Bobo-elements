@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, computed } from 'vue'
+import { provide } from 'vue'
 import type { RadioGroupProps, RadioGroupEmits, RadioValueType } from '../../../core/components/radio/types'
 import { radioGroupContextKey } from '../../../core/components/radio/types'
 

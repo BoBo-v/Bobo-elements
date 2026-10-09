@@ -112,7 +112,7 @@ export default function FormItem({ label, prop, children }: FormItemProps) {
         formContext?.removeField(contextRef.current);
       }
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <FormItemContext.Provider value={contextRef.current}>

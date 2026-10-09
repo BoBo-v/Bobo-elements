@@ -1,5 +1,5 @@
 import { useRef, Fragment, memo } from 'react';
-import type { DropdownProps, DropdownInstance, MenuOption } from '../../../core/components/dropdown.react.types';
+import type { DropdownProps, MenuOption } from '../../../core/components/dropdown.react.types';
 import type { TooltipInstance } from '../../../core/components/Tooltip/tooltip.types';
 import Tooltip from '../Tooltip/Tooltip';
 import '../../../components/Dropdown/style.css';

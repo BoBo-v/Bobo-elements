@@ -9,7 +9,7 @@
 import type { ButtonProps } from '../../core/components/button.types';
 import { useButtonLogic } from '../../core/components/button.logic';
 import Icon from './Icon.vue';
-import '../../core/styles/button.css';
+import '../../components/Button/style.css';
 
 const props = defineProps<ButtonProps>();
 const { isDisabled, iconName, classes } = useButtonLogic(props);

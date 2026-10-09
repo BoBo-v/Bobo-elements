@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide, watch, onMounted } from 'vue'
+import { ref, provide } from 'vue'
 import type { TabsProps, TabsEmits, TabPaneProps } from '../../../core/components/tabs/types'
 import { tabsContextKey } from '../../../core/components/tabs/types'
 import '../../../components/Tabs/style.css'

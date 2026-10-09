@@ -43,9 +43,6 @@ export const createMessage = (props: CreateMessageProps) => {
   return instance
 }
 
-export const getLastInstance = () => {
-  return instances.at(-1)
-}
 
 export const getLastBottomOffset = (id: string) => {
   const idx = instances.findIndex(instance => instance.id === id)

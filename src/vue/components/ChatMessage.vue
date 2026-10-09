@@ -78,7 +78,9 @@ async function handleCopy() {
     copied.value = true
     if (copyTimer) clearTimeout(copyTimer)
     copyTimer = setTimeout(() => { copied.value = false }, 2000)
-  } catch {}
+  } catch {
+    // Ignore clipboard failure in unsupported environments
+  }
 }
 
 onUnmounted(() => {

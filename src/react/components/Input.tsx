@@ -61,6 +61,11 @@ const Input = forwardRef<InputRef, InputProps>(
       runValidation('change');
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      handleInput(e);
+      handleChange(e);
+    };
+
     const handleFocus = (e: React.FocusEvent) => {
       setIsFocus(true);
       onFocus?.(e.nativeEvent as FocusEvent);
@@ -113,7 +118,7 @@ const Input = forwardRef<InputRef, InputProps>(
             autoFocus={autofocus}
             form={form}
             value={modelValue}
-            onChange={handleInput}
+            onChange={handleInputChange}
             onBlur={handleBlur}
             onFocus={handleFocus}
           />
@@ -152,7 +157,7 @@ const Input = forwardRef<InputRef, InputProps>(
             autoFocus={autofocus}
             form={form}
             value={modelValue}
-            onChange={handleInput}
+            onChange={handleInputChange}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onKeyDown={onKeyDown}

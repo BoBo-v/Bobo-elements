@@ -11,9 +11,10 @@ export function useButtonLogic(props: ButtonProps) {
     }, [props.loading, props.icon]);
 
     const classes = useMemo(() => {
+        const type = props.type ?? 'primary';
         return [
             'vk-button',
-            props.type && `vk-button--${props.type}`,
+            type && `vk-button--${type}`,
             props.size && `vk-button--${props.size}`,
             props.plain && 'is-plain',
             props.round && 'is-round',
