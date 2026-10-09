@@ -79,7 +79,7 @@ function App() {
   <PromptInput
     v-model="prompt"
     clearable
-    stopable
+    stoppable
     :streaming="streaming"
     @submit="send"
     @stop="stop"
@@ -155,7 +155,7 @@ function App() {
       <PromptInput
         value={prompt}
         clearable
-        stopable
+        stoppable
         streaming={streaming}
         onChange={setPrompt}
         onSubmit={(value) => {

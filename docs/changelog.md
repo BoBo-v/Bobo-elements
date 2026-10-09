@@ -1,5 +1,40 @@
 # 更新日志
 
+## v1.3.2
+
+_2026-10-09_
+
+### 性能与长列表优化
+
+- **ChatMessage 视口外渲染优化**：引入现代浏览器原生 `content-visibility: auto` 与 `contain-intrinsic-size: auto 80px`，大幅降低长对话列表渲染压力与布局重排负担，并支持 `contentVisibility` 属性配置。
+- **ConversationList 流式滚动与历史锚点补偿**：采用 `requestAnimationFrame` 合并 MutationObserver 与 ResizeObserver 滚动触发；在历史消息前插时记录旧滚动位置与内容高度差，实现平滑视口锚点补偿，消除加载更多消息时的视口跳动。
+
+### AI 核心组件与安全增强
+
+- **StreamingText Unicode 字素簇支持**：采用 `Intl.Segmenter`（grapheme 粒度）进行文本切分并缓存切分结果，防止复杂 Emoji（如 ZWJ、肤色修饰符）和复合字符截断乱码，并提供安全的无孤立代理项降级保证。
+- **MarkdownRenderer 安全迁移至 markdown-it**：底层解析引擎从 marked 迁移至 markdown-it，补充 `@types/markdown-it` 开发依赖；支持 GFM 表格与任务列表；构建严格的安全 URL 协议白名单，禁止不受信任的协议与恶意 SVG data URL，防范 XSS 注入。
+- **PromptInput 无障碍与事件契约健全**：支持独立 `id`、`aria-label` 与 `aria-labelledby` 属性；修复外部监听器调用 `e.preventDefault()` 无法拦截 Enter 提交的缺陷；完善中文/IME 拼音合成输入边界判断；将属性更正为 `stoppable`（同时向后兼容保留已废弃的旧属性 `stopable`）。
+
+### 交互质感与视觉体系升级
+
+- **AI 设计变量与深色模式**：扩展 `--vk-ai-*` 与 `--vk-code-*` 设计 Token，打磨聊天气泡阴影、圆角、层次与 Markdown 表格排版，全面优化深色模式（Dark Mode）视觉对比度。
+- **动效打磨**：升级 ThinkingIndicator 流光呼吸渐变动画；完善 ReasoningBlock 思维链折叠过渡与耗时/Token 元数据展示；打磨流式文本光标动效细节。
+
+### 架构清理与代码重构
+
+- **死代码与孤立文件清理**：清理重构遗留的旧 `src/components/` 孤立类型与方法文件、旧脚手架测试代码（`VNode.tsx`、`App2.vue`）及冗余的 `src/core/styles/` 样式。
+- **React 组件完善**：React `Button` 接入 `useButtonLogic` hook，补齐 `size`、`plain`、`round`、`circle` 支持；修复 React `Input` 未绑定 `handleChange` 导致 `onChange` 回调无法触发的问题。
+- **规范导出与全量类型对齐**：Vue 入口补充导出所有组件的 Props、Emits 与 Instance 类型；React 入口补齐 `AlertType`、`NativeType` 等类型定义；收敛内部无用函数导出。
+- **代码规范达标**：全面清理各组件未使用的 import 与变量，ESLint 达到 0 错误 0 警告纯净通过。
+
+### 工程化与开发脚本
+
+- 拆分 `package.json` 中的 `lint`（只读检查）与 `lint:fix`（自动修复）命令，避免 CI 检查时误改写文件。
+- 完善 UMD 外部依赖打包配置，避免 JSX classic 模式潜在报错。
+- 扩展测试套件至 37 个测试文件、271 项测试用例，100% 通过验证。
+
+---
+
 ## v1.3.1
 
 _2026-06-10_
