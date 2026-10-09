@@ -73,7 +73,7 @@
           覆盖流式对话、代码展示、思维链、聊天气泡等智能应用场景
         </p>
         <div class="hero-actions">
-          <a class="btn-primary" href="/Shiyong">
+          <a class="btn-primary" href="/guide/quickstart">
             <span>快速开始</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -369,7 +369,7 @@
       <h2 class="cta-title">开始使用 Bobo-elements</h2>
       <p class="cta-desc">快速集成到你的 Vue3 或 React 项目中</p>
       <div class="cta-actions">
-        <a class="btn-primary" href="/Shiyong">阅读文档</a>
+        <a class="btn-primary" href="/guide/quickstart">阅读文档</a>
         <a class="btn-outline" href="https://github.com/BoBo-v/Bobo-elements.git" target="_blank">Star on GitHub</a>
       </div>
     </section>

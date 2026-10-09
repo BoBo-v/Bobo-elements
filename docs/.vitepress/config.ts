@@ -31,8 +31,32 @@ export default defineConfig({
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         logo: '/bobo-docs-logo.png',
+        search: {
+            provider: 'local',
+            options: {
+                locales: {
+                    root: {
+                        translations: {
+                            button: {
+                                buttonText: '搜索文档',
+                                buttonAriaLabel: '搜索文档'
+                            },
+                            modal: {
+                                noResultsText: '无法找到相关结果',
+                                resetButtonTitle: '清除查询条件',
+                                footer: {
+                                    selectText: '选择',
+                                    navigateText: '切换',
+                                    closeText: '关闭'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         nav: [
-            { text: '开始使用', link: '/Shiyong' },
+            { text: '快速开始', link: '/guide/quickstart' },
             { text: '组件', link: '/components/button' },
             { text: '更新日志', link: '/changelog' },
             { text: 'Playground', link: '/playground' },
@@ -92,11 +116,11 @@ export default defineConfig({
                     ]
                 },
             ],
-            '/Shiyong': [
+            '/guide/': [
                 {
                     text: '开发指南',
                     items: [
-                        { text: '开始使用', link: '/Shiyong' },
+                        { text: '快速开始', link: '/guide/quickstart' },
                         { text: '更新日志', link: '/changelog' },
                     ]
                 },
@@ -105,7 +129,7 @@ export default defineConfig({
                 {
                     text: '开发指南',
                     items: [
-                        { text: '开始使用', link: '/Shiyong' },
+                        { text: '快速开始', link: '/guide/quickstart' },
                         { text: '更新日志', link: '/changelog' },
                     ]
                 },

@@ -30,3 +30,8 @@ coverage
 #Vitepress
 docs/.vitepress/cache
 docs/.vitepress/dist
+
+# Local caches & sensitive configs
+.npmrc
+.npm-cache
+.claude
