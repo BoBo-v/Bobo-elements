@@ -58,13 +58,13 @@ const Switch = memo(function Switch({
         onKeyDown={handleKeyDown}
       />
       <div className="vk-switch__core">
-        <div className="vk-switch__core-inner">
-          {(activeText || inactiveText) && (
+        {(activeText || inactiveText) && (
+          <div className="vk-switch__core-inner">
             <span className="vk-switch__core-inner-text">
               {checked ? activeText : inactiveText}
             </span>
-          )}
-        </div>
+          </div>
+        )}
         <div className="vk-switch__core-action" />
       </div>
     </div>

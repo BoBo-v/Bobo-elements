@@ -18,8 +18,8 @@
     @keydown.enter="switchValue"
   />
   <div class="vk-switch__core">
-    <div class="vk-switch__core-inner">
-      <span v-if="activeText || inactiveText" class="vk-switch__core-inner-text">
+    <div v-if="activeText || inactiveText" class="vk-switch__core-inner">
+      <span class="vk-switch__core-inner-text">
         {{checked ? activeText : inactiveText}}
       </span>
     </div>

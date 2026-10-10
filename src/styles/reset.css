@@ -1,4 +1,11 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
   font-family: var(--vk-font-family);
   font-weight: 400;
   font-size: var(--vk-font-size-base);

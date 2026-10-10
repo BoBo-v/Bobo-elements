@@ -1,117 +1,456 @@
+/* ==================== AI 科技蓝紫品牌色系 ==================== */
 :root {
-  --vp-c-brand-1: #3451b2;
-  --vp-c-brand-2: #3a5ccc;
-  --vp-c-brand-3: #5672cd;
-  --vp-c-brand-soft: rgba(100, 108, 255, 0.14);
-  --vp-c-brand: var(--vk-color-primary);
-  --vp-c-brand-light: var(--vk-color-primary-light-3);
-  --vp-c-brand-lighter: var(--vk-color-primary-light-5);
-  --vp-c-brand-dark: var(--vk-color-primary-dark-2);
-  --vp-c-brand-darker: #265F99;
+  --vp-c-brand-1: #6366f1;
+  --vp-c-brand-2: #4f46e5;
+  --vp-c-brand-3: #818cf8;
+  --vp-c-brand-soft: rgba(99, 102, 241, 0.1);
+  --vp-c-brand-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  --vp-c-brand-glow: 0 0 24px rgba(99, 102, 241, 0.25);
 
-  --component-preview-bg: var(--vp-code-block-bg);
-  --component-preview-soft: var(--vp-code-block-bg-light);
+  --vp-c-brand: var(--vk-color-primary, #6366f1);
+  --vp-c-brand-light: var(--vk-color-primary-light-3, #818cf8);
+  --vp-c-brand-lighter: var(--vk-color-primary-light-5, #a5b4fc);
+  --vp-c-brand-dark: var(--vk-color-primary-dark-2, #4338ca);
+  --vp-c-brand-darker: #3730a3;
+
+  /* 侧边栏专属层次底色与分界线 (Light) */
+  --vp-sidebar-bg-color: #f8fafc;
+  --vp-c-divider: rgba(226, 232, 240, 0.85);
+
+  --component-preview-bg: #ffffff;
+  --component-preview-soft: rgba(99, 102, 241, 0.03);
+
+  /* 滚动条变量 (Light) */
+  --custom-scrollbar-thumb: rgba(148, 163, 184, 0.35);
+  --custom-scrollbar-thumb-hover: #6366f1;
+  --custom-scrollbar-track: transparent;
 }
-
 
 .dark {
-  --vp-c-brand-1: #a8b1ff;
-  --vp-c-brand-2: #5c73e7;
-  --vp-c-brand-3: #3451b2;
-  --vp-c-brand-soft: rgba(100, 108, 255, 0.16);
+  --vp-c-brand-1: #818cf8;
+  --vp-c-brand-2: #6366f1;
+  --vp-c-brand-3: #a5b4fc;
+  --vp-c-brand-soft: rgba(129, 140, 248, 0.12);
+  --vp-c-brand-gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #38bdf8 100%);
+  --vp-c-brand-glow: 0 0 28px rgba(129, 140, 248, 0.3);
+
+  /* 侧边栏专属层次底色与分界线 (Dark) */
+  --vp-sidebar-bg-color: #0b0f19;
+  --vp-c-divider: rgba(255, 255, 255, 0.08);
+
+  --component-preview-bg: #111827;
+  --component-preview-soft: rgba(129, 140, 248, 0.06);
+
+  /* 滚动条变量 (Dark) */
+  --custom-scrollbar-thumb: rgba(255, 255, 255, 0.18);
+  --custom-scrollbar-thumb-hover: #818cf8;
+  --custom-scrollbar-track: transparent;
 }
 
-body {
+/* ==================== 全局极简现代滚动条 ==================== */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--custom-scrollbar-thumb) var(--custom-scrollbar-track);
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--custom-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--custom-scrollbar-thumb);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--custom-scrollbar-thumb-hover);
+}
+
+/* 代码块与侧边栏独立微型滚动条 */
+div[class*='language-'] pre::-webkit-scrollbar,
+.VPSidebar::-webkit-scrollbar,
+.vitepress-demo-preview-preview::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* ==================== 顶部导航栏毛玻璃磨砂（性能优化） ==================== */
+.VPNav {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+}
+
+.dark .VPNav {
+  background-color: rgba(15, 23, 42, 0.82) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.VPNavBarTitle .title {
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  background: var(--vp-c-brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==================== 侧边栏分界线与背景分层设计 ==================== */
+.VPSidebar {
+  font-size: 14px;
+  background-color: var(--vp-sidebar-bg-color) !important;
+}
+
+@media (min-width: 960px) {
+  .VPSidebar {
+    border-right: 1px solid var(--vp-c-divider) !important;
+    background-color: var(--vp-sidebar-bg-color) !important;
+    /* 右侧极弱环境投影，清晰分离侧边栏抽屉与主画板留白 */
+    box-shadow: 2px 0 16px -4px rgba(0, 0, 0, 0.03) !important;
+  }
+
+  .VPSidebar .curtain {
+    background-color: var(--vp-sidebar-bg-color) !important;
+  }
+}
+
+.dark .VPSidebar {
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 4px 0 24px -4px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 隐藏 VitePress 默认绝对定位的 indicator 竖线，防止杂线干扰 */
+.VPSidebarItem .indicator {
+  display: none !important;
+}
+
+.VPSidebarItem .item {
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  margin: 2px 0 !important;
+  border: 1px solid transparent !important;
+  /* 仅对 background 与 border 进行轻量渐变，禁止触发重排的 all 动画，确保 60fps 丝滑切换 */
+  transition: background-color 0.12s ease, border-color 0.12s ease !important;
+}
+
+.VPSidebarItem .text {
+  font-size: 13.5px !important;
+  line-height: 20px !important;
+  transition: color 0.12s ease !important;
+}
+
+/* 鼠标悬停态：轻柔微底色，即时响应 */
+.VPSidebarItem:not(.is-active) > .item:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.dark .VPSidebarItem:not(.is-active) > .item:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.VPSidebarItem:not(.is-active) > .item:hover .text {
+  color: var(--vp-c-text-1) !important;
+}
+
+/* 激活选中态：现代化纯净对称浮岛胶囊（Symmetrical Pill）
+   固定 1px 细线边框，无任何内外边距变化，无绝对定位伪元素，零布局抖动，文字呼吸空间充裕 */
+.VPSidebarItem.is-active > .item {
+  background-color: var(--vp-c-brand-soft) !important;
+  border-color: rgba(99, 102, 241, 0.22) !important;
+}
+
+.dark .VPSidebarItem.is-active > .item {
+  background-color: rgba(129, 140, 248, 0.14) !important;
+  border-color: rgba(129, 140, 248, 0.25) !important;
+}
+
+.VPSidebarItem.is-active > .item .text {
+  color: var(--vp-c-brand-1) !important;
+  font-weight: 600 !important;
+}
+
+/* 彻底清理可能压盖文字的伪元素 */
+.VPSidebarItem.is-active > .item::before,
+.VPSidebarItem.is-active > .item::after {
+  display: none !important;
+}
+
+/* 侧边栏分组边距与分割线 */
+.VPSidebar .group + .group {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.VPSidebarGroup .title-text {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2) !important;
+}
+
+/* 侧边栏“AI 组件”微徽章 */
+.VPSidebarGroup:first-child .title-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.VPSidebarGroup:first-child .title-text::after {
+  content: 'AI 原生';
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.2));
+  color: var(--vp-c-brand-1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  text-transform: none;
+}
+
+/* ==================== 标题文字放大与垂直呼吸感升级 ==================== */
+.vp-doc h1 {
+  font-size: 34px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 18px !important;
+  margin-bottom: 16px !important;
+  background: linear-gradient(135deg, var(--vp-c-text-1) 25%, var(--vp-c-brand-1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 标题下方的组件简介段落，拉开间距，解决拥挤 */
+.vp-doc h1 + p {
+  font-size: 15.5px !important;
+  line-height: 1.7 !important;
+  color: var(--vp-c-text-2) !important;
+  margin-bottom: 32px !important;
+  padding-bottom: 18px !important;
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+}
+
+.vp-doc h2 {
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.01em !important;
+  margin-top: 48px !important;
+  margin-bottom: 18px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid var(--vp-c-divider);
+  position: relative;
+}
+
+.vp-doc h2::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 36px;
+  height: 2px;
+  background: var(--vp-c-brand-gradient);
+  border-radius: 2px;
+}
+
+.vp-doc h3 {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  margin-top: 36px !important;
+  margin-bottom: 14px !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.vp-doc p {
+  line-height: 1.75 !important;
+  font-size: 15px !important;
+  margin: 14px 0 !important;
   color: var(--vp-c-text-1);
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  color: var(--vp-c-text-1);
+/* ==================== 组件预览卡片 (Demo Container) 浮岛化 ==================== */
+.vitepress-demo-preview__element-plus__container,
+.vitepress-demo-preview__ant-design__container {
+  border-radius: 14px !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  background-color: var(--component-preview-bg) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden;
+  margin: 20px 0 32px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* ==================== API 表格样式 ==================== */
+.dark .vitepress-demo-preview__element-plus__container,
+.dark .vitepress-demo-preview__ant-design__container {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.35) !important;
+}
+
+.vitepress-demo-preview__element-plus__container:hover,
+.vitepress-demo-preview__ant-design__container:hover {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  box-shadow: 0 8px 30px -4px rgba(99, 102, 241, 0.12) !important;
+}
+
+.vitepress-demo-preview__element-plus__container > .vitepress-demo-preview-preview {
+  padding: 28px 24px !important;
+  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.02), transparent 40%), var(--component-preview-bg);
+}
+
+.vitepress-demo-preview-description__split-line {
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+}
+
+.vitepress-demo-preview__element-plus__container > .vitepress-demo-preview-description .vitepress-demo-preview-description__title:before,
+.vitepress-demo-preview__element-plus__container > .vitepress-demo-preview-description .vitepress-demo-preview-description__title:after {
+  border-top: 1px solid var(--vp-c-divider) !important;
+}
+
+.vitepress-demo-preview__element-plus__container > .vitepress-demo-preview-description .vitepress-demo-preview-description__handle-btn {
+  background-color: var(--vp-c-bg-soft) !important;
+  border-top: 1px solid var(--vp-c-divider) !important;
+  padding: 8px 16px !important;
+}
+
+/* ==================== API 参数表格现代胶囊排版 ==================== */
 .vp-doc table {
-  border-radius: 8px;
+  border-radius: 12px !important;
   overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
-  margin: 16px 0;
-  border: 1px solid var(--vp-c-divider);
+  margin: 20px 0 !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  background: var(--vp-c-bg);
+  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.03);
 }
 
 .vp-doc table thead tr {
-  background-color: var(--vp-c-bg-soft);
+  background-color: var(--vp-c-bg-soft) !important;
 }
 
 .vp-doc table thead th {
   font-weight: 600;
-  color: var(--vp-c-text-1);
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--vp-c-divider);
+  font-size: 13.5px;
+  letter-spacing: 0.3px;
+  color: var(--vp-c-text-1) !important;
+  padding: 12px 18px !important;
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+  border-top: none !important;
   text-align: left;
 }
 
+/* 移除老旧斑马纹，改用极简纯净行 */
 .vp-doc table tbody tr:nth-child(even) {
-  background-color: var(--vp-c-bg-soft);
+  background-color: transparent !important;
+}
+
+.vp-doc table tbody tr {
+  transition: background-color 0.15s ease;
 }
 
 .vp-doc table tbody tr:hover {
-  background-color: var(--vp-c-brand-soft);
-  transition: background-color 0.25s;
+  background-color: var(--vp-c-brand-soft) !important;
 }
 
 .vp-doc table tbody td {
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 12px 18px !important;
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+  border-top: none !important;
   color: var(--vp-c-text-2);
+  font-size: 13.5px;
 }
 
-.vp-doc table tbody td code {
-  background-color: var(--vp-c-mute);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 13px;
-  color: var(--vp-c-brand-1);
+.vp-doc table tbody tr:last-child td {
+  border-bottom: none !important;
 }
 
-/* ==================== Tip / Warning / Danger 容器 ==================== */
+/* 属性名加粗高亮 */
+.vp-doc table tbody td:first-child {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+/* 代码标签：圆润微胶囊 */
+.vp-doc table tbody td code,
+.vp-doc p code,
+.vp-doc li code {
+  background-color: var(--vp-c-brand-soft) !important;
+  color: var(--vp-c-brand-1) !important;
+  padding: 2px 7px !important;
+  border-radius: 6px !important;
+  font-size: 12.5px !important;
+  font-family: var(--vp-font-family-mono);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+/* ==================== 代码块与 Code Group 选项卡 ==================== */
+.vp-doc [class*='language-'] {
+  border-radius: 12px !important;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .vp-doc [class*='language-'] {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vp-code-group .tabs {
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+  padding: 0 8px;
+}
+
+.vp-code-group .tabs label.active {
+  color: var(--vp-c-brand-1) !important;
+  border-bottom: 2px solid var(--vp-c-brand-1) !important;
+  font-weight: 600;
+}
+
+/* ==================== Tip / Warning / Danger 提示卡片 ==================== */
 .vp-doc .custom-block {
-  border-radius: 8px;
-  padding: 16px 20px;
-  margin: 16px 0;
+  border-radius: 12px !important;
+  padding: 16px 20px !important;
+  margin: 20px 0 !important;
+  border: 1px solid transparent !important;
 }
 
 .vp-doc .custom-block.tip {
-  border-left: 4px solid var(--vp-c-brand-1);
-  background-color: var(--vp-c-brand-soft);
+  background-color: rgba(99, 102, 241, 0.06) !important;
+  border-color: rgba(99, 102, 241, 0.18) !important;
+  border-left: 4px solid var(--vp-c-brand-1) !important;
 }
 
 .vp-doc .custom-block.warning {
-  border-left: 4px solid var(--vp-c-warning-1);
+  background-color: rgba(245, 158, 11, 0.06) !important;
+  border-color: rgba(245, 158, 11, 0.2) !important;
+  border-left: 4px solid #f59e0b !important;
 }
 
 .vp-doc .custom-block.danger {
-  border-left: 4px solid var(--vp-c-danger-1);
+  background-color: rgba(239, 68, 68, 0.06) !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+  border-left: 4px solid #ef4444 !important;
 }
 
 .vp-doc .custom-block-title {
   font-weight: 600;
+  letter-spacing: 0.3px;
   margin-bottom: 8px;
 }
 
-/* ==================== 自定义首页 ==================== */
+/* ==================== 首页容器重置 ==================== */
 .VPPage {
   padding-bottom: 0 !important;
 }
 
-/* ==================== 侧边栏分组标题 ==================== */
-.VPSidebarItem .text {
-  font-size: 14px;
-}
 
-.VPSidebar .group + .group {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--vp-c-divider);
-}
