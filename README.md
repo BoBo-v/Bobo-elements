@@ -5,10 +5,11 @@ AI 原生的 Vue3 + React 双框架组件库。内置基础 UI 组件和 AI 应�
 ## 特性
 
 - Vue3 与 React 双框架支持，按需从 `@bobocn/element/vue` 或 `@bobocn/element/react` 引入。
-- 18 个 AI 原生组件：ThinkingIndicator、StreamingText、CodeBlock、PromptInput、ReasoningBlock、ChatMessage、TokenBadge、MarkdownRenderer、ConversationList、Welcome、Prompts、Attachment、ToolCall、Sources、SessionList、MessageActions、DiffCodeBlock、ModelSelector，配套 `useStreamBuffer` / `useAIChat` 双端流式 Hooks。
+- 18 个 AI 原生组件：ThinkingIndicator、StreamingText、CodeBlock、PromptInput、ReasoningBlock、ChatMessage、TokenBadge、MarkdownRenderer、ConversationList、Welcome、Prompts、Attachment、ToolCall、Sources、SessionList、MessageActions、DiffCodeBlock、ModelSelector，覆盖开屏引导、流式输出、Agent 工具审批、RAG 溯源、代码 Diff 与工作台管理。
+- 双端流式 Hooks：内置 `useStreamBuffer`（平滑缓冲）与 `useAIChat`（流式会话、停止与重试），Vue 3 与 React 共享核心状态逻辑。
 - 17 个基础组件，覆盖按钮、表单、弹窗、消息、通知、标签、折叠面板等常用场景。
-- 统一 CSS 入口，Vue 与 React 项目保持一致视觉体验。
-- TypeScript 编写，发布包包含类型定义。
+- 统一 CSS 入口，完整支持浅色与深色模式（`html.dark` / `.dark` / `[data-theme="dark"]`）。
+- 100% TypeScript 编写，发布包包含完整类型定义。
 
 ## 安装
 

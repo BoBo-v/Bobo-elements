@@ -1,7 +1,7 @@
 {
   "name": "@bobocn/element",
-  "version": "1.3.2",
-  "description": "AI-native Vue3 and React component library with shared styles and TypeScript types",
+  "version": "1.4.0",
+  "description": "AI-native Vue3 and React component library with 18 AI components, streaming hooks, shared styles and TypeScript types",
   "type": "module",
   "author": "Bobo",
   "license": "MIT",
@@ -11,8 +11,11 @@
     "Vue3",
     "React",
     "AI",
+    "Agent",
+    "RAG",
     "Chat",
     "Streaming",
+    "Hooks",
     "TypeScript",
     "VitePress"
   ],

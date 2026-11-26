@@ -901,7 +901,7 @@ const features = [
   {
     icon: '⚡',
     title: 'AI 原生 · 直接组合',
-    details: '内置流式文本、思维链、代码块、聊天消息、Token 信息和对话列表，适合快速搭建智能应用界面。',
+    details: '提供 18 个 AI 组件与双端流式 Hooks，覆盖流式对话、思维链、ToolCall 工具审批、RAG 溯源与代码 Diff 评审。',
     highlight: true,
   },
   {
@@ -934,9 +934,9 @@ const features = [
 const componentGroups = [
   {
     name: 'AI 组件',
-    icon: '🤖',
+    icon: '✨',
     isAI: true,
-    desc: '面向 AI 对话、流式输出、代码解释、Markdown 渲染和历史消息列表的高频组件。',
+    desc: '覆盖 AI 开屏引导、流式输出、深度推理与工具审批、代码 Diff 对比、模型切换及多会话管理的全链路组件。',
     items: [
       { name: 'ThinkingIndicator', label: '思考指示器', link: 'thinking-indicator', vue: true, react: true },
       { name: 'StreamingText', label: '流式文本', link: 'streaming-text', vue: true, react: true },

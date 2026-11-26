@@ -1,5 +1,49 @@
 # 更新日志
 
+## v1.4.0
+
+_2026-11-26_
+
+### 新增 AI 原生组件（扩展至 18 个）
+
+- **对话引导与输入扩展（P0）**：
+  - `Welcome`：AI 开屏欢迎与能力引导卡片，支持多种对齐布局、填充变体与自定义操作区。
+  - `Prompts`：推荐提示词组件，支持网格与列表布局、图标及描述配置，一键触发预设提问。
+  - `Attachment`：多形态附件卡片与上传进度展示，支持文件类型识别、图片缩略图与移除交互。
+- **Agent 推理与 RAG 溯源（P0）**：
+  - `ToolCall`：Agent 工具调用卡片，支持 `running`、`awaiting-approval`、`success`、`error` 状态流转与人工确认审批回调。
+  - `Sources`：RAG 参考来源折叠溯源列表，支持内联/卡片展示、站点域名展示与引用片段预览。
+- **工作台管理与代码评审（P1）**：
+  - `SessionList`：多分组历史会话列表，支持按时间分组（置顶 / 今天 / 7 天内等）、搜索筛选、新建会话、行内重命名、置顶与删除。
+  - `MessageActions`：消息操作栏，整合一键复制、点赞/点踩反馈、多分支切换与重新生成交互。
+  - `DiffCodeBlock`：支持 `unified`（行内）与 `split`（双栏并排）双视图模式的代码对比组件，内置一键采纳与复制能力。
+  - `ModelSelector`：AI 模型选择器，展示模型名称、上下文窗口（如 `128K` / `200K`）、能力标签与简介。
+
+### 双端流式通信 Hooks
+
+- 新增 Vue 3（`src/vue/hooks`）与 React（`src/react/hooks`）对齐的双端流式 Hooks，统一通过 `@bobocn/element/vue` 与 `@bobocn/element/react` 导出：
+  - `useStreamBuffer`：基于动画帧与字素边界的流式文本平滑缓冲控制器，避免高频 SSE 分片导致的抖动与重排。
+  - `useAIChat`：封装 `fetch` ReadableStream 流式请求、消息队列状态管理、停止生成（AbortController）与重试机制。
+
+### 核心性能优化与缺陷修复
+
+- **CodeBlock 单遍高亮分词重构**：重构内部词法高亮为单遍正则命名捕获组解析，修复字符串/注释内关键词与转义字符嵌套导致的误着色缺陷。
+- **StreamingText 单例分词与共用格式化工具**：复用单例 `Intl.Segmenter` 进行增量切片，减少流式更新期间的内存分配；抽取 `ai-format.ts` 统一时长、Token 与文件大小格式化逻辑。
+- **图标体系升级**：将 `ChatMessage` 与 `Welcome` 等助手默认图标由机器人替换为现代星芒 `sparkles` 内联 SVG，并补齐 React 端 FontAwesome 图标全量映射。
+- **组件显示与细节打磨**：
+  - 修复 `ConversationList` 首屏挂载自动滚动与文档演示引用显示问题，增加 VitePress 文档站包别名配置。
+  - 修复 `ModelSelector` 选项受文档容器行高影响被拉高、标签截断及文档演示框 `overflow: hidden` 裁剪下拉面板的问题。
+  - 优化 `ReasoningBlock` 折叠面板头部高度（覆写默认 `48px` 行高）与耗时/Token 元信息胶囊排版，并补齐 `SessionList` 与 `ModelSelector` 深色模式下的半透明主色适配。
+  - 重构 `Switch` 组件 DOM 结构与 4px 对齐样式体系，补充双端单元测试。
+
+### 首页与文档体验升级
+
+- **交互式 AI 工作台重构**：保留首屏 Hero 结构，将首页第二部分重构为由全部 18 个 AI 原生组件真实组合而成的交互式 **Bobo AI Workspace**，支持流式推理、Agent 审批与溯源、代码 Diff 评审与开屏引导 4 大场景切换、实时流式发送/停止及工作台独立的 **跟随站点 / 浅色 / 深色** 主题切换。
+- **视觉与阴影收敛**：全面调整首页展示区与全局 AI 卡片/浮层阴影变量，采用更克制柔和的浅灰色阴影，提升浅色/深色主题切换的通透质感。
+- 补齐 9 个新 AI 组件与 Hooks 的中英文 API 文档与在线预览示例，首页快速接入代码同步更新为 `ChatMessage` + `PromptInput` 组合示例。
+
+---
+
 ## v1.3.2
 
 _2026-10-09_
