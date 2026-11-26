@@ -7,7 +7,7 @@ import '../../../components/ChatMessage/style.css'
 
 const ROLE_ICONS: Record<string, string> = {
   user: 'user',
-  assistant: 'robot',
+  assistant: 'sparkles',
   system: 'circle-info',
 }
 

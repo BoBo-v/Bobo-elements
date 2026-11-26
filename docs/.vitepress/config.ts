@@ -12,6 +12,8 @@ export default defineConfig({
         ],
         resolve: {
             alias: {
+                '@bobocn/element/vue': fileURLToPath(new URL('../../src/vue/index.ts', import.meta.url)),
+                '@bobocn/element/style.css': fileURLToPath(new URL('../../src/styles/index.css', import.meta.url)),
                 '@': fileURLToPath(new URL('../../src', import.meta.url))
             }
         }

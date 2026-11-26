@@ -43,6 +43,6 @@ defineOptions({ name: 'VkWelcome' })
 withDefaults(defineProps<WelcomeProps>(), {
   variant: 'borderless',
   align: 'left',
-  icon: 'robot'
+  icon: 'sparkles'
 })
 </script>

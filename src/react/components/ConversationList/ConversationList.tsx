@@ -119,6 +119,11 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
+    // 初始挂载且开启 autoScroll 时，若存在溢出内容则直接定位到底部最新消息
+    if (autoScroll && el.scrollHeight > el.clientHeight) {
+      scrollToBottom(true)
+    }
+
     previousScrollHeightRef.current = el.scrollHeight
     const nearBottom = isNearBottom()
     shouldStickToBottomRef.current = nearBottom

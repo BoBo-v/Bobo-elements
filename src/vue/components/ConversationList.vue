@@ -165,6 +165,11 @@ function scheduleUpdate(hasAddedNodes = false) {
 
 onMounted(() => {
   if (containerRef.value) {
+    // 初始挂载且开启 autoScroll 时，若存在溢出内容则直接定位到底部最新消息
+    if (props.autoScroll && containerRef.value.scrollHeight > containerRef.value.clientHeight) {
+      scrollToBottom(true)
+    }
+
     previousScrollHeight = containerRef.value.scrollHeight
     const nearBottom = isNearBottom()
     shouldStickToBottom = nearBottom

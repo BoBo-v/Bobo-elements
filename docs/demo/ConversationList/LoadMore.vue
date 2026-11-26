@@ -1,17 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import ConversationList from '@/vue/components/ConversationList.vue'
-import ChatMessage from '@/vue/components/ChatMessage.vue'
+import { ConversationList, ChatMessage } from '@bobocn/element/vue'
 
 let nextId = 1
 const loading = ref(false)
 const messages = ref([
-  { id: nextId++, role: 'assistant', content: '历史消息 1：这是较早的一轮回复。', timestamp: new Date(Date.now() - 360000) },
-  { id: nextId++, role: 'user', content: '历史消息 2：继续追问一个细节。', timestamp: new Date(Date.now() - 300000) },
-  { id: nextId++, role: 'assistant', content: '历史消息 3：补充上下文和说明。', timestamp: new Date(Date.now() - 240000) },
-  { id: nextId++, role: 'user', content: '当前问题：滚动到顶部加载更多历史消息。', timestamp: new Date(Date.now() - 180000) },
-  { id: nextId++, role: 'assistant', content: '向上滚动到顶部会触发 load-more。', timestamp: new Date(Date.now() - 120000) },
-  { id: nextId++, role: 'assistant', content: '加载中状态会阻止重复触发。', timestamp: new Date(Date.now() - 60000) }
+  { id: nextId++, role: 'user' as const, content: '历史消息 1：如何排查接口超时问题？', timestamp: new Date(Date.now() - 360000) },
+  { id: nextId++, role: 'assistant' as const, content: '历史消息 2：建议先核对网关超时配置与慢查询日志。', timestamp: new Date(Date.now() - 300000) },
+  { id: nextId++, role: 'user' as const, content: '历史消息 3：已经定位到是缓存穿透引起的。', timestamp: new Date(Date.now() - 240000) },
+  { id: nextId++, role: 'assistant' as const, content: '历史消息 4：可以补充布隆过滤器或空值短缓存。', timestamp: new Date(Date.now() - 180000) },
+  { id: nextId++, role: 'user' as const, content: '向上滚动到顶部即可触发加载更多历史记录。', timestamp: new Date(Date.now() - 120000) },
+  { id: nextId++, role: 'assistant' as const, content: '前插历史消息时会自动保持当前阅读视口位置不跳动。', timestamp: new Date(Date.now() - 60000) }
 ])
 
 function handleLoadMore() {
@@ -19,24 +18,26 @@ function handleLoadMore() {
   loading.value = true
   setTimeout(() => {
     const older = [
-      { id: nextId++, role: 'assistant', content: '更早的历史消息：组件会把它插入到顶部。', timestamp: new Date(Date.now() - 480000) },
-      { id: nextId++, role: 'user', content: '更早的用户提问。', timestamp: new Date(Date.now() - 420000) }
+      { id: nextId++, role: 'user' as const, content: '更早的用户提问：系统架构演进背景。', timestamp: new Date(Date.now() - 480000) },
+      { id: nextId++, role: 'assistant' as const, content: '更早的助手回复：历史记录已平滑插入顶部。', timestamp: new Date(Date.now() - 420000) }
     ]
     messages.value = [...older, ...messages.value]
     loading.value = false
-  }, 900)
+  }, 800)
 }
 </script>
 
 <template>
-  <ConversationList height="200px" :loading-more="loading" @load-more="handleLoadMore">
-    <ChatMessage
-      v-for="message in messages"
-      :key="message.id"
-      :role="message.role"
-      :timestamp="message.timestamp"
-    >
-      {{ message.content }}
-    </ChatMessage>
-  </ConversationList>
+  <div style="border: 1px solid var(--vk-border-color-light); border-radius: 12px; overflow: hidden;">
+    <ConversationList height="280px" :loading-more="loading" @load-more="handleLoadMore">
+      <ChatMessage
+        v-for="message in messages"
+        :key="message.id"
+        :role="message.role"
+        :timestamp="message.timestamp"
+      >
+        {{ message.content }}
+      </ChatMessage>
+    </ConversationList>
+  </div>
 </template>

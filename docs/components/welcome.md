@@ -17,6 +17,6 @@ description: Welcome AI 欢迎页组件
 | --- | --- | --- | --- |
 | title | 欢迎标题 | `string` | — |
 | description | 欢迎描述 | `string` | — |
-| icon | 图标名称 | `string` | `'robot'` |
+| icon | 图标名称 | `string` | `'sparkles'` |
 | variant | 外观样式 | `'borderless' \| 'filled'` | `'borderless'` |
 | align | 对齐方式 | `'left' \| 'center'` | `'left'` |

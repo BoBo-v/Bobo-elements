@@ -113,7 +113,7 @@ function onAvatarError(e: Event) {
 const defaultIcon = computed(() => {
   switch (props.role) {
     case 'user': return 'user'
-    case 'assistant': return 'robot'
+    case 'assistant': return 'sparkles'
     case 'system': return 'circle-info'
     default: return 'user'
   }

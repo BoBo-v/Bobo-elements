@@ -93,6 +93,15 @@
   color: var(--vk-text-color-secondary);
 }
 
+.vk-chat-message--assistant .vk-chat-message__avatar {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(64, 158, 255, 0.14));
+  border-color: rgba(99, 102, 241, 0.22);
+}
+
+.vk-chat-message--assistant .vk-chat-message__avatar-icon {
+  color: var(--vk-color-primary);
+}
+
 .vk-chat-message__avatar--small {
   --vk-chat-msg-avatar-size: 28px;
 }
@@ -110,8 +119,15 @@
 .vk-chat-message__body {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
   min-width: 0;
   max-width: 100%;
+}
+
+.vk-chat-message--system .vk-chat-message__body {
+  flex: 0 1 auto;
+  align-items: center;
 }
 
 .vk-chat-message--user .vk-chat-message__body {

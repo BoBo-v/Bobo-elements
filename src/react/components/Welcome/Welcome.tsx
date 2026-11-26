@@ -23,7 +23,7 @@ export interface WelcomeProps extends Omit<CoreWelcomeProps, 'title' | 'descript
 export const Welcome = memo(function Welcome({
   title,
   description,
-  icon = 'robot',
+  icon = 'sparkles',
   extra,
   variant = 'borderless',
   align = 'left',

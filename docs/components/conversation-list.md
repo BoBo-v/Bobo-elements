@@ -118,18 +118,22 @@ export default function App() {
 | --- | --- | --- | --- |
 | autoScroll | 新消息追加时是否自动平滑滚到底部 | `boolean` | `true` |
 | loadingMore | 是否正在向上加载历史消息 | `boolean` | `false` |
+| loadMoreThreshold | 触发顶部加载更多的滚动距离阈值（px） | `number` | `16` |
 | height | 容器固定高度（支持 CSS 单位如 `'480px'` / `'60vh'`） | `string` | — |
 | maxHeight | 容器最大高度 | `string` | `'100%'` |
 | preserveScrollOnPrepend | 向上加载历史消息前插时保持当前视口位置（滚动补偿） | `boolean` | `true` |
+| showScrollToBottom | 上滑脱离底部时是否显示“回到底部”悬浮按钮 | `boolean` | `true` |
+| scrollToBottomText | 回到底部悬浮按钮文案 | `string` | `'回到底部'` |
 | emptyText | 无消息时的空状态文案 | `string` | `'暂无对话'` |
-| loadingText | 向上加载历史消息时的提示文本 | `string` | `'加载更早记录...'` |
+| loadingText | 向上加载历史消息时的提示文本 | `string` | `'加载中...'` |
 
 ### 事件 (Events)
 
 | 事件名 | 说明 | 回调参数 |
 | --- | --- | --- |
-| load-more / onLoadMore | 滚动到顶部（触发阈值）时触发加载更多 | — |
+| load-more / onLoadMore | 滚动到顶部阈值内时触发加载更多 | — |
 | scroll / onScroll | 列表滚动时触发 | `(scrollTop: number)` |
+| at-bottom-change / onAtBottomChange | 列表是否处于底部状态变化时触发 | `(atBottom: boolean)` |
 
 ### 方法 (Exposes / Ref)
 
@@ -143,3 +147,4 @@ export default function App() {
 | 插槽名 | 说明 |
 | --- | --- |
 | default | 消息元素容器（通常为 ChatMessage 集合） |
+| empty | 自定义空状态内容（如组合 `Welcome` 与 `Prompts`） |

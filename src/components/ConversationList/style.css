@@ -79,10 +79,10 @@
 
 .vk-conversation-list__scroll-btn {
   position: sticky;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-flex;
+  bottom: 12px;
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 12px;
   align-items: center;
   gap: 4px;
   padding: 6px 14px;
