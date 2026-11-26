@@ -36,6 +36,12 @@ export { default as Prompts } from './components/Prompts.vue';
 export { default as Attachment } from './components/Attachment.vue';
 export { default as ToolCall } from './components/ToolCall.vue';
 export { default as Sources } from './components/Sources.vue';
+export { default as SessionList } from './components/SessionList.vue';
+export { default as MessageActions } from './components/MessageActions.vue';
+export { default as DiffCodeBlock } from './components/DiffCodeBlock.vue';
+export { default as ModelSelector } from './components/ModelSelector.vue';
+export { useStreamBuffer } from './hooks/useStreamBuffer';
+export { useAIChat } from './hooks/useAIChat';
 
 // Type re-exports
 export type { ButtonProps, ButtonType, ButtonSize, NativeType, ButtonInstance } from '../core/components/button.types';
@@ -67,5 +73,12 @@ export type { PromptsProps, PromptsEmits, PromptItem, PromptsLayout, PromptsVari
 export type { AttachmentProps, AttachmentEmits, AttachmentItem, AttachmentStatus, AttachmentListLayout } from '../core/components/attachment.types';
 export type { ToolCallProps, ToolCallEmits, ToolCallStatus } from '../core/components/tool-call.types';
 export type { SourcesProps, SourcesEmits, SourceItem, SourcesVariant } from '../core/components/sources.types';
+export type { SessionListProps, SessionListEmits, SessionItem } from '../core/components/session-list.types';
+export type { MessageActionsProps, MessageActionsEmits, FeedbackValue } from '../core/components/message-actions.types';
+export type { DiffCodeBlockProps, DiffCodeBlockEmits, DiffLine, DiffLineType } from '../core/components/diff-code-block.types';
+export type { ModelSelectorProps, ModelSelectorEmits, ModelOption, ModelSelectorSize } from '../core/components/model-selector.types';
+export type { AIChatMessage, AIChatRequestContext, AIChatRequestHandler } from '../core/components/ai-chat.types';
+export type { UseStreamBufferOptions } from './hooks/useStreamBuffer';
+export type { UseAIChatOptions } from './hooks/useAIChat';
 export type { FormProps, FormItemProps, FormRules, FormItemRule, FormInstance, FormItemInstance, FormContext, FormItemContext, ValidateStatusProp, FormValidateFailure } from '../components/Form/types';
 

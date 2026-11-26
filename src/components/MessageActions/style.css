@@ -1,0 +1,73 @@
+.vk-message-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vk-message-actions__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--vk-border-color-lighter);
+  background-color: var(--vk-fill-color-light);
+  color: var(--vk-text-color-secondary);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all var(--vk-transition-duration-fast);
+}
+
+.vk-message-actions__btn:hover:not(:disabled) {
+  color: var(--vk-color-primary);
+  border-color: var(--vk-color-primary-light-5, #a0cfff);
+  background-color: var(--vk-color-primary-light-9, rgba(64, 158, 255, 0.08));
+}
+
+.vk-message-actions__btn.is-active {
+  color: var(--vk-color-primary);
+  border-color: var(--vk-color-primary);
+  background-color: var(--vk-color-primary-light-9);
+}
+
+.vk-message-actions__btn.is-dislike.is-active {
+  color: var(--vk-color-danger);
+  border-color: var(--vk-color-danger);
+  background-color: var(--vk-color-danger-light-9, rgba(245, 108, 108, 0.1));
+}
+
+.vk-message-actions__branches {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--vk-text-color-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.vk-message-actions__branch-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--vk-border-color-lighter);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vk-message-actions__branch-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+html.dark .vk-message-actions__btn,
+.dark .vk-message-actions__btn,
+[data-theme="dark"] .vk-message-actions__btn {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+}

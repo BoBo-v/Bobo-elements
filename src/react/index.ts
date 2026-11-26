@@ -30,6 +30,12 @@ export { Prompts } from './components/Prompts';
 export { Attachment } from './components/Attachment';
 export { ToolCall } from './components/ToolCall';
 export { Sources } from './components/Sources';
+export { SessionList } from './components/SessionList';
+export { MessageActions } from './components/MessageActions';
+export { DiffCodeBlock } from './components/DiffCodeBlock';
+export { ModelSelector } from './components/ModelSelector';
+export { useStreamBuffer } from './hooks/useStreamBuffer';
+export { useAIChat } from './hooks/useAIChat';
 
 // Type re-exports
 export type { AlertRef } from './components/Alert';
@@ -97,3 +103,10 @@ export type { PromptsProps, PromptItem, PromptsLayout, PromptsVariant } from './
 export type { AttachmentProps, AttachmentItem, AttachmentStatus, AttachmentListLayout } from './components/Attachment';
 export type { ToolCallProps, ToolCallStatus } from './components/ToolCall';
 export type { SourcesProps, SourceItem, SourcesVariant } from './components/Sources';
+export type { SessionListProps, SessionItem } from './components/SessionList';
+export type { MessageActionsProps, FeedbackValue } from './components/MessageActions';
+export type { DiffCodeBlockProps, DiffLine, DiffLineType } from './components/DiffCodeBlock';
+export type { ModelSelectorProps, ModelOption, ModelSelectorSize } from './components/ModelSelector';
+export type { AIChatMessage, AIChatRequestContext, AIChatRequestHandler } from '../core/components/ai-chat.types';
+export type { UseStreamBufferOptions } from './hooks/useStreamBuffer';
+export type { UseAIChatOptions } from './hooks/useAIChat';
