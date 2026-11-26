@@ -134,132 +134,336 @@
     </div>
   </section>
 
-  <!-- AI Showcase -->
+  <!-- AI Showcase：全真实组件组合的交互式 AI Workspace -->
   <section class="ai-showcase">
     <div class="ai-showcase__inner">
       <div class="ai-showcase__header">
-        <h2 class="ai-showcase__title">AI 原生组件，开箱即用</h2>
-        <p class="ai-showcase__subtitle">为智能对话、流式输出、代码展示等 AI 应用场景而生</p>
+        <div class="ai-showcase__eyebrow">18 个 AI 原生组件 + 双端流式 Hooks</div>
+        <h2 class="ai-showcase__title">交互式 AI 工作台，开箱即用</h2>
+        <p class="ai-showcase__subtitle">
+          下面整个演示窗口均由 Bobo-elements 真实组件直接组合而成——可切换场景、审批工具调用、体验流式发送与明暗主题切换
+        </p>
       </div>
 
-      <div class="ai-showcase__content">
-        <!-- Left: Live Chat Demo -->
-        <div class="ai-demo">
-          <div class="ai-demo__window">
-            <!-- Header -->
-            <div class="ai-demo__titlebar">
-              <div class="ai-demo__dots">
-                <span /><span /><span />
-              </div>
-              <span class="ai-demo__title-text">AI Assistant</span>
-            </div>
-
-            <!-- Messages -->
-            <div class="ai-demo__messages">
-              <!-- User Message -->
-              <div class="ai-demo__msg ai-demo__msg--user">
-                <div class="ai-demo__bubble ai-demo__bubble--user">
-                  {{ demoUserMsg }}
-                </div>
-              </div>
-
-              <!-- Assistant Message -->
-              <div v-if="demoStreamText" class="ai-demo__msg ai-demo__msg--assistant">
-                <div class="ai-demo__bubble ai-demo__bubble--assistant">
-                  <!-- Thinking Phase -->
-                  <ThinkingIndicator
-                    v-if="demoStreamText === '__thinking__'"
-                    color="primary"
-                    text="正在分析..."
-                    size="small"
-                  />
-                  <!-- Streaming + Content Phases -->
-                  <template v-else>
-                    <StreamingText
-                      :text="displayStreamText"
-                      :speed="2"
-                      :interval="30"
-                      :show-cursor="demoStreamText !== '__done__' && !demoStreamText.endsWith('__')"
-                    />
-
-                    <!-- ReasoningBlock -->
-                    <div v-if="showReasoning" class="ai-demo__section">
-                      <ReasoningBlock
-                        title="推理过程"
-                        :duration="currentScenario.duration"
-                        :expanded="demoReasonExpanded"
-                      >
-                        <p style="margin:0;font-size:13px;color:var(--vk-text-color-secondary);line-height:1.7">
-                          {{ currentScenario.reasoning }}
-                        </p>
-                      </ReasoningBlock>
-                    </div>
-
-                    <!-- CodeBlock -->
-                    <div v-if="showCode" class="ai-demo__section">
-                      <CodeBlock
-                        :code="currentScenario.code"
-                        language="typescript"
-                        :show-line-numbers="true"
-                        theme="dark"
-                        :max-height="'220px'"
-                        title="solution.ts"
-                      />
-                    </div>
-
-                    <!-- TokenBadge -->
-                    <div v-if="showTokens" class="ai-demo__tokens">
-                      <TokenBadge :used="currentScenario.tokens" :total="4096" />
-                    </div>
-                  </template>
-                </div>
-              </div>
-            </div>
-
-            <!-- Input Bar -->
-            <div class="ai-demo__input-bar">
-              <span class="ai-demo__input-text">输入消息...</span>
-              <div class="ai-demo__send-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </div>
+      <!-- 交互式 AI Workspace 窗口 -->
+      <div
+        class="ai-workspace"
+        :class="[
+          workspaceDark ? 'dark ai-workspace--dark' : 'ai-workspace--light'
+        ]"
+        :data-theme="workspaceDark ? 'dark' : 'light'"
+      >
+        <!-- 窗口标题栏 + 明暗主题切换 -->
+        <div class="ai-workspace__titlebar">
+          <div class="ai-workspace__dots">
+            <span /><span /><span />
+          </div>
+          <span class="ai-workspace__title-text">Bobo AI Workspace</span>
+          <div class="ai-workspace__theme-switch" role="group" aria-label="演示区明暗主题切换">
+            <button
+              type="button"
+              class="ws-theme-btn"
+              :class="{ 'is-active': workspaceThemeMode === 'auto' }"
+              @click="workspaceThemeMode = 'auto'"
+            >
+              跟随站点
+            </button>
+            <button
+              type="button"
+              class="ws-theme-btn"
+              :class="{ 'is-active': workspaceThemeMode === 'light' }"
+              @click="workspaceThemeMode = 'light'"
+            >
+              浅色
+            </button>
+            <button
+              type="button"
+              class="ws-theme-btn"
+              :class="{ 'is-active': workspaceThemeMode === 'dark' }"
+              @click="workspaceThemeMode = 'dark'"
+            >
+              深色
+            </button>
           </div>
         </div>
 
-        <!-- Right: Capability List -->
-        <div class="ai-caps">
-          <a
-            v-for="cap in aiCapabilities"
-            :key="cap.name"
-            :href="cap.link"
-            class="ai-cap-card"
+        <!-- 移动端场景切换栏 -->
+        <div class="ai-workspace__mobile-tabs">
+          <button
+            v-for="s in workspaceSessions"
+            :key="s.id"
+            type="button"
+            class="ws-mobile-tab"
+            :class="{ 'is-active': activeSceneId === s.id }"
+            @click="selectScene(s.id)"
           >
-            <div class="ai-cap-card__icon" v-html="cap.icon" />
-            <div class="ai-cap-card__info">
-              <div class="ai-cap-card__head">
-                <span class="ai-cap-card__name">{{ cap.name }}</span>
-                <span class="ai-cap-card__label">{{ cap.label }}</span>
-              </div>
-              <p class="ai-cap-card__desc">{{ cap.desc }}</p>
-              <div class="ai-cap-card__tags">
-                <span v-for="tag in cap.tags" :key="tag" class="ai-cap-card__tag">{{ tag }}</span>
-              </div>
+            {{ s.title }}
+          </button>
+        </div>
+
+        <div class="ai-workspace__body">
+          <!-- 左侧会话侧栏：真实 SessionList -->
+          <div class="ai-workspace__sidebar">
+            <SessionList
+              :items="workspaceSessions"
+              :active-id="activeSceneId"
+              searchable
+              search-placeholder="筛选演示场景..."
+              create-text="开屏引导"
+              @select="(item) => selectScene(item.id)"
+              @create="selectScene('welcome')"
+            />
+          </div>
+
+          <!-- 右侧对话主区 -->
+          <div class="ai-workspace__main">
+            <!-- 顶部栏：真实 ModelSelector + TokenBadge -->
+            <div class="ai-workspace__topbar">
+              <ModelSelector v-model="selectedModelId" :models="workspaceModels" size="small" />
+              <TokenBadge
+                :used="currentTokenStats.used"
+                :total="128000"
+                :input-tokens="currentTokenStats.input"
+                :output-tokens="currentTokenStats.output"
+                auto-status
+                show-progress
+                size="small"
+              />
             </div>
-          </a>
+
+            <!-- 对话消息区：真实 ConversationList -->
+            <ConversationList ref="workspaceListRef" height="430px" :show-scroll-to-bottom="true">
+              <!-- 场景 1：Welcome + Prompts（空状态引导） -->
+              <template v-if="activeSceneId === 'welcome' && liveMessages.length === 0" #empty>
+                <div class="ws-welcome-wrap">
+                  <Welcome
+                    align="center"
+                    variant="filled"
+                    title="你好，我是 Bobo AI 助手"
+                    description="点击下方任意推荐词，立即体验流式回复、思维链与代码块组合效果。"
+                  >
+                    <Prompts
+                      :items="welcomePrompts"
+                      layout="grid"
+                      variant="card"
+                      @select="handlePromptSelect"
+                    />
+                  </Welcome>
+                </div>
+              </template>
+
+              <!-- 场景 2：流式推理 + 代码块 + MessageActions -->
+              <template v-if="activeSceneId === 'streaming'">
+                <ChatMessage role="user" :timestamp="demoTime1">
+                  帮我写一个支持 cancel 和 flush 的 TypeScript 防抖函数
+                </ChatMessage>
+                <ChatMessage
+                  role="assistant"
+                  sender-name="Bobo AI"
+                  :timestamp="demoTime2"
+                >
+                  <div class="ws-msg-stack">
+                    <ReasoningBlock
+                      title="深度推理过程"
+                      status="done"
+                      :duration="856"
+                      :token-count="320"
+                    >
+                      1. 定义通用函数泛型签名，保留原参数推导；2. 维护 timer 与 lastArgs 闭包状态；3. 补充 cancel 清理定时器与 flush 立即执行能力。
+                    </ReasoningBlock>
+                    <MarkdownRenderer :content="streamingAnswerIntro" :code-copyable="false" />
+                    <div class="ws-streaming-note">
+                      <StreamingText
+                        text="流式输出就绪 · 可点击下方分支切换或重新生成对比不同实现"
+                        :speed="2"
+                        :interval="32"
+                      />
+                    </div>
+                    <CodeBlock
+                      :code="currentBranchCode"
+                      language="typescript"
+                      title="debounce.ts"
+                      :theme="workspaceDark ? 'dark' : 'light'"
+                      show-line-numbers
+                      collapsible
+                      show-wrap-toggle
+                      max-height="210px"
+                    />
+                    <MessageActions
+                      :content="currentBranchCode"
+                      regenerable
+                      :feedback="msgFeedback"
+                      :branch-index="msgBranch"
+                      :branch-total="3"
+                      @feedback="(val) => (msgFeedback = val)"
+                      @branch-change="(idx) => (msgBranch = idx)"
+                      @regenerate="handleRegenerateDemo"
+                    />
+                  </div>
+                </ChatMessage>
+              </template>
+
+              <!-- 场景 3：Agent 工具调用审批 + RAG 参考来源 -->
+              <template v-else-if="activeSceneId === 'agent'">
+                <ChatMessage role="user" :timestamp="demoTime1">
+                  帮我排查订单表慢查询，并给出索引优化依据
+                </ChatMessage>
+                <ChatMessage role="assistant" sender-name="SQL Agent" :timestamp="demoTime2">
+                  <div class="ws-msg-stack">
+                    <ToolCall
+                      title="执行 SQL 诊断分析"
+                      tool-name="run_sql"
+                      :status="toolStatus"
+                      :duration="toolStatus === 'success' ? 184 : undefined"
+                      :default-expanded="true"
+                      :args="{ table: 'orders', analyze: true }"
+                      :result="toolStatus === 'success' ? { scanType: 'Seq Scan', suggestIndex: 'idx_orders_created_at' } : undefined"
+                      :error-message="toolStatus === 'error' ? '用户已拒绝执行该数据库诊断操作' : undefined"
+                      @approve="toolStatus = 'success'"
+                      @reject="toolStatus = 'error'"
+                    />
+                    <MarkdownRenderer
+                      content="建议为 `orders(created_at)` 添加联合索引，可将全表扫描耗时从 **1.4s** 降至 **12ms**。"
+                      :code-copyable="false"
+                    />
+                    <Sources :items="ragSources" variant="cards" :default-expanded="true" />
+                  </div>
+                </ChatMessage>
+              </template>
+
+              <!-- 场景 4：AI 代码重构 Diff 对比 -->
+              <template v-else-if="activeSceneId === 'diff'">
+                <ChatMessage role="user" :timestamp="demoTime1">
+                  帮我把 greet 函数重构为模板字符串并支持默认参数
+                </ChatMessage>
+                <ChatMessage role="assistant" sender-name="Code Reviewer" :timestamp="demoTime2">
+                  <div class="ws-msg-stack">
+                    <DiffCodeBlock
+                      title="src/utils/greet.ts"
+                      :old-code="diffOldCode"
+                      :new-code="diffNewCode"
+                      :theme="workspaceDark ? 'dark' : 'light'"
+                      actionable
+                      @apply="diffDecision = 'applied'"
+                      @reject="diffDecision = 'rejected'"
+                    />
+                    <div v-if="diffDecision" class="ws-diff-feedback">
+                      {{ diffDecision === 'applied' ? '✓ 已将修改应用到工作区' : '✕ 已忽略本次变更建议' }}
+                    </div>
+                  </div>
+                </ChatMessage>
+              </template>
+
+              <!-- 用户在演示框发送或点击推荐词产生的实时模拟对话 -->
+              <template v-for="msg in liveMessages" :key="msg.id">
+                <ChatMessage
+                  :role="msg.role"
+                  :sender-name="msg.role === 'assistant' ? currentModelLabel : undefined"
+                  :status="msg.status"
+                  :timestamp="msg.timestamp"
+                >
+                  <template v-if="msg.role === 'user'">
+                    {{ msg.content }}
+                  </template>
+                  <template v-else>
+                    <div class="ws-msg-stack">
+                      <ThinkingIndicator
+                        v-if="msg.status === 'streaming' && !msg.content"
+                        variant="wave"
+                        size="small"
+                        text="正在生成回答..."
+                      />
+                      <template v-else>
+                        <ReasoningBlock
+                          v-if="msg.reasoning"
+                          title="深度思考"
+                          :status="msg.status === 'streaming' ? 'thinking' : 'done'"
+                          :duration="640"
+                          :token-count="128"
+                        >
+                          {{ msg.reasoning }}
+                        </ReasoningBlock>
+                        <MarkdownRenderer
+                          :content="msg.content"
+                          :streaming="msg.status === 'streaming'"
+                        />
+                        <MessageActions
+                          v-if="msg.status === 'sent'"
+                          :content="msg.content"
+                          :feedback="null"
+                        />
+                      </template>
+                    </div>
+                  </template>
+                </ChatMessage>
+              </template>
+            </ConversationList>
+
+            <!-- 底部输入区：真实 PromptInput + Attachment -->
+            <div class="ai-workspace__composer">
+              <PromptInput
+                v-model="chatInput"
+                size="small"
+                clearable
+                stoppable
+                :streaming="isSimulating"
+                placeholder="输入问题体验流式回复（Enter 发送）..."
+                hint-text="Enter 发送 · 点击左侧列表切换不同组件场景"
+                @submit="handleWorkspaceSubmit"
+                @stop="stopSimulation"
+              >
+                <template v-if="workspaceAttachments.length > 0" #header>
+                  <Attachment :items="workspaceAttachments" @remove="removeAttachment" />
+                </template>
+                <template #toolbar>
+                  <button
+                    type="button"
+                    class="ws-toolbar-chip"
+                    :class="{ 'is-active': deepThinkEnabled }"
+                    @click="deepThinkEnabled = !deepThinkEnabled"
+                  >
+                    深度思考
+                  </button>
+                  <button
+                    v-if="workspaceAttachments.length === 0"
+                    type="button"
+                    class="ws-toolbar-chip"
+                    @click="restoreAttachments"
+                  >
+                    恢复示例附件
+                  </button>
+                </template>
+              </PromptInput>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Tech Tags -->
-      <div class="ai-tech-tags">
-        <span v-for="tag in aiTechTags" :key="tag" class="ai-tech-tag">{{ tag }}</span>
+      <!-- 4 象限 AI 能力快速直达 -->
+      <div class="ai-matrix">
+        <div v-for="group in aiCapabilityMatrix" :key="group.title" class="ai-matrix-card">
+          <div class="ai-matrix-card__head">
+            <span class="ai-matrix-card__title">{{ group.title }}</span>
+            <span class="ai-matrix-card__count">{{ group.items.length }}</span>
+          </div>
+          <p class="ai-matrix-card__desc">{{ group.desc }}</p>
+          <div class="ai-matrix-card__links">
+            <a
+              v-for="item in group.items"
+              :key="item.name"
+              :href="`/components/${item.link}`"
+              class="ai-matrix-pill"
+            >
+              {{ item.name }}
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- CTA Button -->
       <div class="ai-showcase__cta">
         <a class="btn-primary" href="/components/thinking-indicator">
-          <span>查看 AI 组件</span>
+          <span>查看全部 18 个 AI 组件</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -330,12 +534,11 @@
             <span>Vue3</span>
           </div>
           <div class="usage-code">
-            <pre><code><span class="code-keyword">import</span> { BButton } <span class="code-keyword">from</span> <span class="code-string">'@bobocn/element/vue'</span>
+            <pre><code><span class="code-keyword">import</span> { ChatMessage, PromptInput } <span class="code-keyword">from</span> <span class="code-string">'@bobocn/element/vue'</span>
 
 <span class="code-comment">&lt;template&gt;</span>
-  <span class="code-tag">&lt;BButton</span> <span class="code-attr">type</span>=<span class="code-string">"primary"</span><span class="code-tag">&gt;</span>
-    点击我
-  <span class="code-tag">&lt;/BButton&gt;</span>
+  <span class="code-tag">&lt;ChatMessage</span> <span class="code-attr">role</span>=<span class="code-string">"assistant"</span><span class="code-tag">&gt;</span>你好，有什么可以帮您？<span class="code-tag">&lt;/ChatMessage&gt;</span>
+  <span class="code-tag">&lt;PromptInput</span> <span class="code-attr">v-model</span>=<span class="code-string">"prompt"</span> <span class="code-attr">stoppable</span> <span class="code-attr">@submit</span>=<span class="code-string">"send"</span> <span class="code-tag">/&gt;</span>
 <span class="code-comment">&lt;/template&gt;</span></code></pre>
           </div>
         </div>
@@ -350,13 +553,14 @@
             <span>React</span>
           </div>
           <div class="usage-code">
-            <pre><code><span class="code-keyword">import</span> { Button } <span class="code-keyword">from</span> <span class="code-string">'@bobocn/element/react'</span>
+            <pre><code><span class="code-keyword">import</span> { ChatMessage, PromptInput } <span class="code-keyword">from</span> <span class="code-string">'@bobocn/element/react'</span>
 
 <span class="code-keyword">function</span> <span class="code-func">App</span>() {
   <span class="code-keyword">return</span> (
-    <span class="code-tag">&lt;Button</span> <span class="code-attr">type</span>=<span class="code-string">"primary"</span><span class="code-tag">&gt;</span>
-      Click Me
-    <span class="code-tag">&lt;/Button&gt;</span>
+    &lt;&gt;
+      <span class="code-tag">&lt;ChatMessage</span> <span class="code-attr">role</span>=<span class="code-string">"assistant"</span><span class="code-tag">&gt;</span>你好，有什么可以帮您？<span class="code-tag">&lt;/ChatMessage&gt;</span>
+      <span class="code-tag">&lt;PromptInput</span> <span class="code-attr">value</span>=<span class="code-string">{prompt}</span> <span class="code-attr">stoppable</span> <span class="code-attr">onSubmit</span>=<span class="code-string">{send}</span> <span class="code-tag">/&gt;</span>
+    &lt;/&gt;
   )
 }</code></pre>
           </div>
@@ -377,12 +581,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import StreamingText from '../../../src/vue/components/StreamingText.vue'
+import { ref, computed, onUnmounted } from 'vue'
+import { useData } from 'vitepress'
 import ThinkingIndicator from '../../../src/vue/components/ThinkingIndicator.vue'
+import StreamingText from '../../../src/vue/components/StreamingText.vue'
 import CodeBlock from '../../../src/vue/components/CodeBlock.vue'
 import ReasoningBlock from '../../../src/vue/components/ReasoningBlock.vue'
 import TokenBadge from '../../../src/vue/components/TokenBadge.vue'
+import MarkdownRenderer from '../../../src/vue/components/MarkdownRenderer.vue'
+import ChatMessage from '../../../src/vue/components/ChatMessage.vue'
+import ConversationList from '../../../src/vue/components/ConversationList.vue'
+import PromptInput from '../../../src/vue/components/PromptInput.vue'
+import Welcome from '../../../src/vue/components/Welcome.vue'
+import Prompts from '../../../src/vue/components/Prompts.vue'
+import Attachment from '../../../src/vue/components/Attachment.vue'
+import ToolCall from '../../../src/vue/components/ToolCall.vue'
+import Sources from '../../../src/vue/components/Sources.vue'
+import SessionList from '../../../src/vue/components/SessionList.vue'
+import MessageActions from '../../../src/vue/components/MessageActions.vue'
+import DiffCodeBlock from '../../../src/vue/components/DiffCodeBlock.vue'
+import ModelSelector from '../../../src/vue/components/ModelSelector.vue'
+import type { AttachmentItem } from '../../../src/core/components/attachment.types'
+import type { PromptItem } from '../../../src/core/components/prompts.types'
+import type { ToolCallStatus } from '../../../src/core/components/tool-call.types'
+import type { FeedbackValue } from '../../../src/core/components/message-actions.types'
+
+const { isDark } = useData()
 
 const heroTags = ['AI 原生', 'Vue3', 'React', 'TypeScript', '流式输出']
 
@@ -393,13 +617,13 @@ const stats = [
   { value: '100%', label: 'TypeScript' },
 ]
 
-// Generate random particle positions
-const particlePositions = Array.from({ length: 24 }, () => ({
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  delay: Math.random() * 8,
-  duration: 4 + Math.random() * 6,
-  size: 2 + Math.random() * 4,
+// 固定粒子坐标，避免 SSR 与客户端水合不一致
+const particlePositions = Array.from({ length: 24 }, (_, idx) => ({
+  x: ((idx * 37) % 94) + 3,
+  y: ((idx * 53) % 90) + 5,
+  delay: (idx % 8) * 0.9,
+  duration: 4 + (idx % 5) * 1.1,
+  size: 2 + (idx % 4),
 }))
 
 const pkgManager = ref('npm')
@@ -420,173 +644,258 @@ function copyInstall() {
   setTimeout(() => (copied.value = false), 2000)
 }
 
-// ===== AI Showcase Demo =====
-const demoPhase = ref(0)
-const demoUserMsg = ref('')
-const demoStreamText = ref('')
-const demoReasonExpanded = ref(false)
-const demoTimers: ReturnType<typeof setTimeout>[] = []
+// ===== 交互式 AI Workspace 演示控制 =====
+const workspaceThemeMode = ref<'auto' | 'light' | 'dark'>('auto')
+const workspaceDark = computed(() =>
+  workspaceThemeMode.value === 'auto' ? isDark.value : workspaceThemeMode.value === 'dark'
+)
 
-const demoScenarios = [
-  {
-    user: '帮我写一个防抖函数',
-    thinking: 1200,
-    streamText: '好的，这是一个通用的 TypeScript 防抖函数，支持自定义延迟和取消操作：',
-    reasoning: '用户需要一个防抖函数，我需要考虑：泛型支持、返回值类型、cancel 和 flush 方法，以及正确的 this 绑定和定时器管理。',
-    duration: 856,
-    code: `type AnyFn = (...args: any[]) => any
+const activeSceneId = ref<'welcome' | 'streaming' | 'agent' | 'diff'>('streaming')
+const workspaceSessions = [
+  { id: 'streaming', title: '流式推理 · Code & Reasoning', pinned: true },
+  { id: 'agent', title: 'Agent · 工具审批与溯源', updatedAt: new Date() },
+  { id: 'diff', title: '代码评审 · Diff 对比', updatedAt: new Date() },
+  { id: 'welcome', title: '开屏引导 · Welcome + Prompts', updatedAt: new Date(Date.now() - 86_400_000 * 2) },
+]
 
-function debounce<T extends AnyFn>(
+const selectedModelId = ref('gpt-4o')
+const workspaceModels = [
+  { id: 'gpt-4o', name: 'GPT-4o', contextLength: '128K', description: '通用多模态旗舰模型', tags: ['Vision', 'Tools'] },
+  { id: 'deepseek-r1', name: 'DeepSeek-R1', contextLength: '64K', description: '强推理思维链模型', tags: ['Thinking'] },
+  { id: 'claude-3-7', name: 'Claude 3.7', contextLength: '200K', description: '代码生成与架构分析', tags: ['Coding', 'Agent'] },
+]
+
+const currentModelLabel = computed(
+  () => workspaceModels.find(m => m.id === selectedModelId.value)?.name || 'Bobo AI'
+)
+
+const demoTime1 = new Date(Date.now() - 120_000)
+const demoTime2 = new Date(Date.now() - 60_000)
+
+// 场景 1：Welcome + Prompts
+const welcomePrompts: PromptItem[] = [
+  { key: 'debounce', label: '写一个 TypeScript 防抖函数', description: '支持 cancel 与 flush 方法', icon: 'code' },
+  { key: 'sql', label: '排查订单表慢查询原因', description: '给出索引优化与执行计划建议', icon: 'bolt' },
+]
+
+// 场景 2：Streaming + Code + Actions
+const streamingAnswerIntro = '好的，这是一个通用的 **TypeScript 防抖函数**，支持自定义延迟、取消与立即执行：'
+const branchCodes = [
+  `export function debounce<T extends (...args: any[]) => any>(
   fn: T,
-  delay: number
-): T & { cancel: () => void; flush: () => void } {
+  delay = 300
+) {
   let timer: ReturnType<typeof setTimeout> | null = null
-  let lastArgs: Parameters<T> | null = null
-
-  const debounced = ((...args: Parameters<T>) => {
-    lastArgs = args
+  const debounced = (...args: Parameters<T>) => {
     if (timer) clearTimeout(timer)
-    timer = setTimeout(() => {
-      fn(...args)
-      timer = null
-      lastArgs = null
-    }, delay)
-  }) as T & { cancel: () => void; flush: () => void }
-
-  debounced.cancel = () => {
-    if (timer) { clearTimeout(timer); timer = null }
-    lastArgs = null
+    timer = setTimeout(() => fn(...args), delay)
   }
-
-  debounced.flush = () => {
-    if (timer && lastArgs) {
-      fn(...lastArgs)
-      clearTimeout(timer)
-      timer = null
-      lastArgs = null
-    }
-  }
-
+  debounced.cancel = () => { if (timer) clearTimeout(timer) }
   return debounced
 }`,
-    tokens: 1247,
-    pause: 4000,
+  `export function debounce<T extends (...args: any[]) => any>(fn: T, delay = 300) {
+  let timer: ReturnType<typeof setTimeout> | null = null
+  let lastArgs: Parameters<T> | null = null
+  const run = (...args: Parameters<T>) => {
+    lastArgs = args
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => { fn(...args); timer = null }, delay)
+  }
+  run.flush = () => { if (timer && lastArgs) { fn(...lastArgs); clearTimeout(timer) } }
+  return run
+}`,
+  `// 极简防抖 Hook 封装
+export const useDebounceFn = <T extends (...args: any[]) => any>(fn: T, ms = 250) => {
+  let id: ReturnType<typeof setTimeout> | undefined
+  return (...args: Parameters<T>) => {
+    clearTimeout(id)
+    id = setTimeout(() => fn(...args), ms)
+  }
+}`
+]
+const msgBranch = ref(1)
+const msgFeedback = ref<FeedbackValue>(null)
+const currentBranchCode = computed(() => branchCodes[(msgBranch.value - 1) % branchCodes.length])
+
+// 场景 3：ToolCall + Sources
+const toolStatus = ref<ToolCallStatus>('awaiting-approval')
+const ragSources = [
+  { id: 1, title: 'PostgreSQL 索引优化最佳实践', url: 'https://www.postgresql.org/docs/', domain: 'postgresql.org', snippet: '针对高频范围查询建议为排序与过滤列建立 B-Tree 复合索引。' },
+  { id: 2, title: '慢查询日志分析规范', url: 'https://www.bobocn.cloud/', domain: 'bobocn.cloud', snippet: '结合 EXPLAIN ANALYZE 定位 Seq Scan 全表扫描节点。' },
+]
+
+// 场景 4：DiffCodeBlock
+const diffOldCode = `function greet(name: string) {
+  return 'Hello ' + name
+}`
+const diffNewCode = `function greet(name = 'Developer') {
+  return \`Hello, \${name}!\`
+}`
+const diffDecision = ref<'applied' | 'rejected' | null>(null)
+
+// 附件与实时流式对话模拟
+const defaultAttachments: AttachmentItem[] = [
+  { id: 'att-1', name: 'slow_query.log', size: 18432, status: 'done' },
+  { id: 'att-2', name: 'schema.sql', size: 6144, status: 'done' },
+]
+const workspaceAttachments = ref<AttachmentItem[]>([...defaultAttachments])
+const deepThinkEnabled = ref(true)
+const chatInput = ref('')
+const isSimulating = ref(false)
+const workspaceListRef = ref<{ scrollToBottom: () => void } | null>(null)
+
+interface LiveDemoMsg {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  reasoning?: string
+  status: 'sent' | 'streaming'
+  timestamp: Date
+}
+const liveMessages = ref<LiveDemoMsg[]>([])
+let simTimer: ReturnType<typeof setInterval> | null = null
+let simTimeout: ReturnType<typeof setTimeout> | null = null
+
+const currentTokenStats = computed(() => {
+  const baseByScene: Record<string, { used: number; input: number; output: number }> = {
+    welcome: { used: 320, input: 240, output: 80 },
+    streaming: { used: 1247, input: 420, output: 827 },
+    agent: { used: 2680, input: 1420, output: 1260 },
+    diff: { used: 960, input: 510, output: 450 },
+  }
+  const base = baseByScene[activeSceneId.value] || baseByScene.streaming
+  const extra = liveMessages.value.length * 180
+  return {
+    used: base.used + extra,
+    input: base.input + Math.round(extra * 0.4),
+    output: base.output + Math.round(extra * 0.6),
+  }
+})
+
+function stopSimulation() {
+  if (simTimeout) { clearTimeout(simTimeout); simTimeout = null }
+  if (simTimer) { clearInterval(simTimer); simTimer = null }
+  isSimulating.value = false
+  const last = liveMessages.value[liveMessages.value.length - 1]
+  if (last && last.status === 'streaming') {
+    last.status = 'sent'
+  }
+}
+
+function selectScene(id: string) {
+  stopSimulation()
+  liveMessages.value = []
+  activeSceneId.value = id as typeof activeSceneId.value
+  if (id === 'agent') toolStatus.value = 'awaiting-approval'
+  if (id === 'diff') diffDecision.value = null
+}
+
+function removeAttachment(item: AttachmentItem) {
+  workspaceAttachments.value = workspaceAttachments.value.filter(f => f.id !== item.id)
+}
+
+function restoreAttachments() {
+  workspaceAttachments.value = [...defaultAttachments]
+}
+
+function handlePromptSelect(item: PromptItem) {
+  handleWorkspaceSubmit(item.label)
+}
+
+function handleRegenerateDemo() {
+  msgBranch.value = (msgBranch.value % 3) + 1
+}
+
+function handleWorkspaceSubmit(text: string) {
+  const trimmed = text.trim()
+  if (!trimmed || isSimulating.value) return
+
+  chatInput.value = ''
+  const userId = `u_${Date.now()}`
+  const assistantId = `a_${Date.now()}`
+  liveMessages.value.push({
+    id: userId,
+    role: 'user',
+    content: trimmed,
+    status: 'sent',
+    timestamp: new Date(),
+  })
+  liveMessages.value.push({
+    id: assistantId,
+    role: 'assistant',
+    content: '',
+    reasoning: deepThinkEnabled.value ? `已分析问题「${trimmed}」，正在组织结构化代码与排查思路...` : undefined,
+    status: 'streaming',
+    timestamp: new Date(),
+  })
+
+  isSimulating.value = true
+  const replyText = `收到你的问题：**${trimmed}**\n\n当前由 \`${currentModelLabel.value}\` 模拟流式响应：\n- 已接入 \`ConversationList\` 自动滚底与 \`MarkdownRenderer\` 流式容错渲染\n- 你可以随时点击右下角 **停止** 按钮中断生成。`
+
+  simTimeout = setTimeout(() => {
+    let cursor = 0
+    simTimer = setInterval(() => {
+      const target = liveMessages.value.find(m => m.id === assistantId)
+      if (!target) {
+        stopSimulation()
+        return
+      }
+      cursor = Math.min(cursor + 4, replyText.length)
+      target.content = replyText.slice(0, cursor)
+      if (cursor >= replyText.length) {
+        target.status = 'sent'
+        stopSimulation()
+      }
+    }, 28)
+  }, 450)
+}
+
+onUnmounted(stopSimulation)
+
+const aiCapabilityMatrix = [
+  {
+    title: '对话与引导',
+    desc: '覆盖开屏引导、推荐词、多模态附件与消息气泡容器。',
+    items: [
+      { name: 'ConversationList', link: 'conversation-list' },
+      { name: 'ChatMessage', link: 'chat-message' },
+      { name: 'PromptInput', link: 'prompt-input' },
+      { name: 'Welcome', link: 'welcome' },
+      { name: 'Prompts', link: 'prompts' },
+      { name: 'Attachment', link: 'attachment' },
+    ],
   },
   {
-    user: '写一个 Python 快速排序',
-    thinking: 980,
-    streamText: '这是一个简洁的 Python 快速排序实现，使用列表推导式使代码更 Pythonic：',
-    reasoning: '快速排序核心是分治思想：选基准值，分三部分（小于、等于、大于），递归拼接。列表推导式可以让实现更简洁。',
-    duration: 620,
-    code: `from typing import List
-
-def quicksort(arr: List[int]) -> List[int]:
-    """简洁的快速排序实现"""
-    if len(arr) <= 1:
-        return arr
-
-    pivot = arr[len(arr) // 2]
-    left = [x for x in arr if x < pivot]
-    middle = [x for x in arr if x == pivot]
-    right = [x for x in arr if x > pivot]
-
-    return quicksort(left) + middle + quicksort(right)
-
-# 使用示例
-numbers = [3, 6, 8, 10, 1, 2, 1]
-print(quicksort(numbers))
-# 输出: [1, 1, 2, 3, 6, 8, 10]`,
-    tokens: 892,
-    pause: 3500,
+    title: '内容与流式渲染',
+    desc: '字素簇流式吐字、流式 Markdown 容错、词法高亮与代码 Diff。',
+    items: [
+      { name: 'StreamingText', link: 'streaming-text' },
+      { name: 'MarkdownRenderer', link: 'markdown-renderer' },
+      { name: 'CodeBlock', link: 'code-block' },
+      { name: 'DiffCodeBlock', link: 'diff-code-block' },
+    ],
+  },
+  {
+    title: '推理与 Agent / RAG',
+    desc: '思维链折叠、工具调用人工确认审批以及参考来源溯源。',
+    items: [
+      { name: 'ThinkingIndicator', link: 'thinking-indicator' },
+      { name: 'ReasoningBlock', link: 'reasoning-block' },
+      { name: 'ToolCall', link: 'tool-call' },
+      { name: 'Sources', link: 'sources' },
+    ],
+  },
+  {
+    title: '工作台与反馈',
+    desc: '多会话分组管理、模型切换、Token 进度统计与消息反馈栏。',
+    items: [
+      { name: 'SessionList', link: 'session-list' },
+      { name: 'ModelSelector', link: 'model-selector' },
+      { name: 'TokenBadge', link: 'token-badge' },
+      { name: 'MessageActions', link: 'message-actions' },
+    ],
   },
 ]
-
-const aiCapabilities = [
-  { icon: '&#9889;', name: 'StreamingText', label: '流式文本', desc: '逐字流式输出，3 种光标样式，自动检测追加与重置', tags: ['逐字输出', '光标样式'], link: '/components/streaming-text' },
-  { icon: '&#128187;', name: 'CodeBlock', label: '代码块', desc: '语法高亮 + 行号 + 一键复制，亮色 / 暗色主题切换', tags: ['语法高亮', '亮暗主题'], link: '/components/code-block' },
-  { icon: '&#129504;', name: 'ReasoningBlock', label: '思维链', desc: '可折叠面板展示推理过程，附带耗时与 Token 元信息', tags: ['折叠展示', '元信息'], link: '/components/reasoning-block' },
-  { icon: '&#128172;', name: 'ChatMessage', label: '聊天气泡', desc: '区分 user / assistant / system 角色，支持状态指示与重试', tags: ['多角色', '状态指示'], link: '/components/chat-message' },
-  { icon: '&#9997;', name: 'PromptInput', label: '提示词输入', desc: '自适应高度，Enter 发送，流式输出时自动禁用', tags: ['自适应', '流式感知'], link: '/components/prompt-input' },
-  { icon: '&#128203;', name: 'TokenBadge', label: 'Token 标签', desc: '显示 Token 消耗量，支持正常 / 警告 / 危险三种状态', tags: ['自动格式化', '状态色'], link: '/components/token-badge' },
-]
-
-function scheduleNext(fn: () => void, delay: number) {
-  const t = setTimeout(fn, delay)
-  demoTimers.push(t)
-  return t
-}
-
-function runDemo() {
-  const scenario = demoScenarios[demoPhase.value % demoScenarios.length]
-
-  // Reset
-  demoStreamText.value = ''
-  demoReasonExpanded.value = false
-  demoUserMsg.value = scenario.user
-
-  // Phase 1: Thinking
-  scheduleNext(() => {
-    demoStreamText.value = '__thinking__'
-  }, 600)
-
-  // Phase 2: Streaming text
-  scheduleNext(() => {
-    demoStreamText.value = scenario.streamText
-  }, 600 + scenario.thinking)
-
-  // Phase 3: Reasoning + Code
-  const streamDelay = scenario.streamText.length * 40 + 400
-  scheduleNext(() => {
-    demoStreamText.value = scenario.streamText + '__done__'
-  }, 600 + scenario.thinking + streamDelay)
-
-  scheduleNext(() => {
-    demoStreamText.value = scenario.streamText + '__reasoning__'
-  }, 600 + scenario.thinking + streamDelay + 400)
-
-  scheduleNext(() => {
-    demoStreamText.value = scenario.streamText + '__code__'
-  }, 600 + scenario.thinking + streamDelay + 1800)
-
-  scheduleNext(() => {
-    demoStreamText.value = scenario.streamText + '__tokens__'
-  }, 600 + scenario.thinking + streamDelay + 2200)
-
-  // Next round
-  const totalDelay = 600 + scenario.thinking + streamDelay + 2200 + scenario.pause
-  scheduleNext(() => {
-    demoPhase.value++
-    runDemo()
-  }, totalDelay)
-}
-
-onMounted(() => {
-  scheduleNext(runDemo, 1500)
-})
-
-onUnmounted(() => {
-  demoTimers.forEach(clearTimeout)
-})
-
-const currentScenario = computed(() => demoScenarios[demoPhase.value % demoScenarios.length])
-
-const displayStreamText = computed(() => {
-  const v = demoStreamText.value
-  if (v === '__thinking__') return ''
-  return v.replace(/__(done|reasoning|code|tokens)__$/, '')
-})
-
-const showReasoning = computed(() =>
-  demoStreamText.value.endsWith('__reasoning__') ||
-  demoStreamText.value.endsWith('__code__') ||
-  demoStreamText.value.endsWith('__tokens__')
-)
-const showCode = computed(() =>
-  demoStreamText.value.endsWith('__code__') || demoStreamText.value.endsWith('__tokens__')
-)
-const showTokens = computed(() => demoStreamText.value.endsWith('__tokens__'))
-
-const aiTechTags = ['流式输出', '代码高亮', '思维链', '多轮对话', 'Token 统计', '自适应输入', '自动滚底', '亮暗主题', '无障碍', 'TypeScript']
 
 const features = [
   {
@@ -1673,72 +1982,32 @@ const componentGroups = [
   gap: 12px;
 }
 
-/* ===== AI Showcase ===== */
+/* ===== AI Showcase：交互式工作台 + 明暗切换 ===== */
 .ai-showcase {
-  --ai-bg: #f5f5fa;
-  --ai-bg-deep: #eaeaf2;
+  --ai-bg: #f5f6fb;
   --ai-text: #1a1a2e;
-  --ai-text-muted: #6a6a8a;
-  --ai-text-dim: #9a9ab0;
-  --ai-border: rgba(0, 0, 0, 0.08);
+  --ai-text-muted: #64748b;
+  --ai-border: rgba(15, 23, 42, 0.08);
   --ai-card-bg: #ffffff;
-  --ai-card-hover: rgba(100, 108, 255, 0.04);
-  --ai-accent: #646cff;
-  --ai-accent-soft: rgba(100, 108, 255, 0.08);
-  --ai-green: #42b883;
-  --ai-chat-bg: #ffffff;
-  --ai-chat-header: #f8f8fc;
-  --ai-chat-input-bg: #f5f5fa;
-  --ai-bubble-user: linear-gradient(135deg, #3451b2, #646cff);
-  --ai-bubble-assistant-bg: #f0f0f8;
-  --ai-bubble-assistant-text: #2a2a4a;
-  --ai-tag-bg: rgba(100, 108, 255, 0.08);
-  --ai-tag-text: #5a5a8a;
+  --ai-accent: #6366f1;
+  --ai-accent-soft: rgba(99, 102, 241, 0.1);
 
   position: relative;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
   width: 100vw;
   background: linear-gradient(to bottom, var(--vp-c-bg) 0px, var(--ai-bg) 140px);
-  padding: 80px 0;
+  padding: 76px 0;
   overflow: hidden;
 }
 
 .dark .ai-showcase {
-  --ai-bg: #0f0f1a;
-  --ai-bg-deep: #0a0a14;
-  --ai-text: rgba(255, 255, 255, 0.9);
-  --ai-text-muted: rgba(255, 255, 255, 0.5);
-  --ai-text-dim: rgba(255, 255, 255, 0.35);
-  --ai-border: rgba(255, 255, 255, 0.06);
-  --ai-card-bg: rgba(255, 255, 255, 0.03);
-  --ai-card-hover: rgba(100, 108, 255, 0.08);
-  --ai-accent-soft: rgba(100, 108, 255, 0.1);
-  --ai-chat-bg: #1a1a2e;
-  --ai-chat-header: rgba(255, 255, 255, 0.03);
-  --ai-chat-input-bg: rgba(255, 255, 255, 0.02);
-  --ai-bubble-assistant-bg: rgba(255, 255, 255, 0.06);
-  --ai-bubble-assistant-text: rgba(255, 255, 255, 0.9);
-  --ai-tag-bg: rgba(100, 108, 255, 0.1);
-  --ai-tag-text: rgba(255, 255, 255, 0.5);
-
-  background: linear-gradient(to bottom, var(--vp-c-bg) 0px, var(--ai-bg) 140px);
-}
-
-.ai-showcase::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(100, 108, 255, 0.04), transparent),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(66, 184, 131, 0.03), transparent);
-  pointer-events: none;
-}
-
-.dark .ai-showcase::before {
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(100, 108, 255, 0.06), transparent),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(66, 184, 131, 0.04), transparent);
+  --ai-bg: #0b0f19;
+  --ai-text: #f1f5f9;
+  --ai-text-muted: #94a3b8;
+  --ai-border: rgba(255, 255, 255, 0.08);
+  --ai-card-bg: #111827;
+  --ai-accent-soft: rgba(129, 140, 248, 0.14);
 }
 
 .ai-showcase__inner {
@@ -1750,278 +2019,397 @@ const componentGroups = [
 
 .ai-showcase__header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 36px;
+}
+
+.ai-showcase__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ai-accent);
+  background: var(--ai-accent-soft);
+  border: 1px solid rgba(99, 102, 241, 0.22);
 }
 
 .ai-showcase__title {
   font-size: 36px;
   font-weight: 800;
   line-height: 1.3;
-  margin: 0 0 12px;
-  background: linear-gradient(135deg, #646cff, #42b883);
+  margin: 0 0 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6 50%, #10b981);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .ai-showcase__subtitle {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--ai-text-muted);
-  margin: 0;
+  margin: 0 auto;
+  max-width: 720px;
+  line-height: 1.7;
 }
 
-.ai-showcase__content {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-/* Chat Demo Window */
-.ai-demo {
-  flex: 1.2;
-  min-width: 0;
-}
-
-.ai-demo__window {
-  background: var(--ai-chat-bg);
+/* 工作台容器 + 独立浅色/深色 Variable Reset */
+.ai-workspace {
   border-radius: 16px;
   border: 1px solid var(--ai-border);
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-  min-width: 0;
-  max-width: 100%;
+  box-shadow: 0 24px 64px -12px rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  color: #1e293b;
 }
 
-.dark .ai-demo__window {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+.ai-workspace--light {
+  --vk-bg-color: #ffffff;
+  --vk-bg-color-overlay: #ffffff;
+  --vk-fill-color-blank: #ffffff;
+  --vk-fill-color-light: #f5f7fa;
+  --vk-fill-color: #f0f2f5;
+  --vk-text-color-primary: #303133;
+  --vk-text-color-regular: #606266;
+  --vk-text-color-secondary: #909399;
+  --vk-text-color-placeholder: #a8abb2;
+  --vk-border-color: #dcdfe6;
+  --vk-border-color-light: #e4e7ed;
+  --vk-border-color-lighter: #ebeef5;
+  --vk-ai-bg-assistant: #f8fafc;
 }
 
-.ai-demo__titlebar {
+/* 当外层文档站处于暗黑模式而演示窗切为浅色时，重置内部子组件显式亮色兜底 */
+html.dark .ai-workspace--light :deep(.vk-conversation-list) {
+  --vk-conversation-list-bg: #ffffff;
+  --vk-conversation-list-empty-color: #a8abb2;
+}
+
+html.dark .ai-workspace--light :deep(.vk-chat-message--assistant .vk-chat-message__bubble) {
+  background-color: #f8fafc;
+  color: #303133;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+html.dark .ai-workspace--light :deep(.vk-session-list),
+html.dark .ai-workspace--light :deep(.vk-prompt-input),
+html.dark .ai-workspace--light :deep(.vk-model-selector__trigger),
+html.dark .ai-workspace--light :deep(.vk-model-selector__menu),
+html.dark .ai-workspace--light :deep(.vk-sources__item),
+html.dark .ai-workspace--light :deep(.vk-prompts__item) {
+  background-color: #ffffff;
+  border-color: #e4e7ed;
+  color: #303133;
+}
+
+html.dark .ai-workspace--light :deep(.vk-reasoning-block),
+html.dark .ai-workspace--light :deep(.vk-tool-call),
+html.dark .ai-workspace--light :deep(.vk-welcome--filled) {
+  background-color: #f8fafc;
+  border-color: #ebeef5;
+  color: #303133;
+}
+
+html.dark .ai-workspace--light :deep(.vk-attachment-card) {
+  background-color: #f5f7fa;
+  border-color: #ebeef5;
+}
+
+html.dark .ai-workspace--light :deep(.vk-prompt-input__textarea) {
+  color: #303133;
+}
+
+html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
+  --vk-md-heading-color: #303133;
+  --vk-md-text-color: #606266;
+  --vk-md-code-bg: rgba(64, 158, 255, 0.08);
+  --vk-md-code-text: #0969da;
+  --vk-md-code-border: rgba(64, 158, 255, 0.2);
+}
+
+.ai-workspace--dark {
+  background: #0f172a;
+  color: #f1f5f9;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.55);
+  --vk-bg-color: #141414;
+  --vk-bg-color-overlay: #1e293b;
+  --vk-fill-color-blank: #1a2234;
+  --vk-fill-color-light: #243044;
+  --vk-fill-color: #1e293b;
+  --vk-text-color-primary: #f1f5f9;
+  --vk-text-color-regular: #cbd5e1;
+  --vk-text-color-secondary: #94a3b8;
+  --vk-text-color-placeholder: #64748b;
+  --vk-border-color: #334155;
+  --vk-border-color-light: #2d3748;
+  --vk-border-color-lighter: #1e293b;
+  --vk-ai-bg-assistant: #1e293b;
+}
+
+.ai-workspace__titlebar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 14px 20px;
-  background: var(--ai-chat-header);
-  border-bottom: 1px solid var(--ai-border);
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
-.ai-demo__dots {
+.ai-workspace--dark .ai-workspace__titlebar {
+  background: #131c31;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.ai-workspace__dots {
   display: flex;
   gap: 6px;
 }
 
-.ai-demo__dots span {
+.ai-workspace__dots span {
   width: 10px;
   height: 10px;
   border-radius: 50%;
 }
-.ai-demo__dots span:nth-child(1) { background: #ff5f57; }
-.ai-demo__dots span:nth-child(2) { background: #febc2e; }
-.ai-demo__dots span:nth-child(3) { background: #28c840; }
+.ai-workspace__dots span:nth-child(1) { background: #ff5f57; }
+.ai-workspace__dots span:nth-child(2) { background: #febc2e; }
+.ai-workspace__dots span:nth-child(3) { background: #28c840; }
 
-.ai-demo__title-text {
+.ai-workspace__title-text {
   font-size: 13px;
-  color: var(--ai-text-dim);
+  font-weight: 600;
+  color: #64748b;
+}
+
+.ai-workspace--dark .ai-workspace__title-text {
+  color: #94a3b8;
+}
+
+.ai-workspace__theme-switch {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.06);
+  gap: 2px;
+}
+
+.ai-workspace--dark .ai-workspace__theme-switch {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ws-theme-btn {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.ai-demo__messages {
-  padding: 24px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-  overflow-x: hidden;
+.ai-workspace--dark .ws-theme-btn {
+  color: #94a3b8;
 }
 
-.ai-demo__msg {
-  display: flex;
-  min-width: 0;
-  max-width: 100%;
-  animation: demo-msg-in 0.35s ease;
+.ws-theme-btn.is-active {
+  background: #ffffff;
+  color: #6366f1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.ai-demo__msg--user {
-  justify-content: flex-end;
+.ai-workspace--dark .ws-theme-btn.is-active {
+  background: #1e293b;
+  color: #818cf8;
 }
 
-.ai-demo__msg--assistant {
-  justify-content: flex-start;
+.ai-workspace__mobile-tabs {
+  display: none;
+  gap: 8px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--vk-border-color-lighter);
 }
 
-@keyframes demo-msg-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.ai-demo__bubble {
-  max-width: 85%;
-  min-width: 0;
-  overflow-wrap: anywhere;
-  padding: 12px 16px;
-  border-radius: 14px;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.ai-demo__bubble > * {
-  max-width: 100%;
-}
-
-.ai-demo__bubble--user {
-  background: linear-gradient(135deg, #3451b2, #646cff);
-  color: #fff;
-  border-top-right-radius: 4px;
-}
-
-.ai-demo__bubble--assistant {
-  background: var(--ai-bubble-assistant-bg);
-  color: var(--ai-bubble-assistant-text);
-  border-top-left-radius: 4px;
-}
-
-.ai-demo__section {
-  margin-top: 12px;
-}
-
-.ai-demo__tokens {
-  margin-top: 12px;
-  display: flex;
-}
-
-.ai-demo__input-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-top: 1px solid var(--ai-border);
-  background: var(--ai-chat-input-bg);
-}
-
-.ai-demo__input-text {
-  font-size: 14px;
-  color: var(--ai-text-dim);
-}
-
-.ai-demo__send-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #3451b2, #646cff);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-}
-
-/* Capability Cards */
-.ai-caps {
-  flex: 0.8;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.ai-cap-card {
-  display: flex;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--ai-border);
-  background: var(--ai-card-bg);
-  transition: all 0.25s;
-  text-decoration: none;
-  color: inherit;
+.ws-mobile-tab {
+  flex-shrink: 0;
+  border: 1px solid var(--vk-border-color-light);
+  background: transparent;
+  color: var(--vk-text-color-secondary);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
   cursor: pointer;
 }
 
-.ai-cap-card:hover {
-  border-color: rgba(100, 108, 255, 0.3);
-  background: var(--ai-card-hover);
-  transform: translateX(-4px);
+.ws-mobile-tab.is-active {
+  color: #6366f1;
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.1);
 }
 
-.ai-cap-card__icon {
-  font-size: 22px;
+.ai-workspace__body {
+  display: flex;
+  min-height: 540px;
+}
+
+.ai-workspace__sidebar {
+  width: 248px;
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  padding: 12px;
+  border-right: 1px solid var(--vk-border-color-lighter);
+  background: rgba(248, 250, 252, 0.7);
+}
+
+.ai-workspace--dark .ai-workspace__sidebar {
+  background: rgba(15, 23, 42, 0.75);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.ai-workspace__sidebar :deep(.vk-session-list) {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.ai-workspace__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-workspace__topbar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: var(--ai-accent-soft);
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--vk-border-color-lighter);
 }
 
-.ai-cap-card__info {
-  flex: 1;
+.ai-workspace__composer {
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--vk-border-color-lighter);
+}
+
+.ws-welcome-wrap {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.ws-msg-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   min-width: 0;
 }
 
-.ai-cap-card__head {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 4px;
+.ws-streaming-note {
+  font-size: 12.5px;
+  color: var(--vk-text-color-secondary);
 }
 
-.ai-cap-card__name {
-  font-size: 14px;
+.ws-diff-feedback {
+  font-size: 12px;
+  font-weight: 500;
+  color: #10b981;
+}
+
+.ws-toolbar-chip {
+  border: 1px solid var(--vk-border-color-light);
+  background: transparent;
+  color: var(--vk-text-color-secondary);
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ws-toolbar-chip.is-active {
+  color: #6366f1;
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+/* 4 象限 AI 能力矩阵 */
+.ai-matrix {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.ai-matrix-card {
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid var(--ai-border);
+  background: var(--ai-card-bg);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.ai-matrix-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  transform: translateY(-2px);
+}
+
+.ai-matrix-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.ai-matrix-card__title {
+  font-size: 15px;
   font-weight: 700;
   color: var(--ai-text);
-  font-family: var(--vp-font-family-mono);
 }
 
-.ai-cap-card__label {
-  font-size: 12px;
-  color: var(--ai-text-dim);
+.ai-matrix-card__count {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 999px;
+  color: var(--ai-accent);
+  background: var(--ai-accent-soft);
 }
 
-.ai-cap-card__desc {
-  font-size: 13px;
+.ai-matrix-card__desc {
+  font-size: 12.5px;
+  line-height: 1.55;
   color: var(--ai-text-muted);
-  line-height: 1.5;
-  margin: 0 0 8px;
+  margin: 0 0 12px;
 }
 
-.ai-cap-card__tags {
+.ai-matrix-card__links {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
-.ai-cap-card__tag {
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: var(--ai-tag-bg);
-  color: var(--ai-tag-text);
-}
-
-/* Tech Tags */
-.ai-tech-tags {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 48px;
-  padding-top: 32px;
-  border-top: 1px solid var(--ai-border);
-}
-
-.ai-tech-tag {
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  color: var(--ai-text-muted);
-  border: 1px solid var(--ai-border);
-  transition: all 0.2s;
-}
-
-.ai-tech-tag:hover {
-  color: var(--ai-accent);
-  border-color: rgba(100, 108, 255, 0.3);
+.ai-matrix-pill {
+  font-size: 11.5px;
+  font-family: var(--vp-font-family-mono);
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ai-text);
   background: var(--ai-accent-soft);
+  transition: all 0.15s;
+}
+
+.ai-matrix-pill:hover {
+  color: #ffffff;
+  background: var(--ai-accent);
 }
 
 .ai-showcase__cta {
@@ -2061,13 +2449,16 @@ const componentGroups = [
 
   .deco-shape { display: none; }
 
-  .ai-showcase__content {
-    flex-direction: column;
+  .ai-workspace__sidebar {
+    display: none;
   }
 
-  .ai-caps {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  .ai-workspace__mobile-tabs {
+    display: flex;
+  }
+
+  .ai-matrix {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .component-group--ai .group-items {
@@ -2165,12 +2556,11 @@ const componentGroups = [
     font-size: 15px;
   }
 
-  .ai-demo__messages {
-    min-height: 300px;
-    padding: 16px;
+  .ai-workspace__titlebar {
+    flex-wrap: wrap;
   }
 
-  .ai-caps {
+  .ai-matrix {
     grid-template-columns: 1fr;
   }
 }
