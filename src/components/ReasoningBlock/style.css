@@ -4,18 +4,18 @@
   --vk-reasoning-header-color: var(--vk-text-color-primary);
   --vk-reasoning-content-color: var(--vk-text-color-regular);
   --vk-reasoning-meta-color: var(--vk-text-color-secondary);
-  --vk-reasoning-border-radius: var(--vk-ai-radius-md, 12px);
+  --vk-reasoning-border-radius: 10px;
   --vk-reasoning-accent: var(--vk-color-primary-light-3, #79bbff);
 }
 
 .vk-reasoning-block {
   border: 1px solid var(--vk-reasoning-border-color);
-  border-left: 3.5px solid var(--vk-reasoning-accent);
+  border-left: 3px solid var(--vk-reasoning-accent);
   border-radius: var(--vk-reasoning-border-radius);
   overflow: hidden;
   background-color: var(--vk-reasoning-bg);
-  box-shadow: var(--vk-ai-shadow-card, 0 2px 8px rgba(0, 0, 0, 0.03));
-  transition: all var(--vk-transition-duration-fast);
+  box-shadow: var(--vk-ai-shadow-card, 0 2px 8px rgba(148, 163, 184, 0.12));
+  transition: border-color var(--vk-transition-duration-fast), box-shadow var(--vk-transition-duration-fast);
 }
 
 .vk-reasoning-block:hover {
@@ -24,70 +24,103 @@
 }
 
 .vk-reasoning-block .vk-collapse {
+  --vk-collapse-header-height: auto;
   border: none;
   background: transparent;
 }
 
 .vk-reasoning-block .vk-collapse-item__header {
+  height: auto;
+  min-height: 34px;
+  line-height: 1.4;
+  gap: 8px;
   background-color: transparent;
-  padding: 10px 16px;
-  font-size: 13.5px;
+  padding: 6px 12px;
+  font-size: 13px;
   color: var(--vk-reasoning-header-color);
   border-bottom: none;
+  box-sizing: border-box;
   transition: background-color var(--vk-transition-duration-fast);
 }
 
+.vk-reasoning-block .vk-collapse-item__header .header-angle {
+  font-size: 11px;
+  color: var(--vk-reasoning-meta-color);
+  flex-shrink: 0;
+}
+
 .vk-reasoning-block .vk-collapse-item__header:hover {
-  background-color: rgba(0, 0, 0, 0.015);
+  background-color: rgba(148, 163, 184, 0.08);
 }
 
 .vk-reasoning-block .vk-collapse-item__content {
   background-color: transparent;
   color: var(--vk-reasoning-content-color);
   font-size: 12.5px;
-  line-height: 1.7;
-  padding: 8px 16px 14px;
+  line-height: 1.6;
+  padding: 8px 12px 10px;
   border-top: 1px dashed var(--vk-border-color-lighter);
 }
 
 .vk-reasoning-block__header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
+  min-width: 0;
+  line-height: 1.4;
 }
 
 .vk-reasoning-block__icon {
   color: var(--vk-color-primary);
-  font-size: 14.5px;
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .vk-reasoning-block__title {
+  font-size: 13px;
   font-weight: 500;
+  line-height: 1.4;
   letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Meta: Chips styling */
+/* Meta: 紧凑轻量化元信息胶囊（覆写折叠面板的 line-height，避免拉高胶囊） */
 .vk-reasoning-block__meta {
   margin-left: auto;
+  margin-right: 4px;
   font-size: 11px;
+  line-height: 1.2;
   color: var(--vk-reasoning-meta-color);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .vk-reasoning-block__duration,
 .vk-reasoning-block__tokens {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 1px 7px;
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.04);
+  gap: 3px;
+  height: 20px;
+  line-height: 1;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background-color: rgba(148, 163, 184, 0.14);
+  color: var(--vk-reasoning-meta-color);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.vk-reasoning-block__duration .vk-icon {
+  font-size: 10px;
 }
 
 .vk-reasoning-block__content {
