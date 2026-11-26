@@ -77,6 +77,15 @@ export default defineConfig({
                         { text: 'ReasoningBlock 思维链', link: '/components/reasoning-block' },
                         { text: 'ChatMessage 聊天气泡', link: '/components/chat-message' },
                         { text: 'ConversationList 对话列表', link: '/components/conversation-list' },
+                        { text: 'Welcome 欢迎页', link: '/components/welcome' },
+                        { text: 'Prompts 推荐提示词', link: '/components/prompts' },
+                        { text: 'Attachment 附件卡片', link: '/components/attachment' },
+                        { text: 'ToolCall 工具调用', link: '/components/tool-call' },
+                        { text: 'Sources 参考来源', link: '/components/sources' },
+                        { text: 'SessionList 会话历史', link: '/components/session-list' },
+                        { text: 'MessageActions 消息操作栏', link: '/components/message-actions' },
+                        { text: 'DiffCodeBlock 代码对比', link: '/components/diff-code-block' },
+                        { text: 'ModelSelector 模型选择器', link: '/components/model-selector' },
                     ]
                 },
                 {

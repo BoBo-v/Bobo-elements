@@ -69,8 +69,8 @@
       <div class="hero-right">
         <p class="hero-subtitle">为 AI 应用而生的双框架组件库</p>
         <p class="hero-desc">
-          9 个 AI 原生组件 + 17 个基础组件，Vue3 与 React 共享核心<br />
-          覆盖流式对话、代码展示、思维链、聊天气泡等智能应用场景
+          18 个 AI 原生组件 + 17 个基础组件，Vue3 与 React 共享核心<br />
+          覆盖流式对话、代码展示、思维链、工具调用、RAG 溯源等智能应用场景
         </p>
         <div class="hero-actions">
           <a class="btn-primary" href="/guide/quickstart">
@@ -287,7 +287,7 @@
     <!-- Components -->
     <section class="components-section">
       <h2 class="section-title">组件总览</h2>
-      <p class="section-desc">9 个 AI 原生组件 + 17 个基础组件，覆盖全场景开发需求</p>
+      <p class="section-desc">18 个 AI 原生组件 + 17 个基础组件，覆盖全场景开发需求</p>
       <div class="component-groups">
         <div class="component-group" :class="{ 'component-group--ai': g.isAI }" v-for="g in componentGroups" :key="g.name">
           <h3 class="group-title">
@@ -387,7 +387,7 @@ import TokenBadge from '../../../src/vue/components/TokenBadge.vue'
 const heroTags = ['AI 原生', 'Vue3', 'React', 'TypeScript', '流式输出']
 
 const stats = [
-  { value: '9', label: 'AI 组件', highlight: true },
+  { value: '18', label: 'AI 组件', highlight: true },
   { value: '17', label: '基础组件' },
   { value: '2', label: '框架' },
   { value: '100%', label: 'TypeScript' },
@@ -617,8 +617,8 @@ const features = [
   },
   {
     icon: '🧩',
-    title: '26 个组件 · 覆盖全场景',
-    details: '9 个 AI 原生组件配合 17 个基础组件，从对话体验到表单、反馈和数据展示都能衔接使用。',
+    title: '35 个组件 · 覆盖全场景',
+    details: '18 个 AI 原生组件配合 17 个基础组件，从对话体验到表单、反馈和数据展示都能衔接使用。',
   },
 ]
 
@@ -638,6 +638,15 @@ const componentGroups = [
       { name: 'TokenBadge', label: 'Token 标签', link: 'token-badge', vue: true, react: true },
       { name: 'MarkdownRenderer', label: 'Markdown 渲染', link: 'markdown-renderer', vue: true, react: true },
       { name: 'ConversationList', label: '对话列表', link: 'conversation-list', vue: true, react: true },
+      { name: 'Welcome', label: '欢迎页', link: 'welcome', vue: true, react: true },
+      { name: 'Prompts', label: '推荐提示词', link: 'prompts', vue: true, react: true },
+      { name: 'Attachment', label: '附件卡片', link: 'attachment', vue: true, react: true },
+      { name: 'ToolCall', label: '工具调用', link: 'tool-call', vue: true, react: true },
+      { name: 'Sources', label: '参考来源', link: 'sources', vue: true, react: true },
+      { name: 'SessionList', label: '会话历史', link: 'session-list', vue: true, react: true },
+      { name: 'MessageActions', label: '消息操作栏', link: 'message-actions', vue: true, react: true },
+      { name: 'DiffCodeBlock', label: '代码对比', link: 'diff-code-block', vue: true, react: true },
+      { name: 'ModelSelector', label: '模型选择器', link: 'model-selector', vue: true, react: true },
     ],
   },
   {
