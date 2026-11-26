@@ -1,0 +1,111 @@
+.vk-prompts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vk-prompts__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--vk-text-color-secondary);
+}
+
+.vk-prompts__list {
+  display: flex;
+  gap: 10px;
+}
+
+.vk-prompts__list--wrap {
+  flex-wrap: wrap;
+}
+
+.vk-prompts__list--vertical {
+  flex-direction: column;
+}
+
+.vk-prompts__list--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.vk-prompts__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  border: 1px solid var(--vk-border-color-lighter);
+  background-color: var(--vk-fill-color-blank);
+  color: var(--vk-text-color-primary);
+  cursor: pointer;
+  transition: all var(--vk-transition-duration-fast);
+  font-family: inherit;
+}
+
+.vk-prompts__item--card {
+  padding: 12px 14px;
+  border-radius: var(--vk-ai-radius-md, 12px);
+  box-shadow: var(--vk-ai-shadow-card, 0 2px 8px rgba(0, 0, 0, 0.03));
+}
+
+.vk-prompts__item--pill {
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.vk-prompts__item:hover:not(:disabled) {
+  border-color: var(--vk-color-primary-light-5, #a0cfff);
+  background-color: var(--vk-color-primary-light-9, rgba(64, 158, 255, 0.06));
+  transform: translateY(-1px);
+}
+
+.vk-prompts__item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.vk-prompts__icon {
+  color: var(--vk-color-primary);
+  font-size: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.vk-prompts__item--pill .vk-prompts__icon {
+  margin-top: 0;
+}
+
+.vk-prompts__content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.vk-prompts__label {
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--vk-text-color-primary);
+}
+
+.vk-prompts__desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--vk-text-color-secondary);
+}
+
+html.dark .vk-prompts__item,
+.dark .vk-prompts__item,
+[data-theme="dark"] .vk-prompts__item {
+  background-color: #1e293b;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .vk-prompts__item:hover:not(:disabled),
+.dark .vk-prompts__item:hover:not(:disabled),
+[data-theme="dark"] .vk-prompts__item:hover:not(:disabled) {
+  background-color: rgba(96, 165, 250, 0.14);
+  border-color: rgba(96, 165, 250, 0.38);
+}

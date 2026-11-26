@@ -25,6 +25,11 @@ export { PromptInput } from './components/PromptInput';
 export { ReasoningBlock } from './components/ReasoningBlock';
 export { ChatMessage } from './components/ChatMessage';
 export { ConversationList } from './components/ConversationList';
+export { Welcome } from './components/Welcome';
+export { Prompts } from './components/Prompts';
+export { Attachment } from './components/Attachment';
+export { ToolCall } from './components/ToolCall';
+export { Sources } from './components/Sources';
 
 // Type re-exports
 export type { AlertRef } from './components/Alert';
@@ -87,3 +92,8 @@ export type { PromptInputProps, PromptInputRef, PromptInputSize, PromptInputVari
 export type { ReasoningBlockProps, ReasoningBlockStatus } from './components/ReasoningBlock';
 export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus, ChatMessageVariant, ChatMessageAvatarPlacement } from '../core/components/chat-message.react.types';
 export type { ConversationListProps, ConversationListRef } from '../core/components/conversation-list.react.types';
+export type { WelcomeProps, WelcomeVariant, WelcomeAlign } from './components/Welcome';
+export type { PromptsProps, PromptItem, PromptsLayout, PromptsVariant } from './components/Prompts';
+export type { AttachmentProps, AttachmentItem, AttachmentStatus, AttachmentListLayout } from './components/Attachment';
+export type { ToolCallProps, ToolCallStatus } from './components/ToolCall';
+export type { SourcesProps, SourceItem, SourcesVariant } from './components/Sources';

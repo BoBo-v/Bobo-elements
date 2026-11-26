@@ -31,6 +31,11 @@ export { default as PromptInput } from './components/PromptInput.vue';
 export { default as ReasoningBlock } from './components/ReasoningBlock.vue';
 export { default as ChatMessage } from './components/ChatMessage.vue';
 export { default as ConversationList } from './components/ConversationList.vue';
+export { default as Welcome } from './components/Welcome.vue';
+export { default as Prompts } from './components/Prompts.vue';
+export { default as Attachment } from './components/Attachment.vue';
+export { default as ToolCall } from './components/ToolCall.vue';
+export { default as Sources } from './components/Sources.vue';
 
 // Type re-exports
 export type { ButtonProps, ButtonType, ButtonSize, NativeType, ButtonInstance } from '../core/components/button.types';
@@ -57,5 +62,10 @@ export type { PromptInputProps, PromptInputEmits, PromptInputInstance, PromptInp
 export type { ReasoningBlockProps, ReasoningBlockEmits, ReasoningBlockStatus } from '../core/components/reasoning-block.types';
 export type { ChatMessageProps, ChatMessageEmits, ChatMessageRole, ChatMessageStatus, ChatMessageVariant, ChatMessageAvatarPlacement } from '../core/components/chat-message.types';
 export type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../core/components/conversation-list.types';
+export type { WelcomeProps, WelcomeVariant, WelcomeAlign } from '../core/components/welcome.types';
+export type { PromptsProps, PromptsEmits, PromptItem, PromptsLayout, PromptsVariant } from '../core/components/prompts.types';
+export type { AttachmentProps, AttachmentEmits, AttachmentItem, AttachmentStatus, AttachmentListLayout } from '../core/components/attachment.types';
+export type { ToolCallProps, ToolCallEmits, ToolCallStatus } from '../core/components/tool-call.types';
+export type { SourcesProps, SourcesEmits, SourceItem, SourcesVariant } from '../core/components/sources.types';
 export type { FormProps, FormItemProps, FormRules, FormItemRule, FormInstance, FormItemInstance, FormContext, FormItemContext, ValidateStatusProp, FormValidateFailure } from '../components/Form/types';
 
