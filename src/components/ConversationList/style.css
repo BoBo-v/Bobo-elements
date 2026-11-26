@@ -93,7 +93,7 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: var(--vk-ai-shadow-float, 0 6px 20px rgba(0, 0, 0, 0.1));
+  box-shadow: var(--vk-ai-shadow-float, 0 6px 16px -4px rgba(148, 163, 184, 0.22));
   transition: all var(--vk-transition-duration-fast);
   z-index: 5;
 }

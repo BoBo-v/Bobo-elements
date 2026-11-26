@@ -178,5 +178,42 @@ describe('ConversationList component', () => {
       expect(scrollTop).toBe(215)
       unmount()
     })
+
+    test('does not shift scrollTop when appending new message while user is reading top', async () => {
+      const { unmount } = render(
+        <ConversationList>
+          <div id="first-msg">First message</div>
+        </ConversationList>
+      )
+
+      const el = screen.getByTestId('conversation-list')
+      let scrollHeight = 400
+      let scrollTop = 0
+      const clientHeight = 200
+
+      Object.defineProperty(el, 'clientHeight', { get: () => clientHeight, configurable: true })
+      Object.defineProperty(el, 'scrollHeight', { get: () => scrollHeight, configurable: true })
+      Object.defineProperty(el, 'scrollTop', {
+        get: () => scrollTop,
+        set: (v) => { scrollTop = v },
+        configurable: true
+      })
+      el.scrollTo = (options?: any) => {
+        if (typeof options === 'object') scrollTop = options.top ?? scrollTop
+      }
+
+      el.dispatchEvent(new Event('scroll'))
+
+      const contentEl = el.querySelector('.vk-conversation-list__content')!
+      const newMsg = document.createElement('div')
+      newMsg.textContent = 'Appended message'
+      contentEl.appendChild(newMsg)
+      scrollHeight = 520
+
+      await new Promise(r => setTimeout(r, 50))
+
+      expect(scrollTop).toBe(0)
+      unmount()
+    })
   })
 })

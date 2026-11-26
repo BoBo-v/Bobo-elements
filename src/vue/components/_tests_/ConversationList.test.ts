@@ -198,6 +198,45 @@ describe('ConversationList.vue', () => {
       expect(scrollTop).toBe(215)
       wrapper.unmount()
     })
+
+    test('does not shift scrollTop when appending new message while user is reading top', async () => {
+      const wrapper = mount(ConversationList, {
+        slots: {
+          default: '<div class="msg">First message</div>'
+        },
+        attachTo: document.body
+      })
+
+      const el = wrapper.find('[data-testid="conversation-list"]').element as HTMLElement
+      let scrollHeight = 400
+      let scrollTop = 0
+      const clientHeight = 200
+
+      Object.defineProperty(el, 'clientHeight', { get: () => clientHeight, configurable: true })
+      Object.defineProperty(el, 'scrollHeight', { get: () => scrollHeight, configurable: true })
+      Object.defineProperty(el, 'scrollTop', {
+        get: () => scrollTop,
+        set: (v) => { scrollTop = v },
+        configurable: true
+      })
+      el.scrollTo = (options?: any) => {
+        if (typeof options === 'object') scrollTop = options.top ?? scrollTop
+      }
+
+      wrapper.trigger('scroll')
+
+      const contentEl = el.querySelector('.vk-conversation-list__content')!
+      const newMsg = document.createElement('div')
+      newMsg.textContent = 'Appended message'
+      contentEl.appendChild(newMsg)
+      scrollHeight = 520
+
+      await new Promise(r => setTimeout(r, 50))
+
+      // 底部追加新消息时首节点未变化，不应触发前插高度差补偿
+      expect(scrollTop).toBe(0)
+      wrapper.unmount()
+    })
   })
 })
 

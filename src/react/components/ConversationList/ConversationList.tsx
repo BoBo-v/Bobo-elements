@@ -31,6 +31,10 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
   const pendingHasAddedNodesRef = useRef(false)
   const snapshotScrollTopRef = useRef(0)
   const snapshotScrollHeightRef = useRef(0)
+  const previousFirstChildRef = useRef<Element | null>(null)
+  const snapshotFirstChildRef = useRef<Element | null>(null)
+  const isProgrammaticScrollRef = useRef(false)
+  const programmaticScrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
   const isAtBottomRef = useRef(true)
 
@@ -48,18 +52,40 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
     return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_THRESHOLD
   }, [])
 
+  const cancelProgrammaticScroll = useCallback(() => {
+    isProgrammaticScrollRef.current = false
+    if (programmaticScrollTimerRef.current !== null) {
+      clearTimeout(programmaticScrollTimerRef.current)
+      programmaticScrollTimerRef.current = null
+    }
+  }, [])
+
   const scrollToBottom = useCallback((instant = false) => {
     const el = containerRef.current
     if (el) {
-      if (instant && typeof el.scrollTo === 'function') {
-        el.scrollTo({ top: el.scrollHeight, behavior: 'instant' as ScrollBehavior })
+      cancelProgrammaticScroll()
+      if (instant) {
+        if (typeof el.scrollTo === 'function') {
+          el.scrollTo({ top: el.scrollHeight, behavior: 'instant' as ScrollBehavior })
+        } else {
+          el.scrollTop = el.scrollHeight
+        }
       } else {
-        el.scrollTop = el.scrollHeight
+        // 平滑滚动到底部期间屏蔽中间帧 scroll 事件对吸底状态的误覆盖
+        isProgrammaticScrollRef.current = true
+        programmaticScrollTimerRef.current = setTimeout(() => {
+          cancelProgrammaticScroll()
+        }, 600)
+        if (typeof el.scrollTo === 'function') {
+          el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+        } else {
+          el.scrollTop = el.scrollHeight
+        }
       }
       shouldStickToBottomRef.current = true
       updateAtBottom(true)
     }
-  }, [updateAtBottom])
+  }, [updateAtBottom, cancelProgrammaticScroll])
 
   const getElement = useCallback(() => containerRef.current, [])
 
@@ -75,6 +101,7 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
     if (rafIdRef.current === null) {
       snapshotScrollTopRef.current = el.scrollTop
       snapshotScrollHeightRef.current = previousScrollHeightRef.current > 0 ? previousScrollHeightRef.current : el.scrollHeight
+      snapshotFirstChildRef.current = previousFirstChildRef.current
     }
 
     if (rafIdRef.current !== null) return
@@ -89,15 +116,19 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       pendingHasAddedNodesRef.current = false
       const oldScrollTop = snapshotScrollTopRef.current
       const oldScrollHeight = snapshotScrollHeightRef.current
+      const currentFirstChild = contentRef.current?.firstElementChild ?? null
+      const firstChildChanged = snapshotFirstChildRef.current !== null && currentFirstChild !== snapshotFirstChildRef.current
+      snapshotFirstChildRef.current = null
 
       if (
         preserveScrollOnPrepend &&
         wasPrepend &&
+        firstChildChanged &&
         !shouldStickToBottomRef.current &&
         oldScrollTop <= SCROLL_THRESHOLD &&
         newScrollHeight > oldScrollHeight
       ) {
-        // 历史消息前插时补偿滚动高度差，防止视口跳动
+        // 仅在顶部确实前插了历史节点时补偿滚动锚点，避免底部来新消息误推视口
         const diff = newScrollHeight - oldScrollHeight
         const targetScrollTop = oldScrollTop + diff
         if (typeof currentEl.scrollTo === 'function') {
@@ -110,9 +141,12 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       }
 
       previousScrollHeightRef.current = currentEl.scrollHeight
-      const nearBottom = isNearBottom()
-      shouldStickToBottomRef.current = nearBottom
-      updateAtBottom(nearBottom)
+      previousFirstChildRef.current = contentRef.current?.firstElementChild ?? null
+      if (!isProgrammaticScrollRef.current) {
+        const nearBottom = isNearBottom()
+        shouldStickToBottomRef.current = nearBottom
+        updateAtBottom(nearBottom)
+      }
     })
   }, [autoScroll, preserveScrollOnPrepend, scrollToBottom, isNearBottom, updateAtBottom])
 
@@ -125,6 +159,7 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
     }
 
     previousScrollHeightRef.current = el.scrollHeight
+    previousFirstChildRef.current = contentRef.current?.firstElementChild ?? null
     const nearBottom = isNearBottom()
     shouldStickToBottomRef.current = nearBottom
     isAtBottomRef.current = nearBottom
@@ -146,13 +181,14 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
     resizeObserver?.observe(target)
 
     return () => {
+      cancelProgrammaticScroll()
       if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current)
       }
       observer.disconnect()
       resizeObserver?.disconnect()
     }
-  }, [scheduleUpdate, isNearBottom])
+  }, [scheduleUpdate, isNearBottom, autoScroll, scrollToBottom, cancelProgrammaticScroll])
 
   const handleScroll = useCallback(() => {
     const el = containerRef.current
@@ -161,13 +197,20 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       previousScrollHeightRef.current = el.scrollHeight
     }
     const nearBottom = isNearBottom()
+    if (isProgrammaticScrollRef.current) {
+      if (nearBottom) {
+        cancelProgrammaticScroll()
+      }
+      onScroll?.(el.scrollTop)
+      return
+    }
     shouldStickToBottomRef.current = nearBottom
     updateAtBottom(nearBottom)
     onScroll?.(el.scrollTop)
     if (el.scrollTop <= loadMoreThreshold && !loadingMore) {
       onLoadMore?.()
     }
-  }, [isNearBottom, updateAtBottom, loadMoreThreshold, loadingMore, onLoadMore, onScroll])
+  }, [isNearBottom, updateAtBottom, loadMoreThreshold, loadingMore, onLoadMore, onScroll, cancelProgrammaticScroll])
 
   const rootClass = ['vk-conversation-list', className || ''].filter(Boolean).join(' ')
 
@@ -180,6 +223,8 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       aria-live="polite"
       data-testid="conversation-list"
       onScroll={handleScroll}
+      onWheel={cancelProgrammaticScroll}
+      onTouchStart={cancelProgrammaticScroll}
     >
       {loadingMore && (
         <div className="vk-conversation-list__load-more" data-testid="conversation-list-loading">

@@ -7,6 +7,8 @@
     aria-live="polite"
     data-testid="conversation-list"
     @scroll="handleScroll"
+    @wheel="cancelProgrammaticScroll"
+    @touchstart="cancelProgrammaticScroll"
   >
     <div v-if="loadingMore" class="vk-conversation-list__load-more" data-testid="conversation-list-loading">
       <span class="vk-conversation-list__loading-spinner" />
@@ -63,6 +65,10 @@ let rafId: number | null = null
 let pendingHasAddedNodes = false
 let snapshotScrollTop = 0
 let snapshotScrollHeight = 0
+let previousFirstChild: Element | null = null
+let snapshotFirstChild: Element | null = null
+let isProgrammaticScroll = false
+let programmaticScrollTimer: ReturnType<typeof setTimeout> | null = null
 
 const SCROLL_THRESHOLD = 50
 
@@ -79,13 +85,35 @@ function updateAtBottom(next: boolean) {
   }
 }
 
+function cancelProgrammaticScroll() {
+  isProgrammaticScroll = false
+  if (programmaticScrollTimer !== null) {
+    clearTimeout(programmaticScrollTimer)
+    programmaticScrollTimer = null
+  }
+}
+
 function scrollToBottom(instant = false) {
   const el = containerRef.value
   if (el) {
-    if (instant && typeof el.scrollTo === 'function') {
-      el.scrollTo({ top: el.scrollHeight, behavior: 'instant' as ScrollBehavior })
+    cancelProgrammaticScroll()
+    if (instant) {
+      if (typeof el.scrollTo === 'function') {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'instant' as ScrollBehavior })
+      } else {
+        el.scrollTop = el.scrollHeight
+      }
     } else {
-      el.scrollTop = el.scrollHeight
+      // 平滑滚动到底部期间屏蔽中间帧 scroll 事件对吸底状态的误覆盖
+      isProgrammaticScroll = true
+      programmaticScrollTimer = setTimeout(() => {
+        cancelProgrammaticScroll()
+      }, 600)
+      if (typeof el.scrollTo === 'function') {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+      } else {
+        el.scrollTop = el.scrollHeight
+      }
     }
     shouldStickToBottom = true
     updateAtBottom(true)
@@ -103,6 +131,13 @@ function handleScroll() {
     previousScrollHeight = el.scrollHeight
   }
   const nearBottom = isNearBottom()
+  if (isProgrammaticScroll) {
+    if (nearBottom) {
+      cancelProgrammaticScroll()
+    }
+    emits('scroll', el.scrollTop)
+    return
+  }
   shouldStickToBottom = nearBottom
   updateAtBottom(nearBottom)
   emits('scroll', el.scrollTop)
@@ -122,6 +157,7 @@ function scheduleUpdate(hasAddedNodes = false) {
   if (rafId === null) {
     snapshotScrollTop = el.scrollTop
     snapshotScrollHeight = previousScrollHeight > 0 ? previousScrollHeight : el.scrollHeight
+    snapshotFirstChild = previousFirstChild
   }
 
   if (rafId !== null) return
@@ -136,15 +172,19 @@ function scheduleUpdate(hasAddedNodes = false) {
     pendingHasAddedNodes = false
     const oldScrollTop = snapshotScrollTop
     const oldScrollHeight = snapshotScrollHeight
+    const currentFirstChild = contentRef.value?.firstElementChild ?? null
+    const firstChildChanged = snapshotFirstChild !== null && currentFirstChild !== snapshotFirstChild
+    snapshotFirstChild = null
 
     if (
       props.preserveScrollOnPrepend &&
       wasPrepend &&
+      firstChildChanged &&
       !shouldStickToBottom &&
       oldScrollTop <= SCROLL_THRESHOLD &&
       newScrollHeight > oldScrollHeight
     ) {
-      // 历史消息前插时根据内容高度差补偿滚动锚点，消除视口跳动
+      // 仅在顶部确实前插了历史节点时补偿滚动锚点，避免底部来新消息误推视口
       const diff = newScrollHeight - oldScrollHeight
       const targetScrollTop = oldScrollTop + diff
       if (typeof currentEl.scrollTo === 'function') {
@@ -157,9 +197,12 @@ function scheduleUpdate(hasAddedNodes = false) {
     }
 
     previousScrollHeight = currentEl.scrollHeight
-    const nearBottom = isNearBottom()
-    shouldStickToBottom = nearBottom
-    updateAtBottom(nearBottom)
+    previousFirstChild = contentRef.value?.firstElementChild ?? null
+    if (!isProgrammaticScroll) {
+      const nearBottom = isNearBottom()
+      shouldStickToBottom = nearBottom
+      updateAtBottom(nearBottom)
+    }
   })
 }
 
@@ -171,6 +214,7 @@ onMounted(() => {
     }
 
     previousScrollHeight = containerRef.value.scrollHeight
+    previousFirstChild = contentRef.value?.firstElementChild ?? null
     const nearBottom = isNearBottom()
     shouldStickToBottom = nearBottom
     isAtBottom.value = nearBottom
@@ -193,6 +237,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  cancelProgrammaticScroll()
   if (rafId !== null) {
     cancelAnimationFrame(rafId)
   }

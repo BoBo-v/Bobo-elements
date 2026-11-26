@@ -31,7 +31,7 @@ _2026-11-26_
 - **StreamingText 单例分词与共用格式化工具**：复用单例 `Intl.Segmenter` 进行增量切片，减少流式更新期间的内存分配；抽取 `ai-format.ts` 统一时长、Token 与文件大小格式化逻辑。
 - **图标体系升级**：将 `ChatMessage` 与 `Welcome` 等助手默认图标由机器人替换为现代星芒 `sparkles` 内联 SVG，并补齐 React 端 FontAwesome 图标全量映射。
 - **组件显示与细节打磨**：
-  - 修复 `ConversationList` 首屏挂载自动滚动与文档演示引用显示问题，增加 VitePress 文档站包别名配置。
+  - 修复 `ConversationList` 首屏挂载自动滚动与文档演示引用显示问题，增加 VitePress 文档站包别名配置；同时修复点击“回到底部”平滑滚动期间状态被中间帧覆盖及顶部浏览时来新消息误触锚点补偿的问题。
   - 修复 `ModelSelector` 选项受文档容器行高影响被拉高、标签截断及文档演示框 `overflow: hidden` 裁剪下拉面板的问题。
   - 优化 `ReasoningBlock` 折叠面板头部高度（覆写默认 `48px` 行高）与耗时/Token 元信息胶囊排版，并补齐 `SessionList` 与 `ModelSelector` 深色模式下的半透明主色适配。
   - 重构 `Switch` 组件 DOM 结构与 4px 对齐样式体系，补充双端单元测试。
