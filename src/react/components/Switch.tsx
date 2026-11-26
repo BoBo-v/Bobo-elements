@@ -1,4 +1,4 @@
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo } from 'react';
 import type { SwitchProps } from '../../core/components/switch.react.types';
 import '../../components/Switch/style.css';
 
@@ -14,25 +14,12 @@ const Switch = memo(function Switch({
   size,
   onChange,
 }: SwitchProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const checked = modelValue === activeValue;
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.checked = checked;
-    }
-  }, [checked]);
 
   const switchValue = () => {
     if (disabled) return;
     const newValue = checked ? inactiveValue : activeValue;
     onChange?.(newValue);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      switchValue();
-    }
   };
 
   return (
@@ -45,28 +32,33 @@ const Switch = memo(function Switch({
       ]
         .filter(Boolean)
         .join(' ')}
-      onClick={switchValue}
     >
-      <input
-        className="vk-swtich__input"
-        type="checkbox"
-        role="switch"
-        ref={inputRef}
+      {name && (
+        <input
+          className="vk-switch__input"
+          type="hidden"
+          name={name}
+          value={String(modelValue)}
+        />
+      )}
+      <button
         id={id}
-        name={name}
+        type="button"
+        role="switch"
+        className="vk-switch__core"
+        aria-checked={checked}
         disabled={disabled}
-        onKeyDown={handleKeyDown}
-      />
-      <div className="vk-switch__core">
+        onClick={switchValue}
+      >
         {(activeText || inactiveText) && (
-          <div className="vk-switch__core-inner">
+          <span className="vk-switch__core-inner">
             <span className="vk-switch__core-inner-text">
               {checked ? activeText : inactiveText}
             </span>
-          </div>
+          </span>
         )}
-        <div className="vk-switch__core-action" />
-      </div>
+        <span className="vk-switch__core-action" aria-hidden="true" />
+      </button>
     </div>
   );
 });
