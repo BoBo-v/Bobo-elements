@@ -5,6 +5,8 @@ export interface PromptInputProps {
   modelValue?: string
   placeholder?: string
   disabled?: boolean
+  /** 流式响应期间是否同时禁用文本输入 */
+  disableInputWhenStreaming?: boolean
   maxLength?: number
   rows?: number
   autoResize?: boolean
@@ -33,11 +35,14 @@ export interface PromptInputEmits {
   (e: 'submit', value: string): void
   (e: 'stop'): void
   (e: 'keydown', event: KeyboardEvent): void
+  (e: 'paste-files', files: File[]): void
+  (e: 'drop-files', files: File[]): void
 }
 
 export interface PromptInputInstance {
   focus: () => void
   blur: () => void
   clear: () => void
+  getElement: () => HTMLTextAreaElement | null
   textareaRef: HTMLTextAreaElement | null | { value: HTMLTextAreaElement | null }
 }

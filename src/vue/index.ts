@@ -49,13 +49,13 @@ export type { TagProps, TagEmits, TagType, TagSize, TagEffect } from '../core/co
 export type { RadioProps, RadioGroupProps, RadioEmits, RadioGroupEmits, RadioValueType, RadioGroupContext } from '../core/components/radio/types';
 export type { CheckboxProps, CheckboxGroupProps, CheckboxEmits, CheckboxGroupEmits, CheckboxValueType, CheckboxGroupContext } from '../core/components/checkbox/types';
 export type { ThinkingIndicatorProps, ThinkingIndicatorVariant, ThinkingIndicatorColor } from '../core/components/thinking-indicator.types';
-export type { StreamingTextProps, StreamingTextEmits, CursorStyle } from '../core/components/streaming-text.types';
+export type { StreamingTextProps, StreamingTextEmits, StreamingTextInstance, CursorStyle } from '../core/components/streaming-text.types';
 export type { CodeBlockProps } from '../core/components/code-block.types';
 export type { TokenBadgeProps, TokenBadgeStatus, TokenBadgeVariant, TokenBadgeSize } from '../core/components/token-badge.types';
 export type { MarkdownRendererProps } from '../core/components/markdown-renderer.types';
 export type { PromptInputProps, PromptInputEmits, PromptInputInstance, PromptInputSize, PromptInputVariant } from '../core/components/prompt-input.types';
-export type { ReasoningBlockProps } from '../core/components/reasoning-block.types';
-export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus } from '../core/components/chat-message.types';
+export type { ReasoningBlockProps, ReasoningBlockEmits, ReasoningBlockStatus } from '../core/components/reasoning-block.types';
+export type { ChatMessageProps, ChatMessageEmits, ChatMessageRole, ChatMessageStatus, ChatMessageVariant, ChatMessageAvatarPlacement } from '../core/components/chat-message.types';
 export type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../core/components/conversation-list.types';
 export type { FormProps, FormItemProps, FormRules, FormItemRule, FormInstance, FormItemInstance, FormContext, FormItemContext, ValidateStatusProp, FormValidateFailure } from '../components/Form/types';
 

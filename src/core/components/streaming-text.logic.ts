@@ -1,17 +1,25 @@
 /**
- * Splits text into grapheme clusters.
- * Uses Intl.Segmenter when available for complete grapheme support (ZWJ emojis, skin tones, accents).
- * Gracefully falls back to Array.from for environments without Intl.Segmenter,
- * which guarantees surrogate pair safety (prevents orphaned surrogate code units).
+ * 复用 Intl.Segmenter 单例（按 grapheme 粒度切分），避免长文本流式更新时反复创建实例。
+ * 当运行环境不支持 Intl.Segmenter 时，降级为 Array.from 以保证代理对安全。
  */
+let cachedSegmenter: any = null
+
+function getSegmenter(): any {
+  if (typeof Intl !== 'undefined' && typeof (Intl as any).Segmenter === 'function') {
+    if (!cachedSegmenter) {
+      cachedSegmenter = new (Intl as any).Segmenter(undefined, { granularity: 'grapheme' })
+    }
+    return cachedSegmenter
+  }
+  return null
+}
+
 function splitGraphemes(text: string): string[] {
   if (!text) return []
-  if (typeof Intl !== 'undefined' && typeof (Intl as any).Segmenter === 'function') {
-    const segmenter = new (Intl as any).Segmenter(undefined, { granularity: 'grapheme' })
-    const segments = segmenter.segment(text)
-    return Array.from(segments, (s: any) => s.segment)
+  const segmenter = getSegmenter()
+  if (segmenter) {
+    return Array.from(segmenter.segment(text), (s: any) => s.segment)
   }
-  // Fallback: guarantees surrogate pairs are not split into isolated code units
   return Array.from(text)
 }
 
@@ -21,18 +29,37 @@ export function createStreamingState() {
   let graphemes: string[] = []
 
   function onTextChange(newText: string): void {
-    if (newText.startsWith(prevText)) {
-      // append case: keep currentIndex
-    } else {
-      // reset case
+    if (!newText) {
       currentIndex = 0
+      prevText = ''
+      graphemes = []
+      return
+    }
+
+    if (prevText && newText.startsWith(prevText)) {
+      // 增量追加优化：只对末尾最后一个字素簇与新增片段重新切分，兼顾 ZWJ/变音符边界正确性与 O(Δ) 性能
+      const appended = newText.slice(prevText.length)
+      if (appended) {
+        if (graphemes.length > 0) {
+          const tail = graphemes.pop()!
+          const tailSegments = splitGraphemes(tail + appended)
+          for (const seg of tailSegments) {
+            graphemes.push(seg)
+          }
+        } else {
+          graphemes = splitGraphemes(newText)
+        }
+      }
+    } else {
+      // 全量重置
+      currentIndex = 0
+      graphemes = splitGraphemes(newText)
     }
     prevText = newText
-    graphemes = splitGraphemes(newText)
   }
 
   function tick(arg1?: number, arg2?: number): number {
-    // Supports both tick(speed) and tick(targetLength, speed)
+    // 同时兼容 tick(speed) 与 tick(targetLength, speed)
     const speed = arg2 !== undefined ? arg2 : (arg1 !== undefined ? arg1 : 1)
     const targetLength = graphemes.length
     currentIndex = Math.min(currentIndex + Math.max(1, speed), targetLength)
@@ -48,6 +75,7 @@ export function createStreamingState() {
   function getDisplayText(fullText?: string): string {
     if (graphemes.length === 0 && fullText) {
       graphemes = splitGraphemes(fullText)
+      prevText = fullText
     }
     return graphemes.slice(0, currentIndex).join('')
   }

@@ -1,27 +1,48 @@
-import { useMemo, memo } from 'react'
-import type { ReactNode } from 'react'
-import type { ReasoningBlockProps } from '../../../core/components/reasoning-block.types'
+import { useMemo, useState, useEffect, useRef, memo } from 'react'
+import type { ReactNode, CSSProperties } from 'react'
+import type { ReasoningBlockProps as CoreReasoningBlockProps, ReasoningBlockStatus } from '../../../core/components/reasoning-block.types'
+import { formatDuration } from '../../../core/components/ai-format'
 import { Collapse, CollapseItem } from '../Collapse'
 import Icon from '../Icon'
 import '../../../components/ReasoningBlock/style.css'
 
-function formatDuration(ms: number): string {
-  if (ms < 1000) return ms + 'ms'
-  return (ms / 1000).toFixed(1) + 's'
-}
+export type { ReasoningBlockStatus }
 
-interface ReasoningBlockInternalProps extends ReasoningBlockProps {
+export interface ReasoningBlockProps extends CoreReasoningBlockProps {
+  className?: string
+  style?: CSSProperties
   children?: ReactNode
 }
 
 export const ReasoningBlock = memo(function ReasoningBlock({
   title = '分析过程',
   expanded = false,
+  status = 'done',
+  autoCollapse = false,
   duration,
   tokenCount,
+  tokenUnit = 'tokens',
   onExpandedChange,
+  className,
+  style,
   children,
-}: ReasoningBlockInternalProps) {
+}: ReasoningBlockProps) {
+  const [innerExpanded, setInnerExpanded] = useState(expanded)
+  const prevStatusRef = useRef<ReasoningBlockStatus>(status)
+
+  useEffect(() => {
+    setInnerExpanded(expanded)
+  }, [expanded])
+
+  useEffect(() => {
+    // 当思考状态从 thinking 转为 done 且开启 autoCollapse 时自动收起
+    if (autoCollapse && prevStatusRef.current === 'thinking' && status === 'done') {
+      setInnerExpanded(false)
+      onExpandedChange?.(false)
+    }
+    prevStatusRef.current = status
+  }, [status, autoCollapse, onExpandedChange])
+
   const titleContent = useMemo(() => (
     <div className="vk-reasoning-block__header">
       <Icon name="brain" className="vk-reasoning-block__icon" />
@@ -35,21 +56,29 @@ export const ReasoningBlock = memo(function ReasoningBlock({
           )}
           {tokenCount !== undefined && (
             <span className="vk-reasoning-block__tokens">
-              {tokenCount} tokens
+              {tokenCount} {tokenUnit}
             </span>
           )}
         </span>
       )}
     </div>
-  ), [title, duration, tokenCount])
+  ), [title, duration, tokenCount, tokenUnit])
 
   const handleChange = (names: Array<string | number>) => {
-    onExpandedChange?.(names.includes('reasoning'))
+    const nextExpanded = names.includes('reasoning')
+    setInnerExpanded(nextExpanded)
+    onExpandedChange?.(nextExpanded)
   }
 
+  const rootClass = [
+    'vk-reasoning-block',
+    status === 'thinking' ? 'is-thinking' : '',
+    className || '',
+  ].filter(Boolean).join(' ')
+
   return (
-    <div className="vk-reasoning-block" data-testid="reasoning-block">
-      <Collapse modelValue={expanded ? ['reasoning'] : []} onChange={handleChange}>
+    <div className={rootClass} style={style} data-testid="reasoning-block">
+      <Collapse modelValue={innerExpanded ? ['reasoning'] : []} onChange={handleChange}>
         <CollapseItem name="reasoning" title={titleContent}>
           <div className="vk-reasoning-block__content">{children}</div>
         </CollapseItem>

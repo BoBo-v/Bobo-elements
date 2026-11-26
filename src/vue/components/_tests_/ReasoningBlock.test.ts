@@ -49,4 +49,15 @@ describe('ReasoningBlock.vue', () => {
     })
     expect(wrapper.find('.vk-reasoning-block__meta').exists()).toBeFalsy()
   })
+
+  test('auto-collapses when status changes from thinking to done', async () => {
+    const wrapper = mount(ReasoningBlock, {
+      props: { status: 'thinking', expanded: true, autoCollapse: true },
+      slots: { default: 'Step 1' },
+      global: { stubs: ['Icon'] }
+    })
+    expect(wrapper.classes()).toContain('is-thinking')
+    await wrapper.setProps({ status: 'done' })
+    expect(wrapper.emitted('update:expanded')?.[0]).toEqual([false])
+  })
 })

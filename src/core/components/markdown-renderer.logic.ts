@@ -1,4 +1,12 @@
 import MarkdownIt from 'markdown-it'
+import { highlightCode } from './code-block.logic'
+
+export interface ParseMarkdownOptions {
+  breaks?: boolean
+  streaming?: boolean
+  codeCopyable?: boolean
+  codeCopyText?: string
+}
 
 function sanitizeUrl(rawUrl: string): string {
   const url = rawUrl.trim()
@@ -23,7 +31,7 @@ function sanitizeImageUrl(rawUrl: string): string {
   const url = rawUrl.trim()
   // eslint-disable-next-line no-control-regex
   const lower = url.replace(/[\u0000-\u001F\u007F\s]+/g, '').toLowerCase()
-  // Explicitly block SVG data URLs to prevent script execution inside SVG
+  // 显式拦截 SVG data URL，防止内嵌脚本执行
   if (lower.startsWith('data:image/svg')) {
     return ''
   }
@@ -36,16 +44,58 @@ function sanitizeImageUrl(rawUrl: string): string {
   ) {
     return url
   }
-  // Allow only safe raster image data URLs
+  // 仅放行安全的光栅图片 data URL
   if (/^data:image\/(png|jpe?g|gif|webp);base64,/i.test(lower)) {
     return url
   }
   return ''
 }
 
-function createMarkdownParser(breaks: boolean): MarkdownIt {
+/**
+ * 流式输出容错补全：在 Markdown 尚未吐完时自动闭合未成对的围栏代码块、行内代码与加粗标记，
+ * 避免半截语法导致渲染闪烁或整段误判为纯文本。
+ */
+export function repairStreamingMarkdown(md: string): string {
+  if (!md) return md
+  let result = md
+
+  // 检测围栏代码块（``` 或 ~~~）是否处于未闭合状态
+  const lines = result.split('\n')
+  let activeFence: string | null = null
+  for (const line of lines) {
+    const trimmed = line.trimStart()
+    const fenceMatch = trimmed.match(/^(```+|~~~+)/)
+    if (fenceMatch) {
+      const marker = fenceMatch[1][0]
+      if (!activeFence) {
+        activeFence = fenceMatch[1]
+      } else if (trimmed.startsWith(marker.repeat(activeFence.length))) {
+        activeFence = null
+      }
+    }
+  }
+  if (activeFence) {
+    return `${result}\n${activeFence}`
+  }
+
+  // 若未处于围栏代码块中，检查末尾未闭合的行内反引号与加粗标记
+  const withoutEscapes = result.replace(/\\./g, '')
+  const inlineCodeTicks = (withoutEscapes.match(/`/g) || []).length
+  if (inlineCodeTicks % 2 === 1) {
+    result += '`'
+  } else {
+    const boldMarkers = (withoutEscapes.match(/\*\*/g) || []).length
+    if (boldMarkers % 2 === 1) {
+      result += '**'
+    }
+  }
+
+  return result
+}
+
+function createMarkdownParser(breaks: boolean, codeCopyable: boolean, codeCopyText: string): MarkdownIt {
   const md = new MarkdownIt({
-    html: false, // Strictly disable raw HTML to prevent XSS
+    html: false, // 严格禁用原生 HTML，防范 XSS
     xhtmlOut: true,
     breaks,
     langPrefix: 'vk-md-lang-',
@@ -53,19 +103,15 @@ function createMarkdownParser(breaks: boolean): MarkdownIt {
     typographer: false
   })
 
-  // Allow custom sanitizers in renderer rules to inspect and sanitize all URLs
+  // 放行自定义规则对所有 URL 进行安全校验与清洗
   md.validateLink = () => true
 
-  // Headings
   md.renderer.rules.heading_open = (tokens, idx) => {
     const level = tokens[idx].tag
     return `<${level} class="vk-md-${level}">`
   }
 
-  // Paragraphs
   md.renderer.rules.paragraph_open = () => '<p class="vk-md-p">'
-
-  // Lists
   md.renderer.rules.bullet_list_open = () => '<ul class="vk-md-ul">\n'
   md.renderer.rules.ordered_list_open = (tokens, idx) => {
     const token = tokens[idx]
@@ -74,14 +120,9 @@ function createMarkdownParser(breaks: boolean): MarkdownIt {
     return `<ol class="vk-md-ol"${startAttr}>\n`
   }
   md.renderer.rules.list_item_open = () => '<li class="vk-md-li">'
-
-  // Blockquote
   md.renderer.rules.blockquote_open = () => '<blockquote class="vk-md-blockquote">\n'
-
-  // Horizontal Rule
   md.renderer.rules.hr = () => '<hr class="vk-md-hr" />\n'
 
-  // Text formatting
   md.renderer.rules.strong_open = () => '<strong class="vk-md-bold">'
   md.renderer.rules.strong_close = () => '</strong>'
   md.renderer.rules.em_open = () => '<em class="vk-md-italic">'
@@ -89,29 +130,40 @@ function createMarkdownParser(breaks: boolean): MarkdownIt {
   md.renderer.rules.s_open = () => '<del class="vk-md-del">'
   md.renderer.rules.s_close = () => '</del>'
 
-  // Inline Code
   md.renderer.rules.code_inline = (tokens, idx) => {
     return `<code class="vk-md-inline-code">${md.utils.escapeHtml(tokens[idx].content)}</code>`
   }
 
-  // Code Block (Fenced)
   md.renderer.rules.fence = (tokens, idx) => {
     const token = tokens[idx]
     const info = token.info ? token.info.trim() : ''
     const langName = info ? info.split(/\s+/)[0] : ''
-    const langClass = langName ? ` vk-md-lang-${md.utils.escapeHtml(langName)}` : ''
-    const code = md.utils.escapeHtml(token.content.trim())
-    return `<pre class="vk-md-pre"><code class="vk-md-code${langClass}">${code}</code></pre>\n`
+    const safeLang = md.utils.escapeHtml(langName)
+    const langClass = safeLang ? ` vk-md-lang-${safeLang}` : ''
+    const rawCode = token.content.replace(/\n$/, '')
+    const highlighted = highlightCode(rawCode, langName)
+
+    if (!codeCopyable) {
+      return `<pre class="vk-md-pre"><code class="vk-md-code${langClass}">${highlighted}</code></pre>\n`
+    }
+
+    const encodedCode = encodeURIComponent(rawCode)
+    const labelHtml = safeLang ? `<span class="vk-md-code-lang">${safeLang}</span>` : '<span />'
+    const btnHtml = `<button type="button" class="vk-md-code-copy" data-md-copy="${encodedCode}" aria-label="${md.utils.escapeHtml(codeCopyText)}">${md.utils.escapeHtml(codeCopyText)}</button>`
+    return (
+      `<div class="vk-md-code-block">` +
+      `<div class="vk-md-code-header">${labelHtml}${btnHtml}</div>` +
+      `<pre class="vk-md-pre"><code class="vk-md-code${langClass}">${highlighted}</code></pre>` +
+      `</div>\n`
+    )
   }
 
-  // Code Block (Indented)
   md.renderer.rules.code_block = (tokens, idx) => {
     const token = tokens[idx]
     const code = md.utils.escapeHtml(token.content.trim())
     return `<pre class="vk-md-pre"><code class="vk-md-code">${code}</code></pre>\n`
   }
 
-  // Links
   md.renderer.rules.link_open = (tokens, idx) => {
     const token = tokens[idx]
     const rawHref = token.attrGet('href') || ''
@@ -119,7 +171,6 @@ function createMarkdownParser(breaks: boolean): MarkdownIt {
     return `<a class="vk-md-link" href="${md.utils.escapeHtml(safeHref)}" target="_blank" rel="noopener noreferrer">`
   }
 
-  // Images
   md.renderer.rules.image = (tokens, idx) => {
     const token = tokens[idx]
     const rawSrc = token.attrGet('src') || ''
@@ -131,7 +182,6 @@ function createMarkdownParser(breaks: boolean): MarkdownIt {
     return `<img class="vk-md-img" src="${md.utils.escapeHtml(safeSrc)}" alt="${md.utils.escapeHtml(alt)}" />`
   }
 
-  // Tables
   md.renderer.rules.table_open = () => '<table class="vk-md-table">\n'
   md.renderer.rules.th_open = () => '<th class="vk-md-th">'
   md.renderer.rules.td_open = () => '<td class="vk-md-td">'
@@ -140,11 +190,28 @@ function createMarkdownParser(breaks: boolean): MarkdownIt {
   return md
 }
 
-const parserWithBreaks = createMarkdownParser(true)
-const parserWithoutBreaks = createMarkdownParser(false)
+const parserCache = new Map<string, MarkdownIt>()
 
-export function parseMarkdown(md: string, breaks = true): string {
+function getMarkdownParser(breaks: boolean, codeCopyable: boolean, codeCopyText: string): MarkdownIt {
+  const key = `${breaks}:${codeCopyable}:${codeCopyText}`
+  let parser = parserCache.get(key)
+  if (!parser) {
+    parser = createMarkdownParser(breaks, codeCopyable, codeCopyText)
+    parserCache.set(key, parser)
+  }
+  return parser
+}
+
+export function parseMarkdown(md: string, breaksOrOptions: boolean | ParseMarkdownOptions = true): string {
   if (!md || !md.trim()) return ''
-  const parser = breaks ? parserWithBreaks : parserWithoutBreaks
-  return parser.render(md).trim()
+  const options: ParseMarkdownOptions =
+    typeof breaksOrOptions === 'boolean' ? { breaks: breaksOrOptions } : breaksOrOptions
+  const breaks = options.breaks ?? true
+  const streaming = options.streaming ?? false
+  const codeCopyable = options.codeCopyable ?? true
+  const codeCopyText = options.codeCopyText ?? '复制'
+
+  const source = streaming ? repairStreamingMarkdown(md) : md
+  const parser = getMarkdownParser(breaks, codeCopyable, codeCopyText)
+  return parser.render(source).trim()
 }

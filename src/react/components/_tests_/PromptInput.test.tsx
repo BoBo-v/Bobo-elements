@@ -125,4 +125,15 @@ describe('PromptInput component', () => {
     rerender(<PromptInput streaming stoppable={false} stopable={true} />)
     expect(screen.queryByTestId('prompt-input-stop-btn')).not.toBeInTheDocument()
   })
+
+  test('renders header and toolbar slots', () => {
+    render(
+      <PromptInput
+        header={<span>file.png</span>}
+        toolbar={<button type="button">DeepThink</button>}
+      />
+    )
+    expect(screen.getByTestId('prompt-input-header')).toHaveTextContent('file.png')
+    expect(screen.getByText('DeepThink')).toBeInTheDocument()
+  })
 })

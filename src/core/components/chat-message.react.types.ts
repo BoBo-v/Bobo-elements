@@ -1,13 +1,18 @@
-import type { ReactNode, SyntheticEvent } from 'react'
+import type { ReactNode, SyntheticEvent, CSSProperties } from 'react'
+import type { ChatMessageAvatarPlacement, ChatMessageRole, ChatMessageStatus, ChatMessageVariant } from './chat-message.types'
 
-export type ChatMessageRole = 'user' | 'assistant' | 'system'
-export type ChatMessageStatus = 'sending' | 'sent' | 'error' | 'streaming'
+export type { ChatMessageRole, ChatMessageStatus, ChatMessageVariant, ChatMessageAvatarPlacement }
 
 export interface ChatMessageProps {
   role: ChatMessageRole
   avatar?: string
   avatarSize?: 'small' | 'default' | 'large'
+  avatarPlacement?: ChatMessageAvatarPlacement
+  variant?: ChatMessageVariant
+  senderName?: string
   timestamp?: string | number | Date
+  locale?: string
+  formatTimestamp?: (date: Date) => string
   status?: ChatMessageStatus
   showAvatar?: boolean
   errorMessage?: string
@@ -18,7 +23,11 @@ export interface ChatMessageProps {
   content?: string
   copyContent?: string
   contentVisibility?: 'auto' | 'visible'
+  className?: string
+  style?: CSSProperties
   children?: ReactNode
+  header?: ReactNode
+  actions?: ReactNode
   loading?: ReactNode
   onRetry?: () => void
   onAvatarError?: (event: SyntheticEvent<HTMLImageElement>) => void

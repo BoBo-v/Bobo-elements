@@ -22,6 +22,13 @@ describe('ConversationList.vue', () => {
     expect(wrapper.find('[data-testid="conversation-list-empty"]').text()).toBe('No messages')
   })
 
+  test('supports custom empty slot', () => {
+    const wrapper = mount(ConversationList, {
+      slots: { empty: '<div class="custom-welcome">Welcome!</div>' }
+    })
+    expect(wrapper.find('.custom-welcome').text()).toBe('Welcome!')
+  })
+
   test('shows loading indicator', () => {
     const wrapper = mount(ConversationList, {
       props: { loadingMore: true }

@@ -77,27 +77,71 @@
   to { transform: rotate(360deg); }
 }
 
-.dark .vk-conversation-list::-webkit-scrollbar-thumb {
+.vk-conversation-list__scroll-btn {
+  position: sticky;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--vk-border-color-light);
+  background-color: var(--vk-bg-color-overlay, #ffffff);
+  color: var(--vk-text-color-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--vk-ai-shadow-float, 0 6px 20px rgba(0, 0, 0, 0.1));
+  transition: all var(--vk-transition-duration-fast);
+  z-index: 5;
+}
+
+.vk-conversation-list__scroll-btn:hover {
+  color: var(--vk-color-primary);
+  border-color: var(--vk-color-primary-light-5, #a0cfff);
+}
+
+html.dark .vk-conversation-list::-webkit-scrollbar-thumb,
+.dark .vk-conversation-list::-webkit-scrollbar-thumb,
+[data-theme="dark"] .vk-conversation-list::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.dark .vk-conversation-list::-webkit-scrollbar-thumb:hover {
+html.dark .vk-conversation-list::-webkit-scrollbar-thumb:hover,
+.dark .vk-conversation-list::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .vk-conversation-list::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.28);
 }
 
-.dark .vk-conversation-list {
+html.dark .vk-conversation-list,
+.dark .vk-conversation-list,
+[data-theme="dark"] .vk-conversation-list {
   --vk-conversation-list-bg: #0f172a;
   --vk-conversation-list-empty-color: #64748b;
 }
 
-.dark .vk-conversation-list__load-more {
+html.dark .vk-conversation-list__load-more,
+.dark .vk-conversation-list__load-more,
+[data-theme="dark"] .vk-conversation-list__load-more {
   background-color: #1e293b;
   color: #94a3b8;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.dark .vk-conversation-list__loading-spinner {
+html.dark .vk-conversation-list__loading-spinner,
+.dark .vk-conversation-list__loading-spinner,
+[data-theme="dark"] .vk-conversation-list__loading-spinner {
   border-color: rgba(255, 255, 255, 0.15);
   border-top-color: #60a5fa;
+}
+
+html.dark .vk-conversation-list__scroll-btn,
+.dark .vk-conversation-list__scroll-btn,
+[data-theme="dark"] .vk-conversation-list__scroll-btn {
+  background-color: #1e293b;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
 }
 

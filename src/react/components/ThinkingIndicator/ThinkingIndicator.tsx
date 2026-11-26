@@ -1,6 +1,18 @@
 import { memo } from 'react'
-import type { ThinkingIndicatorProps } from '../../../core/components/thinking-indicator.types'
+import type { CSSProperties } from 'react'
+import type {
+  ThinkingIndicatorProps as CoreThinkingIndicatorProps,
+  ThinkingIndicatorVariant,
+  ThinkingIndicatorColor,
+} from '../../../core/components/thinking-indicator.types'
 import '../../../components/ThinkingIndicator/style.css'
+
+export type { ThinkingIndicatorVariant, ThinkingIndicatorColor }
+
+export interface ThinkingIndicatorProps extends CoreThinkingIndicatorProps {
+  className?: string
+  style?: CSSProperties
+}
 
 export const ThinkingIndicator = memo(function ThinkingIndicator({
   variant = 'dots',
@@ -8,16 +20,20 @@ export const ThinkingIndicator = memo(function ThinkingIndicator({
   color = 'primary',
   text = '正在思考...',
   ariaLabel = 'AI 正在思考',
+  className,
+  style,
 }: ThinkingIndicatorProps) {
   const classes = [
     'vk-thinking-indicator',
     size !== 'default' ? `vk-thinking-indicator--${size}` : '',
     `vk-thinking-indicator--${color}`,
+    className || '',
   ].filter(Boolean).join(' ')
 
   return (
     <div
       className={classes}
+      style={style}
       role="status"
       aria-live="polite"
       aria-label={ariaLabel}

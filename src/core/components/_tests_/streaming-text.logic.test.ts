@@ -100,4 +100,15 @@ describe('createStreamingState Unicode grapheme clustering', () => {
       (Intl as any).Segmenter = originalSegmenter
     }
   })
+
+  test('merges ZWJ or combining marks across incremental append boundary', () => {
+    const state = createStreamingState()
+    state.onTextChange('e')
+    state.onTextChange('e\u0301!')
+    state.tick(1)
+    expect(state.getDisplayText()).toBe('e\u0301')
+    state.tick(1)
+    expect(state.getDisplayText()).toBe('e\u0301!')
+    expect(state.isComplete()).toBe(true)
+  })
 })

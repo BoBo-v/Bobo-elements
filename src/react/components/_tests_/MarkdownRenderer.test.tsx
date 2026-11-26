@@ -68,4 +68,12 @@ describe('MarkdownRenderer component', () => {
     expect(container.querySelector('script')).toBeNull()
     expect(container.querySelector('img')).toBeNull()
   })
+
+  test('auto-closes incomplete bold and fence in streaming mode', () => {
+    const { container } = render(
+      <MarkdownRenderer content={'```js\nconst x = 1'} streaming />
+    )
+    expect(container.querySelector('.vk-md-code-block')).toBeTruthy()
+    expect(container.querySelector('.vk-md-code-copy')).toBeTruthy()
+  })
 })

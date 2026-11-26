@@ -53,7 +53,9 @@
   }
 }
 
-.dark .vk-streaming-text {
+html.dark .vk-streaming-text,
+.dark .vk-streaming-text,
+[data-theme="dark"] .vk-streaming-text {
   --vk-streaming-cursor-color: #60a5fa;
 }
 

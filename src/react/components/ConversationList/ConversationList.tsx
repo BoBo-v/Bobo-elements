@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useImperativeHandle, forwardRef, memo } from 'react'
+import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, memo } from 'react'
 import type { ConversationListProps, ConversationListRef } from '../../../core/components/conversation-list.react.types'
 import '../../../components/ConversationList/style.css'
 
@@ -7,14 +7,21 @@ const SCROLL_THRESHOLD = 50
 export const ConversationList = memo(forwardRef<ConversationListRef, ConversationListProps>(function ConversationList({
   autoScroll = true,
   loadingMore = false,
+  loadMoreThreshold = 16,
   height,
   maxHeight = '100%',
   preserveScrollOnPrepend = true,
+  showScrollToBottom = true,
+  scrollToBottomText = '回到底部',
   emptyText = '暂无对话',
+  empty,
   loadingText = '加载中...',
+  className,
+  style,
   children,
   onLoadMore,
   onScroll,
+  onAtBottomChange,
 }: ConversationListProps, ref) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const contentRef = useRef<HTMLDivElement | null>(null)
@@ -24,6 +31,16 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
   const pendingHasAddedNodesRef = useRef(false)
   const snapshotScrollTopRef = useRef(0)
   const snapshotScrollHeightRef = useRef(0)
+  const [isAtBottom, setIsAtBottom] = useState(true)
+  const isAtBottomRef = useRef(true)
+
+  const updateAtBottom = useCallback((next: boolean) => {
+    if (isAtBottomRef.current !== next) {
+      isAtBottomRef.current = next
+      setIsAtBottom(next)
+      onAtBottomChange?.(next)
+    }
+  }, [onAtBottomChange])
 
   const isNearBottom = useCallback(() => {
     const el = containerRef.current
@@ -39,8 +56,10 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       } else {
         el.scrollTop = el.scrollHeight
       }
+      shouldStickToBottomRef.current = true
+      updateAtBottom(true)
     }
-  }, [])
+  }, [updateAtBottom])
 
   const getElement = useCallback(() => containerRef.current, [])
 
@@ -78,6 +97,7 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
         oldScrollTop <= SCROLL_THRESHOLD &&
         newScrollHeight > oldScrollHeight
       ) {
+        // 历史消息前插时补偿滚动高度差，防止视口跳动
         const diff = newScrollHeight - oldScrollHeight
         const targetScrollTop = oldScrollTop + diff
         if (typeof currentEl.scrollTo === 'function') {
@@ -90,23 +110,29 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       }
 
       previousScrollHeightRef.current = currentEl.scrollHeight
-      shouldStickToBottomRef.current = isNearBottom()
+      const nearBottom = isNearBottom()
+      shouldStickToBottomRef.current = nearBottom
+      updateAtBottom(nearBottom)
     })
-  }, [autoScroll, preserveScrollOnPrepend, scrollToBottom, isNearBottom])
+  }, [autoScroll, preserveScrollOnPrepend, scrollToBottom, isNearBottom, updateAtBottom])
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
     previousScrollHeightRef.current = el.scrollHeight
-    shouldStickToBottomRef.current = isNearBottom()
+    const nearBottom = isNearBottom()
+    shouldStickToBottomRef.current = nearBottom
+    isAtBottomRef.current = nearBottom
+    setIsAtBottom(nearBottom)
 
+    // 仅监听消息内容容器变化，避免加载条或“回到底部”按钮显隐触发误判
+    const target = contentRef.current || el
     const observer = new MutationObserver((mutations) => {
       const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0)
       scheduleUpdate(hasAddedNodes)
     })
-    observer.observe(el, { childList: true, subtree: true, characterData: true })
+    observer.observe(target, { childList: true, subtree: true, characterData: true })
 
-    const target = contentRef.current || el
     const resizeObserver = typeof ResizeObserver !== 'undefined'
       ? new ResizeObserver(() => {
         scheduleUpdate(false)
@@ -129,18 +155,22 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
     if (previousScrollHeightRef.current === 0 && el.scrollHeight > 0) {
       previousScrollHeightRef.current = el.scrollHeight
     }
-    shouldStickToBottomRef.current = isNearBottom()
+    const nearBottom = isNearBottom()
+    shouldStickToBottomRef.current = nearBottom
+    updateAtBottom(nearBottom)
     onScroll?.(el.scrollTop)
-    if (el.scrollTop === 0 && !loadingMore) {
+    if (el.scrollTop <= loadMoreThreshold && !loadingMore) {
       onLoadMore?.()
     }
-  }, [isNearBottom, loadingMore, onLoadMore, onScroll])
+  }, [isNearBottom, updateAtBottom, loadMoreThreshold, loadingMore, onLoadMore, onScroll])
+
+  const rootClass = ['vk-conversation-list', className || ''].filter(Boolean).join(' ')
 
   return (
     <div
       ref={containerRef}
-      className="vk-conversation-list"
-      style={{ height, maxHeight }}
+      className={rootClass}
+      style={{ height, maxHeight, ...style }}
       role="log"
       aria-live="polite"
       data-testid="conversation-list"
@@ -157,8 +187,19 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
       </div>
       {!children && (
         <div className="vk-conversation-list__empty" data-testid="conversation-list-empty">
-          {emptyText}
+          {empty ?? emptyText}
         </div>
+      )}
+      {showScrollToBottom && children && !isAtBottom && (
+        <button
+          type="button"
+          className="vk-conversation-list__scroll-btn"
+          data-testid="conversation-list-scroll-btn"
+          aria-label={scrollToBottomText}
+          onClick={() => scrollToBottom(false)}
+        >
+          ↓ {scrollToBottomText}
+        </button>
       )}
     </div>
   )

@@ -37,6 +37,36 @@
   justify-content: center;
 }
 
+.vk-chat-message--avatar-center {
+  align-items: center;
+}
+
+.vk-chat-message__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--vk-text-color-secondary);
+}
+
+.vk-chat-message__sender {
+  font-weight: 500;
+  color: var(--vk-text-color-primary);
+}
+
+.vk-chat-message--flat .vk-chat-message__body {
+  flex: 1;
+}
+
+.vk-chat-message--flat.vk-chat-message--assistant .vk-chat-message__bubble {
+  max-width: 100%;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 2px 0;
+}
+
 /* Avatar styling */
 .vk-chat-message__avatar {
   flex-shrink: 0;
@@ -233,45 +263,69 @@
 }
 
 /* Dark mode overrides */
-.dark .vk-chat-message--assistant .vk-chat-message__bubble {
+html.dark .vk-chat-message--assistant .vk-chat-message__bubble,
+.dark .vk-chat-message--assistant .vk-chat-message__bubble,
+[data-theme="dark"] .vk-chat-message--assistant .vk-chat-message__bubble {
   background-color: #1e293b;
   color: #f1f5f9;
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
-.dark .vk-chat-message--system .vk-chat-message__bubble {
+html.dark .vk-chat-message--flat.vk-chat-message--assistant .vk-chat-message__bubble,
+.dark .vk-chat-message--flat.vk-chat-message--assistant .vk-chat-message__bubble,
+[data-theme="dark"] .vk-chat-message--flat.vk-chat-message--assistant .vk-chat-message__bubble {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+html.dark .vk-chat-message--system .vk-chat-message__bubble,
+.dark .vk-chat-message--system .vk-chat-message__bubble,
+[data-theme="dark"] .vk-chat-message--system .vk-chat-message__bubble {
   background-color: #1e293b;
   color: #94a3b8;
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.dark .vk-chat-message__avatar {
+html.dark .vk-chat-message__avatar,
+.dark .vk-chat-message__avatar,
+[data-theme="dark"] .vk-chat-message__avatar {
   background-color: #1e293b;
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-.dark .vk-chat-message__avatar-icon {
+html.dark .vk-chat-message__avatar-icon,
+.dark .vk-chat-message__avatar-icon,
+[data-theme="dark"] .vk-chat-message__avatar-icon {
   color: #94a3b8;
 }
 
-.dark .vk-chat-message__timestamp {
+html.dark .vk-chat-message__timestamp,
+.dark .vk-chat-message__timestamp,
+[data-theme="dark"] .vk-chat-message__timestamp {
   color: #94a3b8;
 }
 
-.dark .vk-chat-message__copy-btn {
+html.dark .vk-chat-message__copy-btn,
+.dark .vk-chat-message__copy-btn,
+[data-theme="dark"] .vk-chat-message__copy-btn {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.12);
   color: #94a3b8;
 }
 
-.dark .vk-chat-message__copy-btn:hover {
+html.dark .vk-chat-message__copy-btn:hover,
+.dark .vk-chat-message__copy-btn:hover,
+[data-theme="dark"] .vk-chat-message__copy-btn:hover {
   color: #60a5fa;
   background-color: rgba(96, 165, 250, 0.15);
   border-color: rgba(96, 165, 250, 0.3);
 }
 
-.dark .vk-chat-message__status--error {
+html.dark .vk-chat-message__status--error,
+.dark .vk-chat-message__status--error,
+[data-theme="dark"] .vk-chat-message__status--error {
   background-color: rgba(245, 108, 108, 0.2);
   color: #f89898;
 }

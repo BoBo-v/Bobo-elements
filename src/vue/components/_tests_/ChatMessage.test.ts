@@ -94,4 +94,15 @@ describe('ChatMessage.vue', () => {
     })
     expect(wrapper.classes()).toContain('vk-chat-message--visible')
   })
+
+  test('supports flat variant, senderName, and actions slot', () => {
+    const wrapper = mount(ChatMessage, {
+      props: { role: 'assistant', variant: 'flat', senderName: 'Bobo AI' },
+      slots: { default: 'Answer', actions: '<button class="regen-btn">重试</button>' },
+      global: { stubs: ['Icon', 'ThinkingIndicator'] }
+    })
+    expect(wrapper.classes()).toContain('vk-chat-message--flat')
+    expect(wrapper.find('[data-testid="chat-message-header"]').text()).toBe('Bobo AI')
+    expect(wrapper.find('.regen-btn').exists()).toBe(true)
+  })
 })

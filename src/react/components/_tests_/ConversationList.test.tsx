@@ -23,6 +23,11 @@ describe('ConversationList component', () => {
     expect(screen.getByText('No messages')).toBeInTheDocument()
   })
 
+  test('supports custom empty node', () => {
+    render(<ConversationList empty={<span>Welcome!</span>} />)
+    expect(screen.getByText('Welcome!')).toBeInTheDocument()
+  })
+
   test('shows loading indicator', () => {
     render(<ConversationList loadingMore>content</ConversationList>)
     expect(screen.getByTestId('conversation-list-loading')).toBeInTheDocument()

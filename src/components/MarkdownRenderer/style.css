@@ -10,6 +10,12 @@
   --vk-md-hr-color: var(--vk-border-color-light);
   --vk-md-table-border: var(--vk-border-color-lighter);
   --vk-md-table-header-bg: var(--vk-fill-color-light);
+  --vk-code-keyword: #8b5cf6;
+  --vk-code-string: #10b981;
+  --vk-code-comment: #94a3b8;
+  --vk-code-function: #3b82f6;
+  --vk-code-number: #f59e0b;
+  --vk-code-operator: #06b6d4;
 }
 
 .vk-markdown-renderer {
@@ -45,7 +51,7 @@
 .vk-md-italic { font-style: italic; }
 .vk-md-del { text-decoration: line-through; opacity: 0.75; }
 
-/* Inline Code: Modern tech styling replacing harsh danger red */
+/* 行内代码 */
 .vk-md-inline-code {
   background-color: var(--vk-md-code-bg);
   color: var(--vk-md-code-text);
@@ -58,7 +64,56 @@
   vertical-align: baseline;
 }
 
-/* Code block container */
+/* 增强代码块容器（含语言头栏与复制按钮） */
+.vk-md-code-block {
+  margin: 0.9em 0;
+  border-radius: var(--vk-ai-radius-sm, 8px);
+  border: 1px solid var(--vk-border-color-lighter);
+  background-color: var(--vk-fill-color-light);
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.vk-md-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--vk-text-color-secondary);
+  background-color: var(--vk-fill-color, #f0f2f5);
+  border-bottom: 1px solid var(--vk-border-color-lighter);
+}
+
+.vk-md-code-lang {
+  font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  text-transform: lowercase;
+  font-weight: 500;
+}
+
+.vk-md-code-copy {
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--vk-text-color-secondary);
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all var(--vk-transition-duration-fast);
+}
+
+.vk-md-code-copy:hover {
+  color: var(--vk-color-primary);
+  background: var(--vk-color-primary-light-9);
+}
+
+.vk-md-code-block .vk-md-pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+/* 代码块容器 */
 .vk-md-pre {
   background-color: var(--vk-fill-color-light);
   border: 1px solid var(--vk-border-color-lighter);
@@ -80,7 +135,7 @@
   overflow-wrap: anywhere;
 }
 
-/* Blockquote */
+/* 引用块 */
 .vk-md-blockquote {
   border-left: 3.5px solid var(--vk-md-blockquote-border);
   background-color: var(--vk-md-blockquote-bg);
@@ -94,7 +149,7 @@
   margin: 0.2em 0;
 }
 
-/* Lists */
+/* 列表 */
 .vk-md-ul,
 .vk-markdown-renderer ul {
   padding-left: 1.5em;
@@ -115,7 +170,7 @@
   line-height: 1.65;
 }
 
-/* Links */
+/* 链接 */
 .vk-md-link,
 .vk-markdown-renderer a {
   color: var(--vk-md-link-color);
@@ -132,7 +187,7 @@
   opacity: 0.85;
 }
 
-/* Images */
+/* 图片 */
 .vk-md-img,
 .vk-markdown-renderer img {
   max-width: 100%;
@@ -141,7 +196,7 @@
   box-shadow: var(--vk-ai-shadow-card, 0 2px 8px rgba(0, 0, 0, 0.06));
 }
 
-/* Horizontal Rule */
+/* 分割线 */
 .vk-md-hr,
 .vk-markdown-renderer hr {
   border: none;
@@ -150,7 +205,7 @@
   margin: 1.4em 0;
 }
 
-/* Tables: Full modern layout support */
+/* 表格 */
 .vk-md-table,
 .vk-markdown-renderer table {
   width: 100%;
@@ -199,8 +254,10 @@
   background-color: var(--vk-fill-color-extra-light);
 }
 
-/* Dark mode overrides */
-.dark .vk-markdown-renderer {
+/* 暗黑模式覆盖（统一兼容 html.dark / .dark / [data-theme="dark"]） */
+html.dark .vk-markdown-renderer,
+.dark .vk-markdown-renderer,
+[data-theme="dark"] .vk-markdown-renderer {
   --vk-md-heading-color: #f1f5f9;
   --vk-md-text-color: #cbd5e1;
   --vk-md-code-bg: rgba(96, 165, 250, 0.15);
@@ -211,34 +268,86 @@
   --vk-md-hr-color: rgba(255, 255, 255, 0.12);
   --vk-md-table-border: rgba(255, 255, 255, 0.1);
   --vk-md-table-header-bg: rgba(255, 255, 255, 0.06);
+  --vk-code-keyword: #cba6f7;
+  --vk-code-string: #a6e3a1;
+  --vk-code-comment: #7d829e;
+  --vk-code-function: #89b4fa;
+  --vk-code-number: #fab387;
+  --vk-code-operator: #89dceb;
   color: var(--vk-md-text-color);
 }
 
-.dark .vk-markdown-renderer .vk-md-bold {
+html.dark .vk-markdown-renderer .vk-md-bold,
+.dark .vk-markdown-renderer .vk-md-bold,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-bold {
   color: #f8fafc;
 }
 
-.dark .vk-markdown-renderer .vk-md-pre {
+html.dark .vk-markdown-renderer .vk-md-code-block,
+.dark .vk-markdown-renderer .vk-md-code-block,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-code-block {
   background-color: #0f172a;
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.dark .vk-markdown-renderer .vk-md-pre .vk-md-code {
+html.dark .vk-markdown-renderer .vk-md-code-header,
+.dark .vk-markdown-renderer .vk-md-code-header,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-code-header {
+  background-color: #1e293b;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+html.dark .vk-markdown-renderer .vk-md-code-copy,
+.dark .vk-markdown-renderer .vk-md-code-copy,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-code-copy {
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+html.dark .vk-markdown-renderer .vk-md-code-copy:hover,
+.dark .vk-markdown-renderer .vk-md-code-copy:hover,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-code-copy:hover {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.15);
+}
+
+html.dark .vk-markdown-renderer .vk-md-pre,
+.dark .vk-markdown-renderer .vk-md-pre,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-pre {
+  background-color: #0f172a;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .vk-markdown-renderer .vk-md-pre .vk-md-code,
+.dark .vk-markdown-renderer .vk-md-pre .vk-md-code,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-pre .vk-md-code {
   color: #e2e8f0;
 }
 
+html.dark .vk-markdown-renderer .vk-md-th,
+html.dark .vk-markdown-renderer th,
 .dark .vk-markdown-renderer .vk-md-th,
-.dark .vk-markdown-renderer th {
+.dark .vk-markdown-renderer th,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-th,
+[data-theme="dark"] .vk-markdown-renderer th {
   color: #f1f5f9;
 }
 
+html.dark .vk-markdown-renderer .vk-md-td,
+html.dark .vk-markdown-renderer td,
 .dark .vk-markdown-renderer .vk-md-td,
-.dark .vk-markdown-renderer td {
+.dark .vk-markdown-renderer td,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-td,
+[data-theme="dark"] .vk-markdown-renderer td {
   color: #cbd5e1;
 }
 
+html.dark .vk-markdown-renderer .vk-md-tr:hover,
+html.dark .vk-markdown-renderer tr:hover td,
 .dark .vk-markdown-renderer .vk-md-tr:hover,
-.dark .vk-markdown-renderer tr:hover td {
+.dark .vk-markdown-renderer tr:hover td,
+[data-theme="dark"] .vk-markdown-renderer .vk-md-tr:hover,
+[data-theme="dark"] .vk-markdown-renderer tr:hover td {
   background-color: rgba(255, 255, 255, 0.04);
 }
-

@@ -6,18 +6,23 @@
       `vk-prompt-input--${variant}`,
       {
         'is-disabled': disabled,
-        'is-streaming': streaming
+        'is-streaming': streaming,
+        'is-input-disabled': disabled || (streaming && disableInputWhenStreaming)
       }
     ]"
     data-testid="prompt-input"
+    @drop="handleDrop"
   >
+    <div v-if="$slots.header" class="vk-prompt-input__header" data-testid="prompt-input-header">
+      <slot name="header" />
+    </div>
     <textarea
       ref="textareaRef"
       class="vk-prompt-input__textarea"
       :id="id"
       :value="innerValue"
       :placeholder="placeholder"
-      :disabled="disabled"
+      :disabled="disabled || (streaming && disableInputWhenStreaming)"
       :maxlength="maxLength"
       :rows="rows"
       :aria-label="ariaLabel"
@@ -25,11 +30,13 @@
       data-testid="prompt-input-textarea"
       @input="handleInput"
       @keydown="handleKeydown"
+      @paste="handlePaste"
       @compositionstart="handleCompositionStart"
       @compositionend="handleCompositionEnd"
     />
     <div class="vk-prompt-input__footer">
       <div class="vk-prompt-input__actions">
+        <slot name="toolbar" />
         <span v-if="streaming" class="vk-prompt-input__streaming-badge">
           {{ streamingText }}
         </span>
@@ -80,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, computed, getCurrentInstance } from 'vue'
+import { ref, watch, onMounted, nextTick, computed, getCurrentInstance } from 'vue'
 import type { PromptInputProps, PromptInputEmits, PromptInputInstance } from '../../core/components/prompt-input.types'
 import Icon from './Icon.vue'
 import '../../components/PromptInput/style.css'
@@ -91,6 +98,7 @@ const props = withDefaults(defineProps<PromptInputProps>(), {
   modelValue: '',
   placeholder: '输入消息...',
   disabled: false,
+  disableInputWhenStreaming: false,
   rows: 1,
   autoResize: true,
   maxRows: 6,
@@ -111,7 +119,7 @@ const instance = getCurrentInstance()
 const isStoppable = computed(() => {
   const rawProps = instance?.vnode?.props
   if (rawProps) {
-    if ('stoppable' in rawProps || 'stop-table' in rawProps) {
+    if ('stoppable' in rawProps) {
       return Boolean(props.stoppable)
     }
     if ('stopable' in rawProps || 'stop-able' in rawProps) {
@@ -128,6 +136,10 @@ const isComposing = ref(false)
 
 watch(() => props.modelValue, (val) => {
   innerValue.value = val
+  // 外部修改 modelValue（如点击推荐词回填或清空）时同步调整输入框高度
+  if (props.autoResize) {
+    nextTick(() => autoResize())
+  }
 })
 
 function handleInput(e: Event) {
@@ -146,6 +158,21 @@ function handleKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter' && !e.shiftKey && !isImeComposing) {
     e.preventDefault()
     handleSubmit()
+  }
+}
+
+function handlePaste(e: ClipboardEvent) {
+  const files = Array.from(e.clipboardData?.files || [])
+  if (files.length > 0) {
+    emits('paste-files', files)
+  }
+}
+
+function handleDrop(e: DragEvent) {
+  const files = Array.from(e.dataTransfer?.files || [])
+  if (files.length > 0) {
+    e.preventDefault()
+    emits('drop-files', files)
   }
 }
 
@@ -185,6 +212,7 @@ function autoResize() {
 
 function focus() { textareaRef.value?.focus() }
 function blur() { textareaRef.value?.blur() }
+function getElement() { return textareaRef.value }
 function clear() {
   innerValue.value = ''
   emits('update:modelValue', '')
@@ -197,5 +225,5 @@ onMounted(() => {
   if (props.autoResize) autoResize()
 })
 
-defineExpose<PromptInputInstance>({ focus, blur, clear, textareaRef })
+defineExpose<PromptInputInstance>({ focus, blur, clear, getElement, textareaRef })
 </script>

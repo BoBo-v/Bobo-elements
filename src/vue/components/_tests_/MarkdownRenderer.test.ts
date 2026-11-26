@@ -107,4 +107,16 @@ describe('MarkdownRenderer.vue', () => {
     expect(wrapper.find('script').exists()).toBe(false)
     expect(wrapper.find('img').exists()).toBe(false)
   })
+
+  test('auto-closes incomplete fences in streaming mode and renders copy button', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: {
+        content: '```ts\nconst a = 1',
+        streaming: true
+      }
+    })
+    expect(wrapper.find('.vk-md-code-block').exists()).toBe(true)
+    expect(wrapper.find('.vk-md-code-copy').exists()).toBe(true)
+    expect(wrapper.text()).toContain('const a = 1')
+  })
 })

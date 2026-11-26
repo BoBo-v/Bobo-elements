@@ -1,7 +1,15 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle, forwardRef, memo } from 'react'
-import type { StreamingTextProps } from '../../../core/components/streaming-text.types'
+import type { CSSProperties } from 'react'
+import type { StreamingTextProps as CoreStreamingTextProps, CursorStyle } from '../../../core/components/streaming-text.types'
 import { createStreamingState } from '../../../core/components/streaming-text.logic'
 import '../../../components/StreamingText/style.css'
+
+export type { CursorStyle }
+
+export interface StreamingTextProps extends CoreStreamingTextProps {
+  className?: string
+  style?: CSSProperties
+}
 
 export interface StreamingTextRef {
   reset: () => void
@@ -25,6 +33,8 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
   cursorChar = '',
   cursorStyle = 'line',
   paused = false,
+  className,
+  style,
   onComplete,
 }: StreamingTextProps, ref) {
   const effectiveCursorChar = cursorChar || DEFAULT_CURSOR_CHARS[cursorStyle]
@@ -34,6 +44,8 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const completedTextRef = useRef<string | null>(null)
   const onCompleteRef = useRef(onComplete)
+  const configRef = useRef({ text, speed, interval, paused })
+  configRef.current = { text, speed, interval, paused }
 
   useEffect(() => {
     onCompleteRef.current = onComplete
@@ -54,19 +66,23 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
 
   const startInterval = useCallback(() => {
     stopInterval()
-    if (paused || !text) return
+    const { text: curText, interval: curInterval, paused: curPaused } = configRef.current
+    if (curPaused || !curText) return
     timerRef.current = setInterval(() => {
+      const latestText = configRef.current.text
+      const latestSpeed = configRef.current.speed
       const state = stateRef.current
-      state.tick(text.length, speed)
-      setDisplayText(state.getDisplayText(text))
-      if (state.isComplete(text)) {
+      state.tick(latestText.length, latestSpeed)
+      setDisplayText(state.getDisplayText(latestText))
+      if (state.isComplete(latestText)) {
         setIsDone(true)
         stopInterval()
-        emitCompleteOnce(text)
+        emitCompleteOnce(latestText)
       }
-    }, Math.max(16, interval))
-  }, [text, speed, interval, paused, stopInterval, emitCompleteOnce])
+    }, Math.max(16, curInterval))
+  }, [stopInterval, emitCompleteOnce])
 
+  // 仅当文本变化时同步字素簇状态，避免因 paused/speed 变化导致重复重算
   useEffect(() => {
     const state = stateRef.current
     if (completedTextRef.current !== text) {
@@ -81,49 +97,58 @@ export const StreamingText = memo(forwardRef<StreamingTextRef, StreamingTextProp
     } else {
       setIsDone(false)
       setDisplayText(state.getDisplayText(text))
-      startInterval()
+      if (!configRef.current.paused) {
+        startInterval()
+      }
     }
     return stopInterval
   }, [text, startInterval, stopInterval, emitCompleteOnce])
 
-  const reset = useCallback(() => {
-    stateRef.current.reset()
-    completedTextRef.current = null
-    setDisplayText('')
-    setIsDone(false)
-    if (text) {
-      startInterval()
-    }
-  }, [text, startInterval])
-
-  const finish = useCallback(() => {
-    stopInterval()
-    stateRef.current.finish(text.length)
-    setDisplayText(text)
-    setIsDone(true)
-    emitCompleteOnce(text)
-  }, [text, stopInterval, emitCompleteOnce])
-
-  const pause = useCallback(() => {
-    stopInterval()
-  }, [stopInterval])
-
-  const resume = useCallback(() => {
-    if (!isDone) startInterval()
-  }, [isDone, startInterval])
-
+  // 单独响应暂停、速度或间隔变化
   useEffect(() => {
     if (paused) {
       stopInterval()
     } else if (!isDone && text) {
       startInterval()
     }
-  }, [paused, isDone, text, startInterval, stopInterval])
+  }, [paused, speed, interval, isDone, text, startInterval, stopInterval])
+
+  const reset = useCallback(() => {
+    stateRef.current.reset()
+    completedTextRef.current = null
+    setDisplayText('')
+    setIsDone(false)
+    if (configRef.current.text) {
+      stateRef.current.onTextChange(configRef.current.text)
+      startInterval()
+    }
+  }, [startInterval])
+
+  const finish = useCallback(() => {
+    const curText = configRef.current.text
+    stopInterval()
+    stateRef.current.finish(curText.length)
+    setDisplayText(curText)
+    setIsDone(true)
+    emitCompleteOnce(curText)
+  }, [stopInterval, emitCompleteOnce])
+
+  const pause = useCallback(() => {
+    stopInterval()
+  }, [stopInterval])
+
+  const resume = useCallback(() => {
+    if (!stateRef.current.isComplete(configRef.current.text)) {
+      startInterval()
+    }
+  }, [startInterval])
 
   useImperativeHandle(ref, () => ({ reset, finish, pause, resume, isComplete: isDone }), [reset, finish, pause, resume, isDone])
 
+  const rootClass = ['vk-streaming-text', className || ''].filter(Boolean).join(' ')
+
   return (
-    <span className="vk-streaming-text" data-testid="streaming-text" role="status" aria-live="polite">
+    <span className={rootClass} style={style} data-testid="streaming-text" role="status" aria-live="polite">
       <span data-testid="streaming-text-content">{displayText}</span>
       {showCursor && (
         <span

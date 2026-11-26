@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
-import type { StreamingTextProps, StreamingTextEmits } from '../../core/components/streaming-text.types'
+import type { StreamingTextProps, StreamingTextEmits, StreamingTextInstance } from '../../core/components/streaming-text.types'
 import { createStreamingState } from '../../core/components/streaming-text.logic'
 import '../../components/StreamingText/style.css'
 
@@ -54,6 +54,7 @@ function emitCompleteOnce(text: string) {
   if (!text || completedText === text) return
   completedText = text
   emits('complete')
+  props.onComplete?.()
 }
 
 function startInterval() {
@@ -86,6 +87,7 @@ watch(() => props.text, (newText) => {
   if (!isDone.value) {
     startInterval()
   } else {
+    stopInterval()
     emitCompleteOnce(newText)
   }
   displayText.value = state.getDisplayText(newText)
@@ -101,11 +103,15 @@ watch(() => [props.paused, props.speed, props.interval] as const, () => {
 })
 
 onMounted(() => {
-  if (props.text && !state.isComplete(props.text)) {
-    startInterval()
-  }
-  displayText.value = state.getDisplayText(props.text)
+  // 挂载时同步初始化字素簇缓存，避免首次 tick 才触发分段
+  state.onTextChange(props.text)
   isDone.value = state.isComplete(props.text)
+  displayText.value = state.getDisplayText(props.text)
+  if (props.text && !isDone.value) {
+    startInterval()
+  } else if (props.text && isDone.value) {
+    emitCompleteOnce(props.text)
+  }
 })
 
 onUnmounted(() => {
@@ -118,6 +124,7 @@ function reset() {
   displayText.value = ''
   isDone.value = false
   if (props.text) {
+    state.onTextChange(props.text)
     startInterval()
   }
 }
@@ -138,5 +145,11 @@ function resume() {
   if (!isDone.value) startInterval()
 }
 
-defineExpose({ reset, finish, pause, resume, isComplete: computed(() => isDone.value) })
+defineExpose<StreamingTextInstance>({
+  reset,
+  finish,
+  pause,
+  resume,
+  isComplete: computed(() => isDone.value)
+})
 </script>

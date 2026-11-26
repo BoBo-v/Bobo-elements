@@ -64,4 +64,12 @@ describe('TokenBadge.vue', () => {
     })
     expect(wrapper.classes()).toContain('vk-token-badge--warning')
   })
+
+  test('shows breakdown and progress bar when enabled', () => {
+    const wrapper = mount(TokenBadge, {
+      props: { used: 2000, total: 4000, inputTokens: 1200, outputTokens: 800, showProgress: true }
+    })
+    expect(wrapper.find('[data-testid="token-badge-breakdown"]').text()).toContain('1.2K')
+    expect(wrapper.find('[data-testid="token-badge-progress"]').exists()).toBe(true)
+  })
 })

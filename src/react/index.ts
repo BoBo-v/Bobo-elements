@@ -78,12 +78,12 @@ export type {
   CheckboxGroupProps,
   CheckboxValueType,
 } from '../core/components/checkbox/types';
-export type { ThinkingIndicatorProps, ThinkingIndicatorVariant } from '../core/components/thinking-indicator.types';
-export type { StreamingTextProps, StreamingTextRef } from './components/StreamingText';
-export type { CodeBlockProps } from '../core/components/code-block.types';
-export type { TokenBadgeProps, TokenBadgeStatus } from '../core/components/token-badge.types';
-export type { MarkdownRendererProps } from '../core/components/markdown-renderer.types';
-export type { PromptInputProps, PromptInputRef } from '../core/components/prompt-input.react.types';
-export type { ReasoningBlockProps } from '../core/components/reasoning-block.types';
-export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus } from '../core/components/chat-message.react.types';
+export type { ThinkingIndicatorProps, ThinkingIndicatorVariant, ThinkingIndicatorColor } from './components/ThinkingIndicator';
+export type { StreamingTextProps, StreamingTextRef, CursorStyle } from './components/StreamingText';
+export type { CodeBlockProps } from './components/CodeBlock';
+export type { TokenBadgeProps, TokenBadgeStatus, TokenBadgeVariant, TokenBadgeSize } from './components/TokenBadge';
+export type { MarkdownRendererProps } from './components/MarkdownRenderer';
+export type { PromptInputProps, PromptInputRef, PromptInputSize, PromptInputVariant } from '../core/components/prompt-input.react.types';
+export type { ReasoningBlockProps, ReasoningBlockStatus } from './components/ReasoningBlock';
+export type { ChatMessageProps, ChatMessageRole, ChatMessageStatus, ChatMessageVariant, ChatMessageAvatarPlacement } from '../core/components/chat-message.react.types';
 export type { ConversationListProps, ConversationListRef } from '../core/components/conversation-list.react.types';

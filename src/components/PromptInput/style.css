@@ -37,8 +37,15 @@
   pointer-events: none;
 }
 
-.vk-prompt-input.is-streaming .vk-prompt-input__textarea {
+.vk-prompt-input.is-input-disabled .vk-prompt-input__textarea {
   cursor: not-allowed;
+}
+
+.vk-prompt-input__header {
+  padding: 10px var(--vk-prompt-input-padding) 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .vk-prompt-input__textarea {
@@ -266,56 +273,80 @@
 }
 
 /* Dark mode overrides */
-.dark .vk-prompt-input {
+html.dark .vk-prompt-input,
+.dark .vk-prompt-input,
+[data-theme="dark"] .vk-prompt-input {
   --vk-prompt-input-bg-color: #1e293b;
   --vk-prompt-input-border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
 }
 
-.dark .vk-prompt-input:hover:not(.is-disabled) {
+html.dark .vk-prompt-input:hover:not(.is-disabled),
+.dark .vk-prompt-input:hover:not(.is-disabled),
+[data-theme="dark"] .vk-prompt-input:hover:not(.is-disabled) {
   border-color: rgba(255, 255, 255, 0.22);
 }
 
-.dark .vk-prompt-input__textarea {
+html.dark .vk-prompt-input__textarea,
+.dark .vk-prompt-input__textarea,
+[data-theme="dark"] .vk-prompt-input__textarea {
   color: #f1f5f9;
 }
 
-.dark .vk-prompt-input__textarea::placeholder {
+html.dark .vk-prompt-input__textarea::placeholder,
+.dark .vk-prompt-input__textarea::placeholder,
+[data-theme="dark"] .vk-prompt-input__textarea::placeholder {
   color: #64748b;
 }
 
-.dark .vk-prompt-input__count {
+html.dark .vk-prompt-input__count,
+.dark .vk-prompt-input__count,
+[data-theme="dark"] .vk-prompt-input__count {
   color: #94a3b8;
 }
 
-.dark .vk-prompt-input__hint {
+html.dark .vk-prompt-input__hint,
+.dark .vk-prompt-input__hint,
+[data-theme="dark"] .vk-prompt-input__hint {
   color: #64748b;
 }
 
-.dark .vk-prompt-input__clear-btn {
+html.dark .vk-prompt-input__clear-btn,
+.dark .vk-prompt-input__clear-btn,
+[data-theme="dark"] .vk-prompt-input__clear-btn {
   color: #64748b;
 }
 
-.dark .vk-prompt-input__clear-btn:hover {
+html.dark .vk-prompt-input__clear-btn:hover,
+.dark .vk-prompt-input__clear-btn:hover,
+[data-theme="dark"] .vk-prompt-input__clear-btn:hover {
   color: #f1f5f9;
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.dark .vk-prompt-input__streaming-badge {
+html.dark .vk-prompt-input__streaming-badge,
+.dark .vk-prompt-input__streaming-badge,
+[data-theme="dark"] .vk-prompt-input__streaming-badge {
   color: #60a5fa;
   background-color: rgba(96, 165, 250, 0.15);
   border-color: rgba(96, 165, 250, 0.3);
 }
 
-.dark .vk-prompt-input--filled {
+html.dark .vk-prompt-input--filled,
+.dark .vk-prompt-input--filled,
+[data-theme="dark"] .vk-prompt-input--filled {
   background-color: #0f172a;
 }
 
-.dark .vk-prompt-input--filled:hover:not(.is-disabled) {
+html.dark .vk-prompt-input--filled:hover:not(.is-disabled),
+.dark .vk-prompt-input--filled:hover:not(.is-disabled),
+[data-theme="dark"] .vk-prompt-input--filled:hover:not(.is-disabled) {
   background-color: #162032;
 }
 
-.dark .vk-prompt-input--filled:focus-within {
+html.dark .vk-prompt-input--filled:focus-within,
+.dark .vk-prompt-input--filled:focus-within,
+[data-theme="dark"] .vk-prompt-input--filled:focus-within {
   background-color: #1e293b;
 }
 

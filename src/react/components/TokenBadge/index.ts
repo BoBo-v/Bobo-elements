@@ -1,2 +1,7 @@
 export { TokenBadge } from './TokenBadge'
-export type { TokenBadgeProps, TokenBadgeStatus } from '../../../core/components/token-badge.types'
+export type {
+  TokenBadgeProps,
+  TokenBadgeStatus,
+  TokenBadgeSize,
+  TokenBadgeVariant,
+} from './TokenBadge'

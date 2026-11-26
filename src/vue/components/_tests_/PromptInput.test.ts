@@ -170,4 +170,16 @@ describe('PromptInput.vue', () => {
     })
     expect(wrapperPrecedence.find('[data-testid="prompt-input-stop-btn"]').exists()).toBe(false)
   })
+
+  test('renders header and toolbar slots', () => {
+    const wrapper = mount(PromptInput, {
+      slots: {
+        header: '<div class="attach-chip">file.pdf</div>',
+        toolbar: '<button class="model-btn">Model</button>'
+      },
+      global: { stubs: ['Icon'] }
+    })
+    expect(wrapper.find('[data-testid="prompt-input-header"]').text()).toContain('file.pdf')
+    expect(wrapper.find('.model-btn').exists()).toBe(true)
+  })
 })

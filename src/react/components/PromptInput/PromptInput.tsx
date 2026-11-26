@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useImperativeHandle, forwardRef, memo } from 'react'
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, ClipboardEvent, DragEvent } from 'react'
 import type { PromptInputProps, PromptInputRef } from '../../../core/components/prompt-input.react.types'
 import Icon from '../Icon'
 import '../../../components/PromptInput/style.css'
@@ -8,6 +8,7 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   value: controlledValue,
   placeholder = '输入消息...',
   disabled = false,
+  disableInputWhenStreaming = false,
   maxLength,
   rows = 1,
   autoResize = true,
@@ -28,11 +29,18 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
   variant = 'default',
   clearable = false,
   clearAriaLabel = '清除',
+  className,
+  style,
+  header,
+  toolbar,
+  actions,
   children,
   onChange,
   onSubmit,
   onStop,
   onKeyDown,
+  onPasteFiles,
+  onDropFiles,
 }: PromptInputProps, ref) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const isComposingRef = useRef(false)
@@ -84,6 +92,21 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
     }
   }, [onKeyDown, handleSubmit])
 
+  const handlePaste = useCallback((e: ClipboardEvent<HTMLTextAreaElement>) => {
+    const files = Array.from(e.clipboardData?.files || [])
+    if (files.length > 0) {
+      onPasteFiles?.(files)
+    }
+  }, [onPasteFiles])
+
+  const handleDrop = useCallback((e: DragEvent<HTMLDivElement>) => {
+    const files = Array.from(e.dataTransfer?.files || [])
+    if (files.length > 0) {
+      e.preventDefault()
+      onDropFiles?.(files)
+    }
+  }, [onDropFiles])
+
   const handleCompositionStart = useCallback(() => {
     isComposingRef.current = true
   }, [])
@@ -94,6 +117,7 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
 
   const focus = useCallback(() => textareaRef.current?.focus(), [])
   const blur = useCallback(() => textareaRef.current?.blur(), [])
+  const getElement = useCallback(() => textareaRef.current, [])
   const clear = useCallback(() => {
     setInnerValue('')
     onChange?.('')
@@ -104,8 +128,12 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
     focus,
     blur,
     clear,
+    getElement,
     textareaRef: textareaRef.current,
-  }), [focus, blur, clear])
+  }), [focus, blur, clear, getElement])
+
+  const isTextareaDisabled = disabled || (streaming && disableInputWhenStreaming)
+  const customActions = actions ?? children
 
   const classes = [
     'vk-prompt-input',
@@ -113,17 +141,24 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
     `vk-prompt-input--${variant}`,
     disabled ? 'is-disabled' : '',
     streaming ? 'is-streaming' : '',
+    isTextareaDisabled ? 'is-input-disabled' : '',
+    className || '',
   ].filter(Boolean).join(' ')
 
   return (
-    <div className={classes} data-testid="prompt-input">
+    <div className={classes} style={style} data-testid="prompt-input" onDrop={handleDrop}>
+      {header && (
+        <div className="vk-prompt-input__header" data-testid="prompt-input-header">
+          {header}
+        </div>
+      )}
       <textarea
         ref={textareaRef}
         className="vk-prompt-input__textarea"
         id={id}
         value={innerValue}
         placeholder={placeholder}
-        disabled={disabled}
+        disabled={isTextareaDisabled}
         maxLength={maxLength}
         rows={rows}
         aria-label={ariaLabel}
@@ -131,11 +166,13 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
         data-testid="prompt-input-textarea"
         onChange={handleInput}
         onKeyDown={handleKeydown}
+        onPaste={handlePaste}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}
       />
       <div className="vk-prompt-input__footer">
         <div className="vk-prompt-input__actions">
+          {toolbar}
           {streaming && <span className="vk-prompt-input__streaming-badge">{streamingText}</span>}
           {showCount && maxLength && (
             <span className={`vk-prompt-input__count${innerValue.length > maxLength ? ' is-exceeded' : ''}`}>
@@ -157,7 +194,7 @@ export const PromptInput = memo(forwardRef<PromptInputRef, PromptInputProps>(fun
               <Icon name="xmark" />
             </button>
           )}
-          {children || (streaming && effectiveStoppable ? (
+          {customActions || (streaming && effectiveStoppable ? (
             <button
               type="button"
               className="vk-prompt-input__stop-btn"

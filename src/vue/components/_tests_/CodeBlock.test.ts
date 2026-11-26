@@ -70,4 +70,17 @@ describe('CodeBlock.vue', () => {
     })
     expect(wrapper.find('.vk-code-block__body').attributes('style')).toContain('max-height: 200px')
   })
+
+  test('supports collapsible and wrap toggle', async () => {
+    const wrapper = mount(CodeBlock, {
+      props: { code: 'const a = 1;', collapsible: true, showWrapToggle: true }
+    })
+    const wrapBtn = wrapper.find('[data-testid="code-block-wrap-btn"]')
+    await wrapBtn.trigger('click')
+    expect(wrapper.find('.vk-code-block__code').classes()).toContain('vk-code-block__code--wrap')
+
+    const collapseBtn = wrapper.find('[data-testid="code-block-collapse-btn"]')
+    await collapseBtn.trigger('click')
+    expect(wrapper.classes()).toContain('is-collapsed')
+  })
 })

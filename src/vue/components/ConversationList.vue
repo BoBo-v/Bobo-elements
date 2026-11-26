@@ -16,10 +16,21 @@
       <slot />
     </div>
     <div v-if="!$slots.default" class="vk-conversation-list__empty" data-testid="conversation-list-empty">
-      {{ emptyText }}
+      <slot name="empty">{{ emptyText }}</slot>
     </div>
+    <button
+      v-if="showScrollToBottom && $slots.default && !isAtBottom"
+      type="button"
+      class="vk-conversation-list__scroll-btn"
+      data-testid="conversation-list-scroll-btn"
+      :aria-label="scrollToBottomText"
+      @click="scrollToBottom(false)"
+    >
+      ↓ {{ scrollToBottomText }}
+    </button>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../../core/components/conversation-list.types'
@@ -30,9 +41,12 @@ defineOptions({ name: 'VkConversationList' })
 const props = withDefaults(defineProps<ConversationListProps>(), {
   autoScroll: true,
   loadingMore: false,
+  loadMoreThreshold: 16,
   height: undefined,
   maxHeight: '100%',
   preserveScrollOnPrepend: true,
+  showScrollToBottom: true,
+  scrollToBottomText: '回到底部',
   emptyText: '暂无对话',
   loadingText: '加载中...'
 })
@@ -40,6 +54,7 @@ const props = withDefaults(defineProps<ConversationListProps>(), {
 const emits = defineEmits<ConversationListEmits>()
 const containerRef = ref<HTMLElement | null>(null)
 const contentRef = ref<HTMLElement | null>(null)
+const isAtBottom = ref(true)
 let observer: MutationObserver | null = null
 let resizeObserver: ResizeObserver | null = null
 let shouldStickToBottom = true
@@ -57,6 +72,13 @@ function isNearBottom(): boolean {
   return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_THRESHOLD
 }
 
+function updateAtBottom(next: boolean) {
+  if (isAtBottom.value !== next) {
+    isAtBottom.value = next
+    emits('at-bottom-change', next)
+  }
+}
+
 function scrollToBottom(instant = false) {
   const el = containerRef.value
   if (el) {
@@ -65,6 +87,8 @@ function scrollToBottom(instant = false) {
     } else {
       el.scrollTop = el.scrollHeight
     }
+    shouldStickToBottom = true
+    updateAtBottom(true)
   }
 }
 
@@ -78,9 +102,11 @@ function handleScroll() {
   if (previousScrollHeight === 0 && el.scrollHeight > 0) {
     previousScrollHeight = el.scrollHeight
   }
-  shouldStickToBottom = isNearBottom()
+  const nearBottom = isNearBottom()
+  shouldStickToBottom = nearBottom
+  updateAtBottom(nearBottom)
   emits('scroll', el.scrollTop)
-  if (el.scrollTop === 0 && !props.loadingMore) {
+  if (el.scrollTop <= props.loadMoreThreshold && !props.loadingMore) {
     emits('load-more')
   }
 }
@@ -118,6 +144,7 @@ function scheduleUpdate(hasAddedNodes = false) {
       oldScrollTop <= SCROLL_THRESHOLD &&
       newScrollHeight > oldScrollHeight
     ) {
+      // 历史消息前插时根据内容高度差补偿滚动锚点，消除视口跳动
       const diff = newScrollHeight - oldScrollHeight
       const targetScrollTop = oldScrollTop + diff
       if (typeof currentEl.scrollTo === 'function') {
@@ -130,27 +157,32 @@ function scheduleUpdate(hasAddedNodes = false) {
     }
 
     previousScrollHeight = currentEl.scrollHeight
-    shouldStickToBottom = isNearBottom()
+    const nearBottom = isNearBottom()
+    shouldStickToBottom = nearBottom
+    updateAtBottom(nearBottom)
   })
 }
 
 onMounted(() => {
   if (containerRef.value) {
     previousScrollHeight = containerRef.value.scrollHeight
-    shouldStickToBottom = isNearBottom()
+    const nearBottom = isNearBottom()
+    shouldStickToBottom = nearBottom
+    isAtBottom.value = nearBottom
 
+    // 仅监听消息内容容器变化，避免加载条或“回到底部”按钮显隐触发误判
+    const observeTarget = contentRef.value || containerRef.value
     observer = new MutationObserver((mutations) => {
       const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0)
       scheduleUpdate(hasAddedNodes)
     })
-    observer.observe(containerRef.value, { childList: true, subtree: true, characterData: true })
+    observer.observe(observeTarget, { childList: true, subtree: true, characterData: true })
 
     if (typeof ResizeObserver !== 'undefined') {
       resizeObserver = new ResizeObserver(() => {
         scheduleUpdate(false)
       })
-      const target = contentRef.value || containerRef.value
-      resizeObserver.observe(target)
+      resizeObserver.observe(observeTarget)
     }
   }
 })
@@ -163,5 +195,5 @@ onUnmounted(() => {
   resizeObserver?.disconnect()
 })
 
-defineExpose<ConversationListInstance>({ scrollToBottom, getElement })
+defineExpose<ConversationListInstance>({ scrollToBottom: () => scrollToBottom(false), getElement })
 </script>

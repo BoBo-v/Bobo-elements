@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { CodeBlock } from '../CodeBlock'
 
@@ -39,5 +39,16 @@ describe('CodeBlock component', () => {
   test('no header when no title, language, or copyable', () => {
     const { container } = render(<CodeBlock code="test" copyable={false} />)
     expect(container.querySelector('.vk-code-block__header')).toBeNull()
+  })
+
+  test('supports collapsible, wrap toggle, and custom className', () => {
+    const { container } = render(
+      <CodeBlock code="const a = 1;" collapsible showWrapToggle className="custom-code" />
+    )
+    expect(screen.getByTestId('code-block')).toHaveClass('custom-code')
+    fireEvent.click(screen.getByTestId('code-block-wrap-btn'))
+    expect(container.querySelector('.vk-code-block__code')).toHaveClass('vk-code-block__code--wrap')
+    fireEvent.click(screen.getByTestId('code-block-collapse-btn'))
+    expect(screen.getByTestId('code-block')).toHaveClass('is-collapsed')
   })
 })

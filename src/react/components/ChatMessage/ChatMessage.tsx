@@ -1,5 +1,6 @@
 import { useMemo, useState, useCallback, useRef, useEffect, memo } from 'react'
 import type { ChatMessageProps } from '../../../core/components/chat-message.react.types'
+import { formatTimestamp as formatChatTimestamp } from '../../../core/components/ai-format'
 import { ThinkingIndicator } from '../ThinkingIndicator'
 import Icon from '../Icon'
 import '../../../components/ChatMessage/style.css'
@@ -14,7 +15,12 @@ export const ChatMessage = memo(function ChatMessage({
   role,
   avatar,
   avatarSize = 'default',
+  avatarPlacement = 'top',
+  variant = 'bubble',
+  senderName,
   timestamp,
+  locale = 'zh-CN',
+  formatTimestamp,
   status = 'sent',
   showAvatar = true,
   errorMessage = '发送失败',
@@ -25,7 +31,11 @@ export const ChatMessage = memo(function ChatMessage({
   contentVisibility = 'auto',
   content,
   copyContent,
+  className,
+  style,
   children,
+  header,
+  actions,
   loading,
   onRetry,
   onAvatarError,
@@ -48,25 +58,29 @@ export const ChatMessage = memo(function ChatMessage({
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
       copyTimerRef.current = setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Ignore clipboard failure in unsupported environments
+      // 忽略剪贴板权限异常
     }
   }, [content, copyContent])
+
   const effectiveCopyContent = copyContent || content || ''
-  const formattedTime = useMemo(() => {
-    if (!timestamp) return ''
-    const date = new Date(timestamp)
-    if (isNaN(date.getTime())) return ''
-    return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
-  }, [timestamp])
+  const formattedTime = useMemo(
+    () => formatChatTimestamp(timestamp, locale, formatTimestamp),
+    [timestamp, locale, formatTimestamp]
+  )
+
+  const showActionsBar = status !== 'streaming' && Boolean(actions || (copyable && effectiveCopyContent))
 
   const rootClass = [
     'vk-chat-message',
     `vk-chat-message--${role}`,
+    variant === 'flat' ? 'vk-chat-message--flat' : '',
+    avatarPlacement === 'center' ? 'vk-chat-message--avatar-center' : '',
     contentVisibility === 'visible' ? 'vk-chat-message--visible' : '',
+    className || '',
   ].filter(Boolean).join(' ')
 
   return (
-    <div className={rootClass} data-testid="chat-message">
+    <div className={rootClass} style={style} data-testid="chat-message">
       {showAvatar && (
         <div className={`vk-chat-message__avatar vk-chat-message__avatar--${avatarSize}`} data-testid="chat-message-avatar">
           {avatar ? (
@@ -77,20 +91,29 @@ export const ChatMessage = memo(function ChatMessage({
         </div>
       )}
       <div className="vk-chat-message__body">
+        {(header || senderName) && (
+          <div className="vk-chat-message__header" data-testid="chat-message-header">
+            {header || <span className="vk-chat-message__sender">{senderName}</span>}
+          </div>
+        )}
         <div className="vk-chat-message__bubble" data-testid="chat-message-bubble">
           {children}
           {status === 'streaming' && !children && (loading || <ThinkingIndicator />)}
         </div>
-        {copyable && effectiveCopyContent && (
+        {showActionsBar && (
           <div className="vk-chat-message__actions">
-            <button
-              className="vk-chat-message__copy-btn"
-              data-testid="chat-message-copy-btn"
-              aria-label={copied ? copiedText : copyText}
-              onClick={handleCopy}
-            >
-              {copied ? copiedText : copyText}
-            </button>
+            {copyable && effectiveCopyContent && (
+              <button
+                type="button"
+                className="vk-chat-message__copy-btn"
+                data-testid="chat-message-copy-btn"
+                aria-label={copied ? copiedText : copyText}
+                onClick={handleCopy}
+              >
+                {copied ? copiedText : copyText}
+              </button>
+            )}
+            {actions}
           </div>
         )}
         {timestamp && (
@@ -101,7 +124,7 @@ export const ChatMessage = memo(function ChatMessage({
         {status === 'error' && (
           <div className="vk-chat-message__status vk-chat-message__status--error" data-testid="chat-message-error">
             <span>{errorMessage}</span>
-            <button className="vk-chat-message__retry" data-testid="chat-message-retry" onClick={onRetry}>
+            <button type="button" className="vk-chat-message__retry" data-testid="chat-message-retry" onClick={onRetry}>
               <Icon name="rotate-right" /> {retryText}
             </button>
           </div>

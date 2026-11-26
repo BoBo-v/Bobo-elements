@@ -87,25 +87,66 @@
   box-shadow: 0 2px 6px rgba(245, 108, 108, 0.3);
 }
 
-.dark .vk-token-badge {
+.vk-token-badge__breakdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9em;
+  opacity: 0.82;
+  font-variant-numeric: tabular-nums;
+}
+
+.vk-token-badge__progress {
+  display: inline-block;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-left: 2px;
+}
+
+.vk-token-badge__progress-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background-color: currentColor;
+  transition: width var(--vk-transition-duration-fast);
+}
+
+html.dark .vk-token-badge,
+.dark .vk-token-badge,
+[data-theme="dark"] .vk-token-badge {
   --vk-token-badge-bg: rgba(255, 255, 255, 0.08);
   --vk-token-badge-text: #cbd5e1;
   --vk-token-badge-border: rgba(255, 255, 255, 0.12);
 }
 
-.dark .vk-token-badge--normal:not(.vk-token-badge--filled) {
+html.dark .vk-token-badge__progress,
+.dark .vk-token-badge__progress,
+[data-theme="dark"] .vk-token-badge__progress {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+html.dark .vk-token-badge--normal:not(.vk-token-badge--filled),
+.dark .vk-token-badge--normal:not(.vk-token-badge--filled),
+[data-theme="dark"] .vk-token-badge--normal:not(.vk-token-badge--filled) {
   --vk-token-badge-bg: rgba(64, 158, 255, 0.16);
   --vk-token-badge-text: #79bbff;
   --vk-token-badge-border: rgba(64, 158, 255, 0.3);
 }
 
-.dark .vk-token-badge--warning:not(.vk-token-badge--filled) {
+html.dark .vk-token-badge--warning:not(.vk-token-badge--filled),
+.dark .vk-token-badge--warning:not(.vk-token-badge--filled),
+[data-theme="dark"] .vk-token-badge--warning:not(.vk-token-badge--filled) {
   --vk-token-badge-bg: rgba(230, 162, 60, 0.16);
   --vk-token-badge-text: #eebe77;
   --vk-token-badge-border: rgba(230, 162, 60, 0.3);
 }
 
-.dark .vk-token-badge--danger:not(.vk-token-badge--filled) {
+html.dark .vk-token-badge--danger:not(.vk-token-badge--filled),
+.dark .vk-token-badge--danger:not(.vk-token-badge--filled),
+[data-theme="dark"] .vk-token-badge--danger:not(.vk-token-badge--filled) {
   --vk-token-badge-bg: rgba(245, 108, 108, 0.16);
   --vk-token-badge-text: #f89898;
   --vk-token-badge-border: rgba(245, 108, 108, 0.3);

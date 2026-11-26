@@ -3,6 +3,8 @@
     class="vk-chat-message"
     :class="[
       `vk-chat-message--${role}`,
+      variant === 'flat' ? 'vk-chat-message--flat' : '',
+      avatarPlacement === 'center' ? 'vk-chat-message--avatar-center' : '',
       contentVisibility === 'visible' ? 'vk-chat-message--visible' : ''
     ]"
     data-testid="chat-message"
@@ -17,14 +19,24 @@
       <Icon v-else :icon="defaultIcon" class="vk-chat-message__avatar-icon" />
     </div>
     <div class="vk-chat-message__body">
+      <div v-if="$slots.header || senderName" class="vk-chat-message__header" data-testid="chat-message-header">
+        <slot name="header">
+          <span class="vk-chat-message__sender">{{ senderName }}</span>
+        </slot>
+      </div>
       <div class="vk-chat-message__bubble" data-testid="chat-message-bubble">
         <slot />
         <slot v-if="status === 'streaming' && !$slots.default" name="loading">
           <ThinkingIndicator />
         </slot>
       </div>
-      <div v-if="copyable && effectiveCopyContent" class="vk-chat-message__actions">
+      <div
+        v-if="status !== 'streaming' && ($slots.actions || (copyable && effectiveCopyContent))"
+        class="vk-chat-message__actions"
+      >
         <button
+          v-if="copyable && effectiveCopyContent"
+          type="button"
           class="vk-chat-message__copy-btn"
           data-testid="chat-message-copy-btn"
           :aria-label="copied ? copiedText : copyText"
@@ -32,13 +44,14 @@
         >
           {{ copied ? copiedText : copyText }}
         </button>
+        <slot name="actions" />
       </div>
       <div v-if="timestamp" class="vk-chat-message__timestamp" data-testid="chat-message-timestamp">
         {{ formattedTime }}
       </div>
       <div v-if="status === 'error'" class="vk-chat-message__status vk-chat-message__status--error" data-testid="chat-message-error">
         <span>{{ errorMessage }}</span>
-        <button class="vk-chat-message__retry" data-testid="chat-message-retry" @click="$emit('retry')">
+        <button type="button" class="vk-chat-message__retry" data-testid="chat-message-retry" @click="$emit('retry')">
           <Icon icon="rotate-right" /> {{ retryText }}
         </button>
       </div>
@@ -49,6 +62,7 @@
 <script setup lang="ts">
 import { computed, ref, onUnmounted } from 'vue'
 import type { ChatMessageProps, ChatMessageEmits } from '../../core/components/chat-message.types'
+import { formatTimestamp as formatChatTimestamp } from '../../core/components/ai-format'
 import ThinkingIndicator from './ThinkingIndicator.vue'
 import Icon from './Icon.vue'
 import '../../components/ChatMessage/style.css'
@@ -59,6 +73,9 @@ const props = withDefaults(defineProps<ChatMessageProps>(), {
   status: 'sent',
   showAvatar: true,
   avatarSize: 'default',
+  avatarPlacement: 'top',
+  variant: 'bubble',
+  locale: 'zh-CN',
   errorMessage: '发送失败',
   retryText: '重试',
   copyable: false,
@@ -79,7 +96,7 @@ async function handleCopy() {
     if (copyTimer) clearTimeout(copyTimer)
     copyTimer = setTimeout(() => { copied.value = false }, 2000)
   } catch {
-    // Ignore clipboard failure in unsupported environments
+    // 忽略非安全上下文下的剪贴板权限错误
   }
 }
 
@@ -104,10 +121,7 @@ const defaultIcon = computed(() => {
 
 const effectiveCopyContent = computed(() => props.copyContent || props.content || '')
 
-const formattedTime = computed(() => {
-  if (!props.timestamp) return ''
-  const date = new Date(props.timestamp)
-  if (isNaN(date.getTime())) return ''
-  return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
-})
+const formattedTime = computed(() =>
+  formatChatTimestamp(props.timestamp, props.locale, props.formatTimestamp)
+)
 </script>

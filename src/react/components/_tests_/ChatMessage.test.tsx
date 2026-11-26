@@ -55,4 +55,20 @@ describe('ChatMessage component', () => {
     render(<ChatMessage role="user" contentVisibility="visible">text</ChatMessage>)
     expect(screen.getByTestId('chat-message')).toHaveClass('vk-chat-message--visible')
   })
+
+  test('supports flat variant, senderName, and custom actions', () => {
+    render(
+      <ChatMessage
+        role="assistant"
+        variant="flat"
+        senderName="Bobo AI"
+        actions={<button type="button">Regenerate</button>}
+      >
+        Answer
+      </ChatMessage>
+    )
+    expect(screen.getByTestId('chat-message')).toHaveClass('vk-chat-message--flat')
+    expect(screen.getByTestId('chat-message-header')).toHaveTextContent('Bobo AI')
+    expect(screen.getByText('Regenerate')).toBeInTheDocument()
+  })
 })

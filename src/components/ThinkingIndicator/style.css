@@ -152,7 +152,9 @@
 }
 
 /* Dark mode overrides */
-.dark .vk-thinking-indicator__text {
+html.dark .vk-thinking-indicator__text,
+.dark .vk-thinking-indicator__text,
+[data-theme="dark"] .vk-thinking-indicator__text {
   background: linear-gradient(90deg, #94a3b8 0%, #60a5fa 50%, #94a3b8 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -160,7 +162,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dark .vk-thinking-indicator__text {
+  html.dark .vk-thinking-indicator__text,
+  .dark .vk-thinking-indicator__text,
+  [data-theme="dark"] .vk-thinking-indicator__text {
     -webkit-text-fill-color: #94a3b8;
   }
 }
