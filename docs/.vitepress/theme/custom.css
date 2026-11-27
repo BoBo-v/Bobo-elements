@@ -80,17 +80,23 @@ div[class*='language-'] pre::-webkit-scrollbar,
   height: 5px;
 }
 
-/* ==================== 顶部导航栏毛玻璃磨砂（性能优化） ==================== */
-.VPNav {
+/* ==================== 顶部导航栏毛玻璃磨砂（不阻塞移动端全屏菜单定位） ==================== */
+.VPNavBar:not(.screen-open) {
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
+  background-color: rgba(255, 255, 255, 0.84) !important;
   border-bottom: 1px solid var(--vp-c-divider) !important;
 }
 
-.dark .VPNav {
-  background-color: rgba(15, 23, 42, 0.82) !important;
+.dark .VPNavBar:not(.screen-open) {
+  background-color: rgba(15, 23, 42, 0.86) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.VPNavBar.screen-open {
+  background-color: var(--vp-nav-bg-color) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .VPNavBarTitle .title {
@@ -312,6 +318,20 @@ div[class*='language-'] pre::-webkit-scrollbar,
   background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.02), transparent 40%), var(--component-preview-bg);
 }
 
+.vitepress-demo-preview-preview .block:has(> .vk-button),
+.vitepress-demo-preview-preview .block:has(> .vk-tooltip) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.vitepress-demo-preview-preview .block:has(> .vk-button) .vk-button + .vk-button,
+.vitepress-demo-preview-preview .block:has(> .vk-tooltip) .vk-button {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .vitepress-demo-preview-description__split-line {
   border-bottom: 1px solid var(--vp-c-divider) !important;
 }
@@ -334,22 +354,32 @@ div[class*='language-'] pre::-webkit-scrollbar,
   border-bottom-right-radius: 13px;
 }
 
-/* ==================== API 参数表格现代胶囊排版 ==================== */
-.vp-doc table {
-  display: block;
-  width: max-content;
-  min-width: 100%;
+/* ==================== API 参数表格现代卡片排版 ==================== */
+.vp-doc .vp-table-scroll {
+  width: 100%;
   max-width: 100%;
-  border-radius: 12px !important;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  border-collapse: separate;
-  border-spacing: 0;
   margin: 20px 0 !important;
-  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg);
   box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.03);
+}
+
+.vp-doc table {
+  display: table !important;
+  width: 100% !important;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent;
+}
+
+.vp-doc .vp-table-scroll > table {
+  min-width: 520px;
 }
 
 .vp-doc table thead tr {
@@ -358,13 +388,16 @@ div[class*='language-'] pre::-webkit-scrollbar,
 
 .vp-doc table thead th {
   font-weight: 600;
-  font-size: 13.5px;
-  letter-spacing: 0.3px;
+  font-size: 13px;
+  letter-spacing: 0.25px;
   color: var(--vp-c-text-1) !important;
-  padding: 12px 18px !important;
+  padding: 12px 16px !important;
   border-bottom: 1px solid var(--vp-c-divider) !important;
   border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
   text-align: left;
+  white-space: nowrap;
 }
 
 /* 移除老旧斑马纹，改用极简纯净行 */
@@ -381,24 +414,40 @@ div[class*='language-'] pre::-webkit-scrollbar,
 }
 
 .vp-doc table tbody td {
-  padding: 12px 18px !important;
+  padding: 12px 16px !important;
   border-bottom: 1px solid var(--vp-c-divider) !important;
   border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
   color: var(--vp-c-text-2);
   font-size: 13.5px;
+  line-height: 1.6;
+  vertical-align: top;
 }
 
 .vp-doc table tbody tr:last-child td {
   border-bottom: none !important;
 }
 
-/* 属性名加粗高亮 */
+/* 属性名高亮且不折断 */
 .vp-doc table tbody td:first-child {
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  color: var(--vp-c-brand-1);
+  white-space: nowrap;
 }
 
-/* 代码标签：圆润微胶囊 */
+/* 默认值列保持紧凑 */
+.vp-doc table tbody td:last-child {
+  white-space: nowrap;
+}
+
+.vp-doc table tbody td:nth-child(2) {
+  min-width: 150px;
+}
+
+/* 代码标签：圆润微胶囊（表内允许安全换行） */
 .vp-doc table tbody td code,
 .vp-doc p code,
 .vp-doc li code {
@@ -409,6 +458,11 @@ div[class*='language-'] pre::-webkit-scrollbar,
   font-size: 12.5px !important;
   font-family: var(--vp-font-family-mono);
   border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.vp-doc table tbody td code {
+  white-space: normal;
+  word-break: break-word;
 }
 
 /* ==================== 代码块与 Code Group 选项卡 ==================== */

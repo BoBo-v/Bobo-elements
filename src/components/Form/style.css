@@ -49,6 +49,19 @@
   margin-right: 4px;
 }
 
+@media (max-width: 640px) {
+  .vk-form-item {
+    flex-direction: column;
+    .vk-form-item__label {
+      width: auto;
+      height: auto;
+      line-height: 1.5;
+      padding: 0 0 6px 0;
+      justify-content: flex-start;
+    }
+  }
+}
+
 
 
 

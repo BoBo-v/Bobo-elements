@@ -52,6 +52,12 @@
     opacity: 0;
 }
 
+@media (max-width: 640px) {
+  .vk-alert {
+    width: 100%;
+  }
+}
+
 @each $val in success,warning,info,danger {
     .vk-alert__$(val).vk-alert__light {
     --vk-alert-text-color: var(--vk-color-$(val));

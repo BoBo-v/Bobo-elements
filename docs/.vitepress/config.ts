@@ -28,6 +28,18 @@ export default defineConfig({
         config(md) {
             md.use(containerPreview)
             md.use(componentPreview)
+
+            const defaultTableOpen =
+                md.renderer.rules.table_open ||
+                ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+            const defaultTableClose =
+                md.renderer.rules.table_close ||
+                ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+
+            md.renderer.rules.table_open = (tokens, idx, options, env, self) =>
+                `<div class="vp-table-scroll">${defaultTableOpen(tokens, idx, options, env, self)}`
+            md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
+                `${defaultTableClose(tokens, idx, options, env, self)}</div>`
         }
     },
     themeConfig: {

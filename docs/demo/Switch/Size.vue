@@ -13,9 +13,8 @@ const test = ref(false)
 <style scoped>
 .switch-size-container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  .vk-switch {
-    margin-right: 10px;
-  }
+  gap: 10px 12px;
 }
 </style>

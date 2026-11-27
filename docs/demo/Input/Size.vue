@@ -16,6 +16,13 @@ const test = ref('')
 <style scoped>
 .size-holder {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 12px;
+}
+
+.size-holder :deep(.vk-input) {
+  flex: 1 1 180px;
+  min-width: 0;
 }
 </style>

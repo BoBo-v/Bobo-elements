@@ -34,7 +34,9 @@ import Button from '@/vue/components/Button.vue'
   </div>
 </template>
 <style scoped>
-.vk-button {
-  margin-right: 20px;
+.block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
 }
 </style>

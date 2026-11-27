@@ -2490,6 +2490,10 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
     display: flex;
   }
 
+  .ai-workspace__body {
+    min-height: 0;
+  }
+
   .ai-matrix {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2622,7 +2626,7 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
   }
 
   .ai-workspace__body {
-    min-height: 460px;
+    min-height: 0;
   }
 
   .ai-workspace__topbar {
@@ -2631,11 +2635,11 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
   }
 
   .ai-workspace__composer {
-    padding: 10px 10px 12px;
+    padding: 8px 10px 10px;
   }
 
   .ai-workspace :deep(.vk-conversation-list) {
-    height: min(380px, 56vh) !important;
+    height: min(320px, 46vh) !important;
   }
 }
 
