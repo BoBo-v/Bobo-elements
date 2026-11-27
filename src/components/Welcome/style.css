@@ -1,9 +1,9 @@
 .vk-welcome {
-  container-type: inline-size;
   display: flex;
   align-items: flex-start;
   gap: 16px;
   padding: 20px 24px;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -39,6 +39,7 @@
 
 .vk-welcome__body {
   flex: 1;
+  width: 100%;
   min-width: 0;
 }
 
@@ -78,11 +79,11 @@
   margin-top: 14px;
 }
 
-@container (max-width: 420px) {
+@media (max-width: 640px) {
   .vk-welcome {
     flex-direction: column;
-    gap: 12px;
     padding: 16px;
+    gap: 12px;
   }
 
   .vk-welcome__icon {
@@ -90,21 +91,6 @@
     height: 40px;
     font-size: 18px;
     border-radius: 12px;
-  }
-
-  .vk-welcome__title {
-    font-size: 16px;
-  }
-
-  .vk-welcome__description {
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 640px) {
-  .vk-welcome {
-    padding: 16px;
-    gap: 12px;
   }
 
   .vk-welcome__title {

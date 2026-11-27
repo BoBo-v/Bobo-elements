@@ -1,4 +1,5 @@
 import { describe, test, expect } from 'vitest'
+import { createCommentVNode } from 'vue'
 import { mount } from '@vue/test-utils'
 import ConversationList from '../ConversationList.vue'
 
@@ -27,6 +28,17 @@ describe('ConversationList.vue', () => {
       slots: { empty: '<div class="custom-welcome">Welcome!</div>' }
     })
     expect(wrapper.find('.custom-welcome').text()).toBe('Welcome!')
+  })
+
+  test('renders empty slot when default slot only has comment vnodes from conditional rendering', () => {
+    const wrapper = mount(ConversationList, {
+      slots: {
+        default: () => [createCommentVNode('v-if')],
+        empty: '<div class="conditional-welcome">Empty Guide</div>'
+      }
+    })
+    expect(wrapper.find('[data-testid="conversation-list-empty"]').exists()).toBe(true)
+    expect(wrapper.find('.conditional-welcome').text()).toBe('Empty Guide')
   })
 
   test('shows loading indicator', () => {

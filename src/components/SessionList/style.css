@@ -1,5 +1,4 @@
 .vk-session-list {
-  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -126,9 +125,9 @@
   }
 }
 
-@container (max-width: 240px) {
+@media (max-width: 640px) {
   .vk-session-list {
-    padding: 8px;
+    padding: 10px;
   }
 
   .vk-session-list__item {

@@ -14,14 +14,14 @@
       <span class="vk-conversation-list__loading-spinner" />
       {{ loadingText }}
     </div>
-    <div ref="contentRef" class="vk-conversation-list__content">
+    <div v-show="hasDefaultContent" ref="contentRef" class="vk-conversation-list__content">
       <slot />
     </div>
-    <div v-if="!$slots.default" class="vk-conversation-list__empty" data-testid="conversation-list-empty">
+    <div v-if="!hasDefaultContent" class="vk-conversation-list__empty" data-testid="conversation-list-empty">
       <slot name="empty">{{ emptyText }}</slot>
     </div>
     <button
-      v-if="showScrollToBottom && $slots.default && !isAtBottom"
+      v-if="showScrollToBottom && hasDefaultContent && !isAtBottom"
       type="button"
       class="vk-conversation-list__scroll-btn"
       data-testid="conversation-list-scroll-btn"
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, useSlots, Comment, Text, Fragment, onMounted, onUnmounted, type VNode } from 'vue'
 import type { ConversationListProps, ConversationListEmits, ConversationListInstance } from '../../core/components/conversation-list.types'
 import '../../components/ConversationList/style.css'
 
@@ -54,6 +54,32 @@ const props = withDefaults(defineProps<ConversationListProps>(), {
 })
 
 const emits = defineEmits<ConversationListEmits>()
+const slots = useSlots()
+
+function hasRenderableVNodes(nodes: VNode[]): boolean {
+  for (const node of nodes) {
+    if (node.type === Comment) continue
+    if (node.type === Text) {
+      if (typeof node.children === 'string' && node.children.trim().length > 0) return true
+      continue
+    }
+    if (node.type === Fragment) {
+      if (Array.isArray(node.children) && hasRenderableVNodes(node.children as VNode[])) {
+        return true
+      }
+      continue
+    }
+    return true
+  }
+  return false
+}
+
+const hasDefaultContent = computed(() => {
+  const defaultSlot = slots.default
+  if (!defaultSlot) return false
+  return hasRenderableVNodes(defaultSlot())
+})
+
 const containerRef = ref<HTMLElement | null>(null)
 const contentRef = ref<HTMLElement | null>(null)
 const isAtBottom = ref(true)

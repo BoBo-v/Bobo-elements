@@ -9,9 +9,10 @@
 }
 
 .vk-reasoning-block {
-  container-type: inline-size;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--vk-reasoning-border-color);
   border-left: 3px solid var(--vk-reasoning-accent);
   border-radius: var(--vk-reasoning-border-radius);
@@ -144,7 +145,7 @@
   50% { opacity: 0.45; transform: scale(0.92); }
 }
 
-@container (max-width: 340px) {
+@media (max-width: 480px) {
   .vk-reasoning-block__title {
     flex-basis: calc(100% - 24px);
     white-space: normal;

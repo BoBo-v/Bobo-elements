@@ -10,10 +10,10 @@
 }
 
 .vk-prompt-input {
-  container-type: inline-size;
   position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -363,13 +363,7 @@ html.dark .vk-prompt-input--filled:focus-within,
   background-color: #1e293b;
 }
 
-/* Narrow container & mobile touch optimization */
-@container (max-width: 440px) {
-  .vk-prompt-input__hint {
-    display: none;
-  }
-}
-
+/* Narrow screen & mobile touch optimization */
 @media (max-width: 640px), (hover: none) and (pointer: coarse) {
   .vk-prompt-input__hint {
     display: none;

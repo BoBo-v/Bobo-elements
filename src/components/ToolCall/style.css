@@ -1,7 +1,8 @@
 .vk-tool-call {
-  container-type: inline-size;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
+  box-sizing: border-box;
   border-radius: var(--vk-ai-radius-md, 12px);
   border: 1px solid var(--vk-border-color-lighter);
   background-color: var(--vk-ai-bg-assistant, #f8fafc);
@@ -173,7 +174,7 @@
   background-color: rgba(230, 162, 60, 0.05);
 }
 
-@container (max-width: 360px) {
+@media (max-width: 640px) {
   .vk-tool-call__header {
     padding: 9px 12px;
   }

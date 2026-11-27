@@ -39,13 +39,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  padding: 60px 16px;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 24px 16px;
   color: var(--vk-conversation-list-empty-color);
   font-size: var(--vk-font-size-base);
   letter-spacing: 0.02em;
   user-select: none;
+}
+
+.vk-conversation-list__empty > * {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .vk-conversation-list__load-more {
@@ -110,7 +116,7 @@
   }
 
   .vk-conversation-list__empty {
-    padding: 36px 12px;
+    padding: 16px 12px;
   }
 }
 

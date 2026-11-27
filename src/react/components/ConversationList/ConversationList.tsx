@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, memo } from 'react'
+import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, memo, Children } from 'react'
 import type { ConversationListProps, ConversationListRef } from '../../../core/components/conversation-list.react.types'
 import '../../../components/ConversationList/style.css'
 
@@ -213,6 +213,7 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
   }, [isNearBottom, updateAtBottom, loadMoreThreshold, loadingMore, onLoadMore, onScroll, cancelProgrammaticScroll])
 
   const rootClass = ['vk-conversation-list', className || ''].filter(Boolean).join(' ')
+  const hasChildren = Children.toArray(children).length > 0
 
   return (
     <div
@@ -232,15 +233,19 @@ export const ConversationList = memo(forwardRef<ConversationListRef, Conversatio
           {loadingText}
         </div>
       )}
-      <div ref={contentRef} className="vk-conversation-list__content">
+      <div
+        ref={contentRef}
+        className="vk-conversation-list__content"
+        style={hasChildren ? undefined : { display: 'none' }}
+      >
         {children}
       </div>
-      {!children && (
+      {!hasChildren && (
         <div className="vk-conversation-list__empty" data-testid="conversation-list-empty">
           {empty ?? emptyText}
         </div>
       )}
-      {showScrollToBottom && children && !isAtBottom && (
+      {showScrollToBottom && hasChildren && !isAtBottom && (
         <button
           type="button"
           className="vk-conversation-list__scroll-btn"

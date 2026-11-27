@@ -2333,7 +2333,7 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
 .ws-welcome-wrap {
   width: 100%;
   max-width: 620px;
-  margin: 0 auto;
+  margin: auto;
   text-align: left;
 }
 
@@ -2341,6 +2341,7 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
   min-width: 0;
 }
 
@@ -2639,7 +2640,9 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
   }
 
   .ai-workspace :deep(.vk-conversation-list) {
-    height: min(320px, 46vh) !important;
+    height: auto !important;
+    min-height: 260px;
+    max-height: min(400px, 56vh);
   }
 }
 

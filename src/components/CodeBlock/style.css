@@ -42,8 +42,9 @@
 }
 
 .vk-code-block {
-  container-type: inline-size;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
   border-radius: var(--vk-code-block-border-radius);
   overflow: hidden;
   background-color: var(--vk-code-block-bg);
@@ -235,7 +236,7 @@
 .vk-code-diff-add { color: var(--vk-code-diff-add); background-color: rgba(16, 185, 129, 0.12); display: inline-block; width: 100%; }
 .vk-code-diff-del { color: var(--vk-code-diff-del); background-color: rgba(239, 68, 68, 0.12); display: inline-block; width: 100%; }
 
-@container (max-width: 420px) {
+@media (max-width: 640px) {
   .vk-code-block {
     font-size: 12px;
   }
@@ -253,19 +254,5 @@
     padding-right: 8px;
     margin-right: 8px;
     font-size: 11.5px;
-  }
-}
-
-@media (max-width: 640px) {
-  .vk-code-block {
-    font-size: 12px;
-  }
-
-  .vk-code-block__header {
-    padding: 7px 12px;
-  }
-
-  .vk-code-block__body {
-    padding: 12px;
   }
 }
