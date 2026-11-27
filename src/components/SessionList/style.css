@@ -1,7 +1,11 @@
 .vk-session-list {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 12px;
   border-radius: var(--vk-ai-radius-md, 12px);
   background-color: var(--vk-fill-color-blank);
@@ -101,13 +105,35 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
   opacity: 0;
   transition: opacity var(--vk-transition-duration-fast);
 }
 
 .vk-session-list__item:hover .vk-session-list__item-actions,
+.vk-session-list__item:focus-within .vk-session-list__item-actions,
 .vk-session-list__item.is-active .vk-session-list__item-actions {
   opacity: 1;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .vk-session-list__item-actions {
+    opacity: 1;
+  }
+
+  .vk-session-list__icon-btn {
+    padding: 4px 6px;
+  }
+}
+
+@container (max-width: 240px) {
+  .vk-session-list {
+    padding: 8px;
+  }
+
+  .vk-session-list__item {
+    padding: 7px 8px;
+  }
 }
 
 .vk-session-list__icon-btn {

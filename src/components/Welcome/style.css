@@ -1,8 +1,12 @@
 .vk-welcome {
+  container-type: inline-size;
   display: flex;
   align-items: flex-start;
   gap: 16px;
   padding: 20px 24px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   border-radius: var(--vk-ai-radius-lg, 16px);
   color: var(--vk-text-color-primary);
   transition: background-color var(--vk-transition-duration-fast);
@@ -42,6 +46,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -71,6 +76,44 @@
 
 .vk-welcome__footer {
   margin-top: 14px;
+}
+
+@container (max-width: 420px) {
+  .vk-welcome {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .vk-welcome__icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 12px;
+  }
+
+  .vk-welcome__title {
+    font-size: 16px;
+  }
+
+  .vk-welcome__description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vk-welcome {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .vk-welcome__title {
+    font-size: 16px;
+  }
+
+  .vk-welcome__description {
+    font-size: 13px;
+  }
 }
 
 html.dark .vk-welcome--filled,

@@ -336,11 +336,16 @@ div[class*='language-'] pre::-webkit-scrollbar,
 
 /* ==================== API 参数表格现代胶囊排版 ==================== */
 .vp-doc table {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  max-width: 100%;
   border-radius: 12px !important;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
   border-collapse: separate;
   border-spacing: 0;
-  width: 100%;
   margin: 20px 0 !important;
   border: 1px solid var(--vp-c-divider) !important;
   background: var(--vp-c-bg);
@@ -461,8 +466,59 @@ div[class*='language-'] pre::-webkit-scrollbar,
 }
 
 /* ==================== 首页容器重置 ==================== */
+html,
+body {
+  overflow-x: clip;
+}
+
 .VPPage {
   padding-bottom: 0 !important;
+  overflow-x: clip;
+}
+
+/* ==================== 移动端与窄屏文档站适配 ==================== */
+@media (max-width: 768px) {
+  .vp-doc h1 {
+    font-size: 26px !important;
+    margin-top: 10px !important;
+  }
+
+  .vp-doc h1 + p {
+    font-size: 14.5px !important;
+    margin-bottom: 24px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .vp-doc h2 {
+    font-size: 20px !important;
+    margin-top: 36px !important;
+  }
+
+  .vp-doc h3 {
+    font-size: 16.5px !important;
+    margin-top: 28px !important;
+  }
+
+  .vp-doc table thead th,
+  .vp-doc table tbody td {
+    padding: 10px 12px !important;
+    font-size: 13px;
+  }
+
+  .vp-doc .custom-block {
+    padding: 12px 14px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .vitepress-demo-preview__element-plus__container,
+  .vitepress-demo-preview__ant-design__container {
+    margin: 16px 0 24px !important;
+  }
+
+  .vitepress-demo-preview__element-plus__container > .vitepress-demo-preview-preview {
+    padding: 18px 14px !important;
+  }
 }
 
 

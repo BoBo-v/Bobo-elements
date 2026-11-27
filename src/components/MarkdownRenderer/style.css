@@ -78,6 +78,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
   padding: 6px 14px;
   font-size: 12px;
   color: var(--vk-text-color-secondary);
@@ -206,6 +208,16 @@
 }
 
 /* 表格 */
+.vk-md-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 1em 0;
+  border-radius: var(--vk-ai-radius-sm, 8px);
+  border: 1px solid var(--vk-md-table-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .vk-md-table,
 .vk-markdown-renderer table {
   width: 100%;
@@ -216,6 +228,12 @@
   overflow: hidden;
   border: 1px solid var(--vk-md-table-border);
   font-size: 13.5px;
+}
+
+.vk-md-table-wrap .vk-md-table {
+  margin: 0;
+  border: none;
+  border-radius: 0;
 }
 
 .vk-md-th,

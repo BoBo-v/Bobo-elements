@@ -1,7 +1,10 @@
 .vk-prompts {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .vk-prompts__title {
@@ -13,6 +16,8 @@
 .vk-prompts__list {
   display: flex;
   gap: 10px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .vk-prompts__list--wrap {
@@ -25,13 +30,16 @@
 
 .vk-prompts__list--grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
 }
 
 .vk-prompts__item {
   display: flex;
   align-items: flex-start;
   gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   text-align: left;
   border: 1px solid var(--vk-border-color-lighter);
   background-color: var(--vk-fill-color-blank);
@@ -88,12 +96,33 @@
   font-weight: 500;
   line-height: 1.4;
   color: var(--vk-text-color-primary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .vk-prompts__desc {
   font-size: 12px;
   line-height: 1.5;
   color: var(--vk-text-color-secondary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@container (max-width: 360px) {
+  .vk-prompts__item--card {
+    padding: 10px 12px;
+  }
+
+  .vk-prompts__item--pill {
+    padding: 5px 12px;
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vk-prompts__item--card {
+    padding: 10px 12px;
+  }
 }
 
 html.dark .vk-prompts__item,

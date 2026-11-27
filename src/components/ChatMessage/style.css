@@ -273,8 +273,22 @@
 
 /* Responsive adjustment */
 @media (max-width: 640px) {
+  .vk-chat-message {
+    --vk-chat-msg-gap: 8px;
+    --vk-chat-msg-avatar-size: 28px;
+    --vk-chat-msg-padding: 10px 12px;
+  }
+
+  .vk-chat-message__avatar-icon {
+    font-size: 14px;
+  }
+
   .vk-chat-message__bubble {
-    max-width: 90%;
+    max-width: 92%;
+  }
+
+  .vk-chat-message--assistant .vk-chat-message__bubble {
+    max-width: 100%;
   }
 }
 

@@ -4,7 +4,7 @@
 
 <iframe
   src="https://stackblitz.com/edit/vitejs-vite-vue3?embed=1&file=src%2FApp.vue&terminal=dev"
-  style="width: 100%; height: 600px; border: 1px solid var(--vp-c-divider); border-radius: 8px;"
+  style="width: 100%; height: clamp(420px, 65vh, 620px); border: 1px solid var(--vp-c-divider); border-radius: 8px;"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>

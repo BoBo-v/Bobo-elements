@@ -182,7 +182,8 @@ function createMarkdownParser(breaks: boolean, codeCopyable: boolean, codeCopyTe
     return `<img class="vk-md-img" src="${md.utils.escapeHtml(safeSrc)}" alt="${md.utils.escapeHtml(alt)}" />`
   }
 
-  md.renderer.rules.table_open = () => '<table class="vk-md-table">\n'
+  md.renderer.rules.table_open = () => '<div class="vk-md-table-wrap"><table class="vk-md-table">\n'
+  md.renderer.rules.table_close = () => '</table></div>\n'
   md.renderer.rules.th_open = () => '<th class="vk-md-th">'
   md.renderer.rules.td_open = () => '<td class="vk-md-td">'
   md.renderer.rules.tr_open = () => '<tr class="vk-md-tr">'

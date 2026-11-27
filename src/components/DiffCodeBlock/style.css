@@ -1,4 +1,7 @@
 .vk-diff-code-block {
+  container-type: inline-size;
+  min-width: 0;
+  max-width: 100%;
   border-radius: var(--vk-ai-radius-sm, 8px);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -19,12 +22,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 8px 14px;
   background-color: #282a3a;
   color: #bac2de;
   font-size: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vk-diff-code-block__header > div:first-child {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.vk-diff-code-block__header > div:first-child > span:first-child {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .vk-diff-code-block--light .vk-diff-code-block__header {
@@ -37,8 +58,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-left: 8px;
   font-size: 11px;
+  flex-shrink: 0;
 }
 
 .vk-diff-code-block__stat-add { color: #34d399; }
@@ -47,7 +68,10 @@
 .vk-diff-code-block__actions {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .vk-diff-code-block__btn {
@@ -68,11 +92,14 @@
 .vk-diff-code-block__body {
   overflow-x: auto;
   padding: 8px 0;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .vk-diff-code-block__line {
   display: flex;
   align-items: flex-start;
+  min-width: max-content;
   padding: 1px 14px;
   white-space: pre;
 }
@@ -108,4 +135,40 @@
 .vk-diff-code-block__text {
   flex: 1;
   min-width: 0;
+}
+
+@container (max-width: 420px) {
+  .vk-diff-code-block {
+    font-size: 12px;
+  }
+
+  .vk-diff-code-block__header {
+    padding: 8px 10px;
+  }
+
+  .vk-diff-code-block__line {
+    padding: 1px 10px;
+  }
+
+  .vk-diff-code-block__ln {
+    width: 24px;
+    padding-right: 6px;
+    font-size: 11px;
+  }
+
+  .vk-diff-code-block__marker {
+    width: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vk-diff-code-block {
+    font-size: 12px;
+  }
+
+  .vk-diff-code-block__ln {
+    width: 24px;
+    padding-right: 6px;
+    font-size: 11px;
+  }
 }

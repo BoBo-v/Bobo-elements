@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect, useMemo, memo } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo, memo } from 'react'
 import type { CSSProperties } from 'react'
 import type {
   ModelSelectorProps as CoreModelSelectorProps,
   ModelOption,
   ModelSelectorSize,
 } from '../../../core/components/model-selector.types'
+import { computeMenuPlacement, type MenuPlacementResult } from '../../../core/components/model-selector.logic'
 import Icon from '../Icon'
 import '../../../components/ModelSelector/style.css'
 
@@ -28,7 +29,30 @@ export const ModelSelector = memo(function ModelSelector({
   onChange,
 }: ModelSelectorProps) {
   const [open, setOpen] = useState(false)
+  const [placement, setPlacement] = useState<MenuPlacementResult>({
+    alignRight: false,
+    dropUp: false,
+    shiftX: 0,
+  })
   const rootRef = useRef<HTMLDivElement | null>(null)
+  const menuRef = useRef<HTMLDivElement | null>(null)
+
+  const updatePlacement = useCallback(() => {
+    if (!rootRef.current || !menuRef.current) return
+    const rootRect = rootRef.current.getBoundingClientRect()
+    setPlacement(
+      computeMenuPlacement({
+        rootLeft: rootRect.left,
+        rootRight: rootRect.right,
+        rootTop: rootRect.top,
+        rootBottom: rootRect.bottom,
+        menuWidth: menuRef.current.offsetWidth,
+        menuHeight: menuRef.current.offsetHeight,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+      })
+    )
+  }, [])
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -40,12 +64,30 @@ export const ModelSelector = memo(function ModelSelector({
     return () => document.removeEventListener('click', handleOutside)
   }, [])
 
+  useLayoutEffect(() => {
+    if (!open) {
+      setPlacement({ alignRight: false, dropUp: false, shiftX: 0 })
+      return
+    }
+    updatePlacement()
+    window.addEventListener('resize', updatePlacement)
+    return () => window.removeEventListener('resize', updatePlacement)
+  }, [open, updatePlacement])
+
   const selectedModel = useMemo(() => models.find(m => m.id === value), [models, value])
   const rootClass = [
     'vk-model-selector',
     `vk-model-selector--${size}`,
     className || '',
   ].filter(Boolean).join(' ')
+  const menuClass = [
+    'vk-model-selector__menu',
+    placement.alignRight ? 'vk-model-selector__menu--align-right' : '',
+    placement.dropUp ? 'vk-model-selector__menu--up' : '',
+  ].filter(Boolean).join(' ')
+  const menuStyle = placement.shiftX
+    ? ({ '--vk-ms-shift-x': `${placement.shiftX}px` } as CSSProperties)
+    : undefined
 
   return (
     <div ref={rootRef} className={rootClass} style={style} data-testid="model-selector">
@@ -68,7 +110,7 @@ export const ModelSelector = memo(function ModelSelector({
       </button>
 
       {open && (
-        <div className="vk-model-selector__menu" data-testid="model-selector-menu">
+        <div ref={menuRef} className={menuClass} style={menuStyle} data-testid="model-selector-menu">
           {models.map((model) => (
             <button
               key={model.id}

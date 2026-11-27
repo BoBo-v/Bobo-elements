@@ -1,7 +1,10 @@
 .vk-sources {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .vk-sources__toggle {
@@ -44,7 +47,7 @@
 
 .vk-sources__list--cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr));
   gap: 8px;
 }
 
@@ -52,6 +55,9 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 8px 12px;
   border-radius: var(--vk-ai-radius-sm, 8px);
   border: 1px solid var(--vk-border-color-lighter);
@@ -109,6 +115,15 @@
 .vk-sources__domain {
   font-size: 11px;
   color: var(--vk-text-color-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@container (max-width: 360px) {
+  .vk-sources__item {
+    padding: 8px 10px;
+  }
 }
 
 .vk-sources__snippet {

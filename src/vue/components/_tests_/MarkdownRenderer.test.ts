@@ -119,4 +119,13 @@ describe('MarkdownRenderer.vue', () => {
     expect(wrapper.find('.vk-md-code-copy').exists()).toBe(true)
     expect(wrapper.text()).toContain('const a = 1')
   })
+
+  test('wraps markdown tables in scrollable container for narrow screens', () => {
+    const wrapper = mount(MarkdownRenderer, {
+      props: {
+        content: '| Col A | Col B |\n| --- | --- |\n| 1 | 2 |'
+      }
+    })
+    expect(wrapper.find('.vk-md-table-wrap > table.vk-md-table').exists()).toBe(true)
+  })
 })

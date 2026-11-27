@@ -1020,13 +1020,8 @@ const componentGroups = [
 
 .hero-bg {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  width: 100vw;
+  inset: 0;
+  width: 100%;
   pointer-events: none;
 }
 
@@ -1687,6 +1682,7 @@ const componentGroups = [
 }
 
 .feature-card {
+  min-width: 0;
   padding: 28px 24px;
   border-radius: 12px;
   border: 1px solid var(--vp-c-divider);
@@ -1743,6 +1739,7 @@ const componentGroups = [
 }
 
 .component-group {
+  min-width: 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 12px;
   padding: 24px;
@@ -1877,6 +1874,8 @@ const componentGroups = [
   color: var(--vp-c-text-3);
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -1915,6 +1914,7 @@ const componentGroups = [
 }
 
 .usage-card {
+  min-width: 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 12px;
   overflow: hidden;
@@ -1935,6 +1935,8 @@ const componentGroups = [
 .usage-code {
   padding: 20px;
   background: var(--vp-c-bg-soft);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .usage-code pre {
@@ -1979,6 +1981,7 @@ const componentGroups = [
 .cta-actions {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -1993,12 +1996,10 @@ const componentGroups = [
   --ai-accent-soft: rgba(99, 102, 241, 0.1);
 
   position: relative;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  width: 100vw;
+  width: 100%;
   background: linear-gradient(to bottom, var(--vp-c-bg) 0px, var(--ai-bg) 140px);
   padding: 76px 0;
-  overflow: hidden;
+  overflow-x: clip;
 }
 
 .dark .ai-showcase {
@@ -2499,13 +2500,22 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
 }
 
 @media (max-width: 768px) {
+  .home-wrapper {
+    padding: 0 16px;
+  }
+
   .hero-inner {
-    padding-top: 30px;
-    gap: 40px;
+    padding: 30px 16px 0;
+    gap: 36px;
   }
 
   .hero-install {
-    padding-bottom: 30px;
+    padding: 0 16px 30px;
+  }
+
+  .logo-wrapper {
+    padding: 16px 24px;
+    max-width: 100%;
   }
 
   .hero-logo-text {
@@ -2523,18 +2533,18 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
   }
 
   .hero-subtitle {
-    font-size: 32px;
+    font-size: 30px;
   }
 
   .hero-desc {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .btn-primary,
   .btn-outline,
   .btn-ghost {
-    padding: 14px 32px;
-    font-size: 16px;
+    padding: 13px 28px;
+    font-size: 15px;
   }
 
   .stat-number {
@@ -2580,6 +2590,10 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
     padding: 50px 0;
   }
 
+  .ai-showcase__inner {
+    padding: 0 16px;
+  }
+
   .ai-showcase__title {
     font-size: 28px;
   }
@@ -2590,6 +2604,7 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
 
   .ai-workspace__titlebar {
     flex-wrap: wrap;
+    padding: 10px 14px;
   }
 
   .ai-matrix {
@@ -2597,9 +2612,44 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
   }
 }
 
+@media (max-width: 640px) {
+  .logo-orbit {
+    display: none;
+  }
+
+  .ai-showcase__inner {
+    padding: 0 12px;
+  }
+
+  .ai-workspace__body {
+    min-height: 460px;
+  }
+
+  .ai-workspace__topbar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .ai-workspace__composer {
+    padding: 10px 10px 12px;
+  }
+
+  .ai-workspace :deep(.vk-conversation-list) {
+    height: min(380px, 56vh) !important;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-logo-text {
-    font-size: 36px;
+    font-size: 34px;
+  }
+
+  .hero-subtitle {
+    font-size: 24px;
+  }
+
+  .hero-desc {
+    font-size: 15px;
   }
 
   .logo-ring {
@@ -2619,6 +2669,49 @@ html.dark .ai-workspace--light :deep(.vk-markdown-renderer) {
 
   .stat-item:not(:last-child)::after {
     display: none;
+  }
+
+  .install-code {
+    padding: 12px 14px;
+    font-size: 12.5px;
+    gap: 8px;
+    overflow-x: auto;
+  }
+
+  .component-group {
+    padding: 18px 14px;
+  }
+
+  .component-item {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .item-name {
+    min-width: 0;
+  }
+
+  .ai-workspace__dots {
+    display: none;
+  }
+
+  .ai-workspace__titlebar {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .ws-theme-btn {
+    padding: 3px 8px;
+  }
+
+  .cta-actions .btn-primary,
+  .cta-actions .btn-outline,
+  .hero-actions .btn-primary,
+  .hero-actions .btn-outline,
+  .hero-actions .btn-ghost {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
   }
 }
 </style>

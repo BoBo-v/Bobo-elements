@@ -23,7 +23,17 @@
       <Icon icon="chevron-down" />
     </button>
 
-    <div v-if="open" class="vk-model-selector__menu" data-testid="model-selector-menu">
+    <div
+      v-if="open"
+      ref="menuRef"
+      class="vk-model-selector__menu"
+      :class="{
+        'vk-model-selector__menu--align-right': placement.alignRight,
+        'vk-model-selector__menu--up': placement.dropUp
+      }"
+      :style="menuStyle"
+      data-testid="model-selector-menu"
+    >
       <button
         v-for="model in models"
         :key="model.id"
@@ -48,8 +58,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import type { ModelSelectorProps, ModelSelectorEmits, ModelOption } from '../../core/components/model-selector.types'
+import { computeMenuPlacement, type MenuPlacementResult } from '../../core/components/model-selector.logic'
 import useClickOutside from '../../hooks/useClickOutside'
 import Icon from './Icon.vue'
 import '../../components/ModelSelector/style.css'
@@ -65,7 +76,43 @@ const props = withDefaults(defineProps<ModelSelectorProps>(), {
 
 const emits = defineEmits<ModelSelectorEmits>()
 const rootRef = ref<HTMLElement | undefined>(undefined)
+const menuRef = ref<HTMLElement | undefined>(undefined)
 const open = ref(false)
+const placement = ref<MenuPlacementResult>({ alignRight: false, dropUp: false, shiftX: 0 })
+
+const menuStyle = computed(() =>
+  placement.value.shiftX ? { '--vk-ms-shift-x': `${placement.value.shiftX}px` } : undefined
+)
+
+function updatePlacement() {
+  if (!open.value || !rootRef.value || !menuRef.value) return
+  const rootRect = rootRef.value.getBoundingClientRect()
+  placement.value = computeMenuPlacement({
+    rootLeft: rootRect.left,
+    rootRight: rootRect.right,
+    rootTop: rootRect.top,
+    rootBottom: rootRect.bottom,
+    menuWidth: menuRef.value.offsetWidth,
+    menuHeight: menuRef.value.offsetHeight,
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight
+  })
+}
+
+watch(open, async (isOpen) => {
+  if (isOpen) {
+    placement.value = { alignRight: false, dropUp: false, shiftX: 0 }
+    await nextTick()
+    updatePlacement()
+    window.addEventListener('resize', updatePlacement)
+  } else {
+    window.removeEventListener('resize', updatePlacement)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updatePlacement)
+})
 
 useClickOutside(rootRef, () => {
   open.value = false

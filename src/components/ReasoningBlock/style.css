@@ -9,6 +9,9 @@
 }
 
 .vk-reasoning-block {
+  container-type: inline-size;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--vk-reasoning-border-color);
   border-left: 3px solid var(--vk-reasoning-accent);
   border-radius: var(--vk-reasoning-border-radius);
@@ -65,7 +68,8 @@
 .vk-reasoning-block__header {
   display: flex;
   align-items: center;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 4px 6px;
   width: 100%;
   min-width: 0;
   line-height: 1.4;
@@ -80,6 +84,8 @@
 }
 
 .vk-reasoning-block__title {
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
@@ -136,6 +142,17 @@
 @keyframes vk-reasoning-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.45; transform: scale(0.92); }
+}
+
+@container (max-width: 340px) {
+  .vk-reasoning-block__title {
+    flex-basis: calc(100% - 24px);
+    white-space: normal;
+  }
+
+  .vk-reasoning-block__meta {
+    margin-left: 19px;
+  }
 }
 
 /* Dark mode overrides */

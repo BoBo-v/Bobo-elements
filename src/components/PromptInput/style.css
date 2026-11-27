@@ -10,9 +10,13 @@
 }
 
 .vk-prompt-input {
+  container-type: inline-size;
   position: relative;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--vk-prompt-input-border-color);
   border-radius: var(--vk-prompt-input-border-radius);
   background-color: var(--vk-prompt-input-bg-color);
@@ -77,6 +81,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
   padding: 6px var(--vk-prompt-input-padding) 10px;
 }
 
@@ -94,7 +100,14 @@
 .vk-prompt-input__actions {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.vk-prompt-input__actions:last-child {
+  margin-left: auto;
 }
 
 .vk-prompt-input__hint {
@@ -348,5 +361,26 @@ html.dark .vk-prompt-input--filled:focus-within,
 .dark .vk-prompt-input--filled:focus-within,
 [data-theme="dark"] .vk-prompt-input--filled:focus-within {
   background-color: #1e293b;
+}
+
+/* Narrow container & mobile touch optimization */
+@container (max-width: 440px) {
+  .vk-prompt-input__hint {
+    display: none;
+  }
+}
+
+@media (max-width: 640px), (hover: none) and (pointer: coarse) {
+  .vk-prompt-input__hint {
+    display: none;
+  }
+
+  .vk-prompt-input {
+    --vk-prompt-input-padding: 10px;
+  }
+
+  .vk-prompt-input__footer {
+    padding: 6px var(--vk-prompt-input-padding) 8px;
+  }
 }
 

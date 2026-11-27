@@ -103,6 +103,17 @@
   border-color: var(--vk-color-primary-light-5, #a0cfff);
 }
 
+@media (max-width: 640px) {
+  .vk-conversation-list__content {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .vk-conversation-list__empty {
+    padding: 36px 12px;
+  }
+}
+
 html.dark .vk-conversation-list::-webkit-scrollbar-thumb,
 .dark .vk-conversation-list::-webkit-scrollbar-thumb,
 [data-theme="dark"] .vk-conversation-list::-webkit-scrollbar-thumb {
